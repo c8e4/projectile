@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     let x;
     let scene;
@@ -35,6 +36,19 @@
         scene.add( cube );
 
         camera.position.z = 5;
+
+        const light = new THREE.AmbientLight( 0xffffff ); // soft white light
+        scene.add( light );
+
+        const loader = new GLTFLoader();
+
+        loader.load( 'medieval/Models/tiles/square/gltf/square_forest_detail.gltf.glb', function ( gltf ) {
+            console.log(gltf.scene);
+            scene.add( gltf.scene );
+        }, undefined, function ( error ) {
+            console.error( error );
+        } );
+
 
         function animate() {
             requestAnimationFrame( animate );
