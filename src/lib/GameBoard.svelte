@@ -27,7 +27,11 @@
 {#each grid as row}
 <div class="flex">
     {#each row as cell}
+    {#if cell == '0, 0'}
+        <img src="tiles/A.png" class="tile" alt="">
+    {:else}
     <div class="cell bg-red-100">{cell}</div>
+    {/if}
     {/each}
 </div>
 {/each}
@@ -45,5 +49,9 @@
     display: flex;
     align-items:center;
     justify-content: center;
+}
+.tile{
+    width:100px;
+    height: 100px;
 }
 </style>
