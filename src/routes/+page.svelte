@@ -1,10 +1,20 @@
 <script lang="ts">
     import SmallTile from "$lib/SmallTile.svelte";
     import { tiles } from "$lib/game/tiles";
+    let myTiles = tiles 
+    
+    function rotateTile(tile){
+        for (let i = 0 ; i<3 ; i++ ) {
+            tile.connectors.unshift(tile.connectors[tile.connectors.length-1]);
+            tile.connectors.pop();
+        }
+        myTiles=myTiles
+    }
+
 </script>
 
 <div class="flex flex-wrap gap-4">
-{#each tiles as tile}
+{#each myTiles as tile}
 <div>
     <div class="flex">
         <SmallTile></SmallTile>
@@ -19,7 +29,7 @@
             <SmallTile val={tile.connectors[9]}></SmallTile>
             <SmallTile val={tile.connectors[8]}></SmallTile>
         </div>
-        <div class="tile-center bg-gray-200 flex items-center justify-center text-3xl font-bold">
+        <div class="tile-center bg-gray-200 flex items-center justify-center text-3xl font-bold" on:click={()=>rotateTile(tile)}>
             {tile.name}
         </div>
         <div class="">
@@ -30,9 +40,9 @@
     </div>
     <div class="flex">
         <SmallTile></SmallTile>
-        <SmallTile val={tile.connectors[5]}></SmallTile>
-        <SmallTile val={tile.connectors[6]}></SmallTile>
         <SmallTile val={tile.connectors[7]}></SmallTile>
+        <SmallTile val={tile.connectors[6]}></SmallTile>
+        <SmallTile val={tile.connectors[5]}></SmallTile>
         <SmallTile></SmallTile>
     </div>
 </div>

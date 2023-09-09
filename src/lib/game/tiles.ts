@@ -1,4 +1,4 @@
-export const tiles = [
+export let tiles =[
   {
     name: 'A',
     index: '1',
@@ -91,7 +91,7 @@ export const tiles = [
     connectors: [
       'z0', null, null,
       'p0', null, null,
-      'z0', null, null,
+      'z1', null, null,
       'p0', null, null
     ]
   },
@@ -258,7 +258,7 @@ export const tiles = [
     center: null,
     connectors: [
       'p0', null, null,
-      'p0', null, null,
+      'p0', null, 'p0',
       'd0', 'p1', 'p1',
       'd0', 'p0', null
     ]
