@@ -6,19 +6,20 @@
     let x;
     let scene;
     let camera;
+    let model;
 
     function onKeyDown(e){
         if (e.key == "ArrowDown") {
-            camera.position.y -= 0.1;
+            model.rotation.x -= 0.1;
         }
         if (e.key == "ArrowUp") {
-            camera.position.y += 0.1;
+            model.rotation.x += 0.1;
         }
         if (e.key == "ArrowLeft") {
-            camera.position.x -= 0.1;
+            model.rotation.y -= 0.1;
         }
         if (e.key == "ArrowRight") {
-            camera.position.x += 0.1;
+            model.rotation.y += 0.1;
         }
     }
 
@@ -42,9 +43,10 @@
 
         const loader = new GLTFLoader();
 
-        loader.load( 'medieval/Models/tiles/square/gltf/square_forest_detail.gltf.glb', function ( gltf ) {
-            console.log(gltf.scene);
+        loader.load( 'medieval/Models/tiles/square/gltf/square_forest_roadA_detail.gltf.glb', function ( gltf ) {
+            model = gltf.scene;
             scene.add( gltf.scene );
+            console.log(scene)
         }, undefined, function ( error ) {
             console.error( error );
         } );
