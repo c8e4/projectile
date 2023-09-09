@@ -23,5 +23,8 @@
 		"vite": "^4.4.2",
 		"vitest": "^0.34.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"three": "^0.156.1"
+	}
 }
