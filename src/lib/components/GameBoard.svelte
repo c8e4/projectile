@@ -45,15 +45,18 @@
         if (e.key == "r") {
             game.activeCell = rotateActiveCell(game.activeCell);
             game.grid = game.grid;
+            e.preventDefault();
         }
         if (e.key == " ") {
             if (hasGoodConnections(game.grid,game.activeCell)){
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
             getNextCell();
             }
+            e.preventDefault();
         }
         if (e.key == "x") {
             showConnectors=!showConnectors
+            e.preventDefault();
         }
     }
 
@@ -101,7 +104,7 @@
     {/each}
 </div>
 
-<svelte:window on:keydown|preventDefault={onKeyDown} />
+<svelte:window on:keydown={onKeyDown} />
 
 <style>
     .board {
