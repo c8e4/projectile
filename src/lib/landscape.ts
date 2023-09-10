@@ -37,6 +37,7 @@ export function addLocations(cell: GridCell) {
                 name: p,
                 index: i,
                 closed: false,
+                id: `x${cell.x}y${cell.y}${name}`
             }
             localPorts.push(tempPort)
         }
