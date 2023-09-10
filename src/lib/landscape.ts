@@ -14,42 +14,59 @@ enum LandType {
 }
 
 export type Port = {
+    name: string
     x: number
     y: number
     index: ConnectorIndex
     closed: boolean
+    landscapeId: number
 }
 
 export type ConnectorIndex = number // 0..11
 
 
-export function addLocations(cell:GridCell){
-    console.log(cell)
-    const localPortNames = cell.tile.connectors.filter((c,i,a)=>c&&a.indexOf(c)==i)
 
+export function addLocations(cell: GridCell) {
+    console.log(cell)
+    let localPorts = []
+    cell.tile.connectors.forEach((p, i) => {
+        if (p) {
+            let tempPort = {
+                x: cell.x,
+                y: cell.y,
+                name: p,
+                index: i,
+                closed: false,
+            }
+            localPorts.push(tempPort)
+        }
+    })
+    console.log (localPorts)
+    const localPortNames = cell.tile.connectors.filter((c, i, a) => c && a.indexOf(c) == i)
+    
     //console.log(localLandscapes)
 
     //let localPorts = cell.tile.connectors 
 }
 
 
-function landTypeToName(landType:LandType):string{
-    if(LandType.Pole == landType){ return "Pole"}
-    if(LandType.Zamok == landType){ return "Zamok"}
-    if(LandType.Doroga == landType){ return "Doroga"}
+function landTypeToName(landType: LandType): string {
+    if (LandType.Pole == landType) { return "Pole" }
+    if (LandType.Zamok == landType) { return "Zamok" }
+    if (LandType.Doroga == landType) { return "Doroga" }
     return "Cerkov"
 }
-function connectorNameToLandType(connectorName:string|null): LandType | null{
-    if(!connectorName){
+function connectorNameToLandType(connectorName: string | null): LandType | null {
+    if (!connectorName) {
         return null
     }
-    if(connectorName.charAt(0)=='z'){
+    if (connectorName.charAt(0) == 'z') {
         return LandType.Zamok
     }
-    if(connectorName.charAt(0)=='p'){
+    if (connectorName.charAt(0) == 'p') {
         return LandType.Pole
     }
-    if(connectorName.charAt(0)=='d'){
+    if (connectorName.charAt(0) == 'd') {
         return LandType.Doroga
     }
     return null
