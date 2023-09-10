@@ -1,32 +1,11 @@
 <script lang="ts">
     import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
-    import { GRID_CENTER, GRID_SIZE } from "../gameState";
+    import { newGame } from "../gameState";
+    import { GRID_SIZE } from "$lib/grid";
 
 
-    let grid = new Array(GRID_SIZE)
-        .fill(null)
-        .map((x) => new Array(GRID_SIZE).fill(null));
-
-    for (let i = 0; i < GRID_SIZE; i++) {
-        for (let j = 0; j < GRID_SIZE; j++) {
-            grid[i][j] = {
-                coord: toVisualGridCoordinates(i, j),
-                tile: {
-                    name: "",
-                    deg: 0,
-                },
-                x: i,
-                y: j,
-                locked: false,
-            };
-        }
-    }
-    grid[GRID_CENTER][GRID_CENTER].tile = {
-        name: "D",
-        deg: 0,
-    };
-    grid[GRID_CENTER][GRID_CENTER].locked = true;
+    const gameState = newGame();
 
 
     let activeCell = null;
@@ -35,16 +14,12 @@
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
     });
 
-    function toVisualGridCoordinates(x, y) {
-        return `${x},${y}`; //`${y - GRID_CENTER}, ${(x - GRID_CENTER) * -1}`;
-    }
-
     function landTileAtCell(cell) {
         if (!hasNeighbours(cell)) {
             return;
         }
         if (activeCell) {
-            grid[activeCell.x][activeCell.y].tile = {
+            gameState.grid[activeCell.x][activeCell.y].tile = {
                 name: "",
                 deg: 0,
             };
@@ -57,7 +32,7 @@
         cell.tile = {
             name: "B",
         };
-        grid = grid;
+        gameState.grid = gameState.grid;
         //activeCell = activeCell;
     }
 
@@ -66,22 +41,22 @@
         const y = cell.y;
         //neighbours
         if (x + 1 < GRID_SIZE) {
-            if (grid[x + 1][y].locked) {
+            if (gameState.grid[x + 1][y].locked) {
                 return true;
             }
         }
         if (y + 1 < GRID_SIZE) {
-            if (grid[x][y + 1].locked) {
+            if (gameState.grid[x][y + 1].locked) {
                 return true;
             }
         }
         if (x - 1 >= 0) {
-            if (grid[x - 1][y].locked) {
+            if (gameState.grid[x - 1][y].locked) {
                 return true;
             }
         }
         if (y - 1 >= 0) {
-            if (grid[x][y - 1].locked) {
+            if (gameState.grid[x][y - 1].locked) {
                 return true;
             }
         }
@@ -93,7 +68,7 @@
         if (e.key == "r") {
             //
             rotateActiveCell(activeCell);
-            grid = grid;
+            gameState.grid = gameState.grid;
         }
         if (e.key == " ") {
             confirmTilePlacement(activeCell);
@@ -110,7 +85,7 @@
         } else {
             cell.tile.deg = (cell.tile.deg + 90) % 360;
         }
-        grid = grid;
+        gameState.grid = gameState.grid;
     }
 
     function confirmTilePlacement() {
@@ -133,7 +108,7 @@
 </script>
 
 <div class="board bg-green-100">
-    {#each grid as row}
+    {#each gameState.grid as row}
         <div class="flex">
             {#each row as cell}
                 {#if cell.tile?.name}
