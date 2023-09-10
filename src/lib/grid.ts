@@ -2,7 +2,7 @@ type TileConnector = string | null
 
 type TileConnectorList = Array<TileConnector>
 
-type Tile = {
+export type Tile = {
     name: string
     deg: number
     connectors: TileConnectorList

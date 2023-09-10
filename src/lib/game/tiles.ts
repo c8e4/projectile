@@ -1,8 +1,9 @@
-export let tiles =[
+export let tiles =
+[
   {
     name: 'A',
-    index: '1',
-    amount: '2',
+    index: 1,
+    amount: 2,
     center: 'c0',
     connectors: [
       'p0', null, null,
@@ -13,8 +14,8 @@ export let tiles =[
   },
   {
     name: 'B',
-    index: '2',
-    amount: '4',
+    index: 2,
+    amount: 4,
     center: 'c0',
     connectors: [
       'p0', null, null,
@@ -25,8 +26,8 @@ export let tiles =[
   },
   {
     name: 'C',
-    index: '3',
-    amount: '1',
+    index: 3,
+    amount: 1,
     center: null,
     connectors: [
       'z0', null, null,
@@ -37,8 +38,8 @@ export let tiles =[
   },
   {
     name: 'D',
-    index: '4',
-    amount: '4',
+    index: 4,
+    amount: 4,
     center: null,
     connectors: [
       'z0', null, 'p1',
@@ -49,8 +50,8 @@ export let tiles =[
   },
   {
     name: 'E',
-    index: '5',
-    amount: '2',
+    index: 5,
+    amount: 2,
     center: null,
     connectors: [
       'z0', null, null,
@@ -61,8 +62,8 @@ export let tiles =[
   },
   {
     name: 'F',
-    index: '6',
-    amount: '2',
+    index: 6,
+    amount: 2,
     center: null,
     connectors: [
       'p0', null, null,
@@ -73,8 +74,8 @@ export let tiles =[
   },
   {
     name: 'G',
-    index: '7',
-    amount: '1',
+    index: 7,
+    amount: 1,
     center: null,
     connectors: [
       'p0', null, null,
@@ -85,8 +86,8 @@ export let tiles =[
   },
   {
     name: 'H',
-    index: '8',
-    amount: '3',
+    index: 8,
+    amount: 3,
     center: null,
     connectors: [
       'z0', null, null,
@@ -97,8 +98,8 @@ export let tiles =[
   },
   {
     name: 'I',
-    index: '9',
-    amount: '2',
+    index: 9,
+    amount: 2,
     center: null,
     connectors: [
       'z0', null, null,
@@ -109,8 +110,8 @@ export let tiles =[
   },
   {
     name: 'J',
-    index: '10',
-    amount: '3',
+    index: 10,
+    amount: 3,
     center: null,
     connectors: [
       'z0', null, 'p0',
@@ -121,8 +122,8 @@ export let tiles =[
   },
   {
     name: 'K',
-    index: '11',
-    amount: '3',
+    index: 11,
+    amount: 3,
     center: null,
     connectors: [
       'z0', null, null,
@@ -133,8 +134,8 @@ export let tiles =[
   },
   {
     name: 'L',
-    index: '12',
-    amount: '3',
+    index: 12,
+    amount: 3,
     center: null,
     connectors: [
       'z0', null, 'p0',
@@ -145,8 +146,8 @@ export let tiles =[
   },
   {
     name: 'M',
-    index: '13',
-    amount: '2',
+    index: 13,
+    amount: 2,
     center: null,
     connectors: [
       'z0', null, null,
@@ -157,8 +158,8 @@ export let tiles =[
   },
   {
     name: 'N',
-    index: '14',
-    amount: '3',
+    index: 14,
+    amount: 3,
     center: null,
     connectors: [
       'z0', null, null,
@@ -169,8 +170,8 @@ export let tiles =[
   },
   {
     name: 'O',
-    index: '15',
-    amount: '2',
+    index: 15,
+    amount: 2,
     center: null,
     connectors: [
       'z0', null, 'p0',
@@ -181,8 +182,8 @@ export let tiles =[
   },
   {
     name: 'P',
-    index: '16',
-    amount: '3',
+    index: 16,
+    amount: 3,
     center: null,
     connectors: [
       'z0', null, 'p0',
@@ -193,8 +194,8 @@ export let tiles =[
   },
   {
     name: 'Q',
-    index: '17',
-    amount: '1',
+    index: 17,
+    amount: 1,
     center: null,
     connectors: [
       'z0', null, null,
@@ -205,8 +206,8 @@ export let tiles =[
   },
   {
     name: 'R',
-    index: '18',
-    amount: '3',
+    index: 18,
+    amount: 3,
     center: null,
     connectors: [
       'z0', null, null,
@@ -217,8 +218,8 @@ export let tiles =[
   },
   {
     name: 'S',
-    index: '19',
-    amount: '2',
+    index: 19,
+    amount: 2,
     center: null,
     connectors: [
       'z0', null, null,
@@ -229,8 +230,8 @@ export let tiles =[
   },
   {
     name: 'T',
-    index: '20',
-    amount: '1',
+    index: 20,
+    amount: 1,
     center: null,
     connectors: [
       'z0', null, null,
@@ -241,8 +242,8 @@ export let tiles =[
   },
   {
     name: 'U',
-    index: '21',
-    amount: '8',
+    index: 21,
+    amount: 8,
     center: null,
     connectors: [
       'd0', 'p0', null,
@@ -253,8 +254,8 @@ export let tiles =[
   },
   {
     name: 'V',
-    index: '22',
-    amount: '9',
+    index: 22,
+    amount: 9,
     center: null,
     connectors: [
       'p0', null, null,
@@ -265,8 +266,8 @@ export let tiles =[
   },
   {
     name: 'W',
-    index: '23',
-    amount: '4',
+    index: 23,
+    amount: 4,
     center: null,
     connectors: [
       'p0', null, 'p0',
@@ -277,8 +278,8 @@ export let tiles =[
   },
   {
     name: 'X',
-    index: '24',
-    amount: '1',
+    index: 24,
+    amount: 1,
     center: null,
     connectors: [
       'd0', 'p0', 'p0',

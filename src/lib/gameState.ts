@@ -1,23 +1,26 @@
-import { newGameGrid, type GridOfTiles, type GridCell, emptyTile, emptyGridCell } from "./grid"
+import { newRandomDeck } from "./deck"
+import { newGameGrid, type GridOfTiles, type GridCell, emptyTile, emptyGridCell, type Tile } from "./grid"
 
 type GameState = {
   grid: GridOfTiles
   activeCell: GridCell | null
+  tileDeck: Array<Tile>
 }
 
 export function newGame(): GameState{
   const gameState = {
     grid: newGameGrid(),
-    activeCell: getNextGridCell(),
+    activeCell: null,
+    tileDeck: newRandomDeck()
   }
   return gameState;
 }
 
-export function getNextGridCell(): GridCell {
-  const cell = emptyGridCell(0,0);
-  cell.tile.name = "B";
-  return cell;
-  // 1 Not enough tiles ?
-  // 2 Calculate winner
-  // 3 New Random Tile
+export function getNextTile(tileDeck:Array<Tile>): Tile |null {
+  const e = tileDeck.pop();
+  if(!e){
+    return null
+  }{
+    return e
+  }
 }

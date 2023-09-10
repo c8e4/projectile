@@ -1,15 +1,38 @@
 <script lang="ts">
     import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
-    import { getNextGridCell, newGame } from "../gameState";
-    import { rotateActiveCell, type GridCell, confirmTilePlacement, removeAndPlaceActiveCell, hasNeighbours } from "$lib/grid";
+    import { getNextTile, newGame } from "../gameState";
+    import {
+        rotateActiveCell,
+        type GridCell,
+        confirmTilePlacement,
+        removeAndPlaceActiveCell,
+        hasNeighbours,
+    } from "$lib/grid";
 
     const game = newGame();
+    getNextCell();
 
     onMount(() => {
         window.game = game;
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
     });
+
+    function getNextCell() {
+        const tile = getNextTile(game.tileDeck);
+        if (tile) {
+            game.activeCell = {
+                coord: `0,0`,
+                tile,
+                x: 0,
+                y: 0,
+                locked: false,
+            };
+        } else {
+            // game is over no more tiles left
+            console.log("Game over!");
+        }
+    }
 
     function onKeyDown(e) {
         if (e.key == "r") {
@@ -18,12 +41,12 @@
         }
         if (e.key == " ") {
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
-            game.activeCell = getNextGridCell();
+            getNextCell();
             console.log("this is probel");
         }
     }
 
-    function previewActiveCell(cell: GridCell){
+    function previewActiveCell(cell: GridCell) {
         game.grid = removeAndPlaceActiveCell(game.grid, game.activeCell, cell);
         if (game.activeCell && hasNeighbours(game.grid, cell)) {
             game.activeCell.x = cell.x;
@@ -38,7 +61,10 @@
             {#each row as cell}
                 {#if cell.tile?.name}
                     <img
-                        style="transform: rotate({cell.tile?.deg ?? 0}deg); scale: {cell.locked?1:1.1}; z-index:{cell.locked?1:2};"
+                        style="transform: rotate({cell.tile?.deg ??
+                            0}deg); scale: {cell.locked
+                            ? 1
+                            : 1.1}; z-index:{cell.locked ? 1 : 2};"
                         src="tiles/{cell.tile?.name}.png"
                         class="tile"
                         alt=""
