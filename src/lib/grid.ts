@@ -31,7 +31,7 @@ export function emptyTile(): Tile {
     }
 }
 
-export function emptyGridCell(i:number,j:number):GridCell{
+export function emptyGridCell(i: number, j: number): GridCell {
     return {
         coord: toVisualGridCoordinates(i, j),
         tile: emptyTile(),
@@ -52,7 +52,7 @@ function createEmptyGrid(gridSize: number): GridOfTiles {
 
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j < gridSize; j++) {
-            grid[i][j] = emptyGridCell(i,j);
+            grid[i][j] = emptyGridCell(i, j);
         }
     }
     return grid;
@@ -65,7 +65,12 @@ export function newGameGrid(): GridOfTiles {
         name: "D",
         deg: 0,
         center: null,
-        connectors: []
+        connectors: [
+            'z0', null, 'p1',
+            'd0', 'p0', null,
+            'p0', null, 'p0',
+            'd0', 'p1', null
+          ]
     };
     grid[GRID_CENTER][GRID_CENTER].locked = true;
     return grid;
@@ -80,6 +85,7 @@ export function rotateActiveCell(cell: GridCell | null): GridCell | null {
     } else {
         cell.tile.deg = (cell.tile.deg + 90) % 360;
     }
+    cell.tile = rotateTile(cell.tile)
     return cell;
 }
 
@@ -99,7 +105,7 @@ function placeActiveCellOnGrid(grid: GridOfTiles, targetCell: GridCell, activeCe
     return grid;
 }
 
-export function removeAndPlaceActiveCell(grid: GridOfTiles, activeCell: GridCell | null, cell: GridCell){
+export function removeAndPlaceActiveCell(grid: GridOfTiles, activeCell: GridCell | null, cell: GridCell) {
     if (!activeCell || !hasNeighbours(grid, cell)) {
         return grid;
     }
@@ -108,7 +114,7 @@ export function removeAndPlaceActiveCell(grid: GridOfTiles, activeCell: GridCell
     return grid;
 }
 
-export function confirmTilePlacement(grid: GridOfTiles, activeCell:GridCell|null): GridOfTiles {
+export function confirmTilePlacement(grid: GridOfTiles, activeCell: GridCell | null): GridOfTiles {
     if (!activeCell) {
         return grid;
     }
@@ -143,3 +149,75 @@ export function hasNeighbours(grid: GridOfTiles, cell: GridCell): boolean {
     return false;
 }
 
+export function hasGoodConnections(grid: GridOfTiles, activeCell: GridCell|null): boolean {
+    if (!activeCell){
+        return false
+    }
+    
+    const x = activeCell.x;
+    const y = activeCell.y;
+    //neighbours
+    let topClear = true
+    let botClear = true
+    let leftClear = true
+    let rightClear = true
+    if (x + 1 < GRID_SIZE) {
+        rightClear = validCellConnection(activeCell, grid[x + 1][y])
+    }
+    if (y + 1 < GRID_SIZE) {
+        topClear = validCellConnection(activeCell, grid[x][y + 1])
+    }
+    if (x - 1 >= 0) {
+        leftClear = validCellConnection(activeCell, grid[x - 1][y])
+    }
+    if (y - 1 >= 0) {
+        botClear = validCellConnection(activeCell, grid[x][y - 1])
+    }
+    return rightClear && topClear && botClear && leftClear;
+}
+
+export function validCellConnection(activeCell: GridCell, cell2: GridCell): boolean {
+    if (!cell2.locked) {
+        return true
+    }
+    const cell1 = activeCell
+    const x1 = cell1.x;
+    const y1 = cell1.y;
+    const x2 = cell2.x;
+    const y2 = cell2.y;
+
+    if (x1 == x2) {
+        if (y1 > y2) {
+            //cell1 - 3 bottom connectors
+            //cell2 - 3 top connectors
+            return canConnect([cell1.tile.connectors[7], cell1.tile.connectors[6], cell1.tile.connectors[5]], [cell2.tile.connectors[11], cell2.tile.connectors[0], cell2.tile.connectors[1]])
+        }
+        else {
+            //cell2 - 3 bottom connectors
+            //cell1 - 3 top connectors
+            return canConnect([cell2.tile.connectors[7], cell2.tile.connectors[6], cell2.tile.connectors[5]], [cell1.tile.connectors[11], cell1.tile.connectors[0], cell1.tile.connectors[1]])
+        }
+    }
+    else {
+        if (x1 > x2) {
+            // cell1 - 3 right connectors      cells2 - 3 left connectors
+            return canConnect([cell1.tile.connectors[2], cell1.tile.connectors[3], cell1.tile.connectors[4]], [cell2.tile.connectors[10], cell2.tile.connectors[9], cell2.tile.connectors[8]])
+        }
+        else {
+            // cell2 - 3 right connectors      cells1 - 3 left connectors
+            return canConnect([cell2.tile.connectors[2], cell2.tile.connectors[3], cell2.tile.connectors[4]], [cell1.tile.connectors[10], cell1.tile.connectors[9], cell1.tile.connectors[8]])
+        }
+    }
+}
+
+export function canConnect(list1: Array<string | null>, list2: Array<string | null>): boolean {
+    return list1[0]?.charAt(0) == list2[0]?.charAt(0) && list1[1]?.charAt(0) == list2[1]?.charAt(0) && list1[2]?.charAt(0) == list2[2]?.charAt(0)
+}
+
+function rotateTile(tile: Tile):Tile{
+    for (let i = 0 ; i<3 ; i++ ) {
+        tile.connectors.unshift(tile.connectors[tile.connectors.length-1]);
+        tile.connectors.pop();
+    }
+    return tile
+}

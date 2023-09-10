@@ -8,6 +8,7 @@
         confirmTilePlacement,
         removeAndPlaceActiveCell,
         hasNeighbours,
+        hasGoodConnections,
     } from "$lib/grid";
 
     const game = newGame();
@@ -41,8 +42,10 @@
             game.grid = game.grid;
         }
         if (e.key == " ") {
+            if (hasGoodConnections(game.grid,game.activeCell)){
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
             getNextCell();
+            }
         }
     }
 
