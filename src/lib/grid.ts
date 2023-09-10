@@ -2,42 +2,49 @@ type TileConnector = string | null
 
 type TileConnectorList = Array<TileConnector>
 
-type FieldTile = {
+type Tile = {
+    name: string
+    deg: number
+    connectors: TileConnectorList
+    center: string | null
+}
+
+export type GridCell = {
     coord: string
-    tile: {
-        name: string
-        deg: number
-        connectors: TileConnectorList
-        center: string | null
-    }
+    tile: Tile
     x: number
     y: number
     locked: boolean
 }
 
-export type GridOfTiles = Array<Array<FieldTile>>
+export type GridOfTiles = Array<Array<GridCell>>
 
 export const GRID_SIZE = 81;
 export const GRID_CENTER = 40;
+
+function emptyTile(): Tile {
+    return {
+        name: "",
+        deg: 0,
+        connectors: [],
+        center: null
+    }
+}
 
 function toVisualGridCoordinates(x: number, y: number): string {
     return `${x},${y}`; //`${y - GRID_CENTER}, ${(x - GRID_CENTER) * -1}`;
 }
 
-function createEmptyGrid():GridOfTiles {
-    const grid = new Array(GRID_SIZE)
+function createEmptyGrid(gridSize: number): GridOfTiles {
+    const grid = new Array(gridSize)
         .fill(null)
-        .map((x) => new Array(GRID_SIZE).fill(null));
+        .map((x) => new Array(gridSize).fill(null));
 
-    for (let i = 0; i < GRID_SIZE; i++) {
-        for (let j = 0; j < GRID_SIZE; j++) {
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
             grid[i][j] = {
                 coord: toVisualGridCoordinates(i, j),
-                tile: {
-                    name: "",
-                    deg: 0,
-                    connector: [],
-                },
+                tile: emptyTile(),
                 x: i,
                 y: j,
                 locked: false,
@@ -47,8 +54,8 @@ function createEmptyGrid():GridOfTiles {
     return grid;
 }
 
-export function newGameGrid():GridOfTiles{
-    const grid = createEmptyGrid();
+export function newGameGrid(): GridOfTiles {
+    const grid = createEmptyGrid(GRID_SIZE);
     // TODO take actual D tile
     grid[GRID_CENTER][GRID_CENTER].tile = {
         name: "D",
@@ -58,5 +65,71 @@ export function newGameGrid():GridOfTiles{
     };
     grid[GRID_CENTER][GRID_CENTER].locked = true;
     return grid;
+}
+
+export function rotateActiveCell(cell: GridCell | null): GridCell | null {
+    if (!cell) {
+        return null;
+    }
+    if (!cell.tile.deg) {
+        cell.tile.deg = 90;
+    } else {
+        cell.tile.deg = (cell.tile.deg + 90) % 360;
+    }
+    return cell;
+}
+
+export function removeActiveCellFromGrid(grid: GridOfTiles, cell: GridCell | null): GridOfTiles {
+    if (!cell || !hasNeighbours(grid, cell)) {
+        return grid;
+    }
+    if (cell) {
+        grid[cell.x][cell.y].tile = emptyTile();
+    }
+    return grid;
+}
+
+export function placeActiveCellOnGrid(grid: GridOfTiles, targetCell: GridCell, activeCell: GridCell | null): GridOfTiles {
+    if (activeCell) {
+        grid[targetCell.x][targetCell.y].tile = emptyTile();
+        grid[targetCell.x][targetCell.y].tile = activeCell.tile;
+        return grid
+    }
+    return grid;
+}
+
+export function confirmTilePlacement(grid: GridOfTiles, activeCell:GridCell|null): GridOfTiles {
+    if (!activeCell) {
+        return grid;
+    }
+    grid[activeCell.x][activeCell.y].locked = true;
+    return grid;
+}
+
+export function hasNeighbours(grid: GridOfTiles, cell: GridCell): boolean {
+    const x = cell.x;
+    const y = cell.y;
+    //neighbours
+    if (x + 1 < GRID_SIZE) {
+        if (grid[x + 1][y].locked) {
+            return true;
+        }
+    }
+    if (y + 1 < GRID_SIZE) {
+        if (grid[x][y + 1].locked) {
+            return true;
+        }
+    }
+    if (x - 1 >= 0) {
+        if (grid[x - 1][y].locked) {
+            return true;
+        }
+    }
+    if (y - 1 >= 0) {
+        if (grid[x][y - 1].locked) {
+            return true;
+        }
+    }
+    return false;
 }
 

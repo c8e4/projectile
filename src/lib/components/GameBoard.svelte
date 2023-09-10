@@ -2,101 +2,29 @@
     import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
     import { newGame } from "../gameState";
-    import { GRID_SIZE } from "$lib/grid";
+    import { placeActiveCellOnGrid, rotateActiveCell, type GridCell, removeActiveCellFromGrid, confirmTilePlacement } from "$lib/grid";
 
-
-    const gameState = newGame();
-
-
-    let activeCell = null;
+    const game = newGame();
 
     onMount(() => {
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
     });
 
-    function landTileAtCell(cell) {
-        if (!hasNeighbours(cell)) {
-            return;
-        }
-        if (activeCell) {
-            gameState.grid[activeCell.x][activeCell.y].tile = {
-                name: "",
-                deg: 0,
-            };
-            activeCell = null;
-        }
-
-        console.log("old cell", activeCell);
-        activeCell = cell;
-        console.log("New", activeCell);
-        cell.tile = {
-            name: "B",
-        };
-        gameState.grid = gameState.grid;
-        //activeCell = activeCell;
-    }
-
-    function hasNeighbours(cell) {
-        const x = cell.x;
-        const y = cell.y;
-        //neighbours
-        if (x + 1 < GRID_SIZE) {
-            if (gameState.grid[x + 1][y].locked) {
-                return true;
-            }
-        }
-        if (y + 1 < GRID_SIZE) {
-            if (gameState.grid[x][y + 1].locked) {
-                return true;
-            }
-        }
-        if (x - 1 >= 0) {
-            if (gameState.grid[x - 1][y].locked) {
-                return true;
-            }
-        }
-        if (y - 1 >= 0) {
-            if (gameState.grid[x][y - 1].locked) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     function onKeyDown(e) {
-        console.log(e.key);
         if (e.key == "r") {
-            //
-            rotateActiveCell(activeCell);
-            gameState.grid = gameState.grid;
+            game.activeCell = rotateActiveCell(game.activeCell);
+            game.grid = game.grid;
         }
         if (e.key == " ") {
-            confirmTilePlacement(activeCell);
+            game.grid = confirmTilePlacement(game.grid, game.activeCell);
+            game.activeCell = null;
             console.log("this is probel");
         }
     }
 
-    function rotateActiveCell(cell) {
-        if (!cell) {
-            return;
-        }
-        if (!cell.tile.deg) {
-            cell.tile.deg = 90;
-        } else {
-            cell.tile.deg = (cell.tile.deg + 90) % 360;
-        }
-        gameState.grid = gameState.grid;
-    }
-
-    function confirmTilePlacement() {
-        if (!activeCell) {
-            return;
-        }
-        // 1 Check Connectors
-        activeCell.locked = true;
-        activeCell = null;
-        // 3 Next Step "BadBoyPlacement"
-        // 4 Calculate if Castle/Road/Church completed?
+    function previewActiveCell(cell: GridCell){
+        game.grid = removeActiveCellFromGrid(game.grid, game.activeCell);
+        game.grid = placeActiveCellOnGrid(game.grid, cell, game.activeCell); 
     }
 
     function getNextTile() {
@@ -108,7 +36,7 @@
 </script>
 
 <div class="board bg-green-100">
-    {#each gameState.grid as row}
+    {#each game.grid as row}
         <div class="flex">
             {#each row as cell}
                 {#if cell.tile?.name}
@@ -119,9 +47,11 @@
                         alt=""
                     />
                 {:else}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y-no-static-element-interactions -->
                     <div
                         class="cell bg-red-100"
-                        on:click={() => landTileAtCell(cell)}
+                        on:click={() => previewActiveCell(cell)}
                     >
                         {cell.coord}
                     </div>
