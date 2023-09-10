@@ -28,7 +28,9 @@
             return;
         }
         game.grid = removeActiveCellFromGrid(game.grid, game.activeCell);
-        game.grid = placeActiveCellOnGrid(game.grid, cell, game.activeCell); 
+        game.grid = placeActiveCellOnGrid(game.grid, cell, game.activeCell);
+        game.activeCell.x = cell.x;
+        game.activeCell.y = cell.y;
     }
 </script>
 
