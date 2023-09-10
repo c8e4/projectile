@@ -71,7 +71,7 @@
 
 </script>
 
-<div class="board flex bg-green-100">
+<div class="board flex">
     {#each game.grid as row}
         <div class="flex flex-col-reverse">
             {#each row as cell}
@@ -79,7 +79,12 @@
                     {#if showConnectors}
                     <Tile tile={cell.tile}></Tile> 
                     {:else}
+                    <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
+                    <!-- TODO: https://www.kevinleary.net/blog/remove-box-shadows-one-side-css/ -->
+                    <!-- TODO: add static properties: hasLeftNeighbour, haBotNeighbouth, ... -->
+                    <!-- TODO: only render a subframe of the board, no need to iterate over all tiles -->
                     <img
+                    
                         style="transform: rotate({cell.tile?.deg ??
                             0}deg); scale: {cell.locked
                             ? 1
@@ -93,10 +98,10 @@
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
                     <div
-                        class="cell bg-red-100"
+                        class="cell"
                         on:click={() => previewActiveCell(cell)}
                     >
-                        {cell.coord}
+                        <!-- {cell.coord} -->
                     </div>
                 {/if}
             {/each}
@@ -108,19 +113,22 @@
 
 <style>
     .board {
+        background-image: url('gray_tile.png');
+        background-repeat: repeat;
+        backdrop-filter: grayscale(1);
         width: 8000px;
         height: 8000px;
     }
     .cell {
         width: 100px;
         height: 100px;
-        border: 1px solid gray;
         display: flex;
         align-items: center;
         justify-content: center;
     }
     .tile {
-        width: 99px;
+        width: 100px;
         height: 100px;
+        box-shadow: -4px 6px 13px 2px rgba(0,0,0,0.7);
     }
 </style>

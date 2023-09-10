@@ -18,7 +18,7 @@
             <SmallTile val={tile.connectors[9]}></SmallTile>
             <SmallTile val={tile.connectors[8]}></SmallTile>
         </div>
-        <div class="tile-center bg-gray-200 flex items-center justify-center text-3xl font-bold">
+        <div class="tile-center flex items-center justify-center text-3xl font-bold">
             {tile.name}
         </div>
         <div class="">

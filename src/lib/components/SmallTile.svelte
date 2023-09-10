@@ -3,9 +3,6 @@
 </script>
 <div
     class="small-tile"
-    class:bg-green-200={val?.startsWith("p")}
-    class:bg-slate-300={val?.startsWith("d")}
-    class:bg-yellow-300={val?.startsWith("z")}
 >
     {val ?? ""}
 </div>
