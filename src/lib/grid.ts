@@ -52,7 +52,7 @@ function createEmptyGrid(gridSize: number): GridOfTiles {
 
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j < gridSize; j++) {
-            grid[i][j] = emptyGridCell(i, j);
+            grid[i][j] = emptyGridCell(i, convertJ(j));
         }
     }
     return grid;
@@ -190,22 +190,25 @@ export function validCellConnection(activeCell: GridCell, cell2: GridCell): bool
         if (y1 > y2) {
             //cell1 - 3 bottom connectors
             //cell2 - 3 top connectors
-            return canConnect([cell1.tile.connectors[7], cell1.tile.connectors[6], cell1.tile.connectors[5]], [cell2.tile.connectors[11], cell2.tile.connectors[0], cell2.tile.connectors[1]])
+
+            return canConnect([cell1.tile.connectors[7], cell1.tile.connectors[6], cell1.tile.connectors[5]], [cell2.tile.connectors[11], cell2.tile.connectors[0], cell2.tile.connectors[1]])  
+            
         }
         else {
             //cell2 - 3 bottom connectors
             //cell1 - 3 top connectors
-            return canConnect([cell2.tile.connectors[7], cell2.tile.connectors[6], cell2.tile.connectors[5]], [cell1.tile.connectors[11], cell1.tile.connectors[0], cell1.tile.connectors[1]])
+            return canConnect([cell2.tile.connectors[7], cell2.tile.connectors[6], cell2.tile.connectors[5]], [cell1.tile.connectors[11], cell1.tile.connectors[0], cell1.tile.connectors[1]])           
         }
     }
     else {
         if (x1 > x2) {
-            // cell1 - 3 right connectors      cells2 - 3 left connectors
-            return canConnect([cell1.tile.connectors[2], cell1.tile.connectors[3], cell1.tile.connectors[4]], [cell2.tile.connectors[10], cell2.tile.connectors[9], cell2.tile.connectors[8]])
+        // cell2 - 3 right connectors      cells1 - 3 left connectors
+        return canConnect([cell2.tile.connectors[2], cell2.tile.connectors[3], cell2.tile.connectors[4]], [cell1.tile.connectors[10], cell1.tile.connectors[9], cell1.tile.connectors[8]])
+
         }
         else {
-            // cell2 - 3 right connectors      cells1 - 3 left connectors
-            return canConnect([cell2.tile.connectors[2], cell2.tile.connectors[3], cell2.tile.connectors[4]], [cell1.tile.connectors[10], cell1.tile.connectors[9], cell1.tile.connectors[8]])
+        // cell1 - 3 right connectors      cells2 - 3 left connectors
+        return canConnect([cell1.tile.connectors[2], cell1.tile.connectors[3], cell1.tile.connectors[4]], [cell2.tile.connectors[10], cell2.tile.connectors[9], cell2.tile.connectors[8]])
         }
     }
 }
@@ -220,4 +223,8 @@ export function rotateTile(tile: Tile):Tile{
         tile.connectors.pop();
     }
     return tile
+}
+
+export function convertJ(j:number):number{
+    return j
 }

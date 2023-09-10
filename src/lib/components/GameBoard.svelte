@@ -66,9 +66,9 @@
 
 </script>
 
-<div class="board bg-green-100">
+<div class="board flex bg-green-100">
     {#each game.grid as row}
-        <div class="flex">
+        <div class="flex flex-col-reverse">
             {#each row as cell}
                 {#if cell.tile?.name}
                     {#if showConnectors}
