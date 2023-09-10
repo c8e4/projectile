@@ -5,7 +5,9 @@ type GameState = {
   grid: GridOfTiles
   activeCell: GridCell | null
   tileDeck: Array<Tile>
+  landscapeList: Array<Landscape>
 }
+
 
 export function newGame(): GameState{
   const gameState = {
