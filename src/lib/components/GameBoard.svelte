@@ -29,6 +29,7 @@
                 locked: false,
             };
         } else {
+            game.activeCell = null;
             // game is over no more tiles left
             console.log("Game over!");
         }
@@ -42,7 +43,6 @@
         if (e.key == " ") {
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
             getNextCell();
-            console.log("this is probel");
         }
     }
 
