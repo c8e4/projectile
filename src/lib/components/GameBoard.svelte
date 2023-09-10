@@ -1,10 +1,9 @@
 <script lang="ts">
-    import SmallTile from "$lib/SmallTile.svelte";
     import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
+    import { GRID_CENTER, GRID_SIZE } from "../gameState";
 
-    let GRID_SIZE = 81;
-    let GRID_CENTER = 40;
+
     let grid = new Array(GRID_SIZE)
         .fill(null)
         .map((x) => new Array(GRID_SIZE).fill(null));
@@ -23,15 +22,12 @@
             };
         }
     }
-    grid[40][40].tile = {
+    grid[GRID_CENTER][GRID_CENTER].tile = {
         name: "D",
         deg: 0,
     };
-    grid[40][40].locked = true;
-    /*grid[40][41].tile = {
-    name: "C",
-  };
-  */
+    grid[GRID_CENTER][GRID_CENTER].locked = true;
+
 
     let activeCell = null;
 

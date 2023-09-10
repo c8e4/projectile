@@ -1,5 +1,5 @@
 <script lang="ts">
-    import SmallTile from "$lib/SmallTile.svelte";
+    import SmallTile from "$lib/components/SmallTile.svelte";
     import { tiles } from "$lib/game/tiles";
     let myTiles = tiles 
     
