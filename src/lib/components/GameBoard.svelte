@@ -2,7 +2,7 @@
     import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
     import { newGame } from "../gameState";
-    import { placeActiveCellOnGrid, rotateActiveCell, type GridCell, removeActiveCellFromGrid, confirmTilePlacement, hasNeighbours, removeAndPlaceActiveCell } from "$lib/grid";
+    import { rotateActiveCell, type GridCell, confirmTilePlacement, removeAndPlaceActiveCell, hasNeighbours } from "$lib/grid";
 
     const game = newGame();
 
@@ -25,7 +25,7 @@
 
     function previewActiveCell(cell: GridCell){
         game.grid = removeAndPlaceActiveCell(game.grid, game.activeCell, cell);
-        if(game.activeCell){
+        if (game.activeCell && hasNeighbours(game.grid, cell)) {
             game.activeCell.x = cell.x;
             game.activeCell.y = cell.y;
         }
@@ -38,7 +38,7 @@
             {#each row as cell}
                 {#if cell.tile?.name}
                     <img
-                        style="transform: rotate({cell.tile?.deg ?? 0}deg);"
+                        style="transform: rotate({cell.tile?.deg ?? 0}deg); scale: {cell.locked?1:1.1}; z-index:{cell.locked?1:2};"
                         src="tiles/{cell.tile?.name}.png"
                         class="tile"
                         alt=""
