@@ -83,19 +83,28 @@ export function rotateActiveCell(cell: GridCell | null): GridCell | null {
     return cell;
 }
 
-export function removeActiveCellFromGrid(grid: GridOfTiles, cell: GridCell | null): GridOfTiles {
+function removeActiveCellFromGrid(grid: GridOfTiles, cell: GridCell | null): GridOfTiles {
     if (cell && !cell?.locked) {
         grid[cell.x][cell.y].tile = emptyTile();
     }
     return grid;
 }
 
-export function placeActiveCellOnGrid(grid: GridOfTiles, targetCell: GridCell, activeCell: GridCell | null): GridOfTiles {
+function placeActiveCellOnGrid(grid: GridOfTiles, targetCell: GridCell, activeCell: GridCell | null): GridOfTiles {
     if (activeCell) {
         grid[targetCell.x][targetCell.y].tile = emptyTile();
         grid[targetCell.x][targetCell.y].tile = activeCell.tile;
         return grid
     }
+    return grid;
+}
+
+export function removeAndPlaceActiveCell(grid: GridOfTiles, activeCell: GridCell | null, cell: GridCell){
+    if (!activeCell || !hasNeighbours(grid, cell)) {
+        return grid;
+    }
+    grid = removeActiveCellFromGrid(grid, activeCell);
+    grid = placeActiveCellOnGrid(grid, cell, activeCell);
     return grid;
 }
 
