@@ -22,12 +22,22 @@ export type GridOfTiles = Array<Array<GridCell>>
 export const GRID_SIZE = 81;
 export const GRID_CENTER = 40;
 
-function emptyTile(): Tile {
+export function emptyTile(): Tile {
     return {
         name: "",
         deg: 0,
         connectors: [],
         center: null
+    }
+}
+
+export function emptyGridCell(i:number,j:number):GridCell{
+    return {
+        coord: toVisualGridCoordinates(i, j),
+        tile: emptyTile(),
+        x: i,
+        y: j,
+        locked: false,
     }
 }
 
@@ -42,13 +52,7 @@ function createEmptyGrid(gridSize: number): GridOfTiles {
 
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j < gridSize; j++) {
-            grid[i][j] = {
-                coord: toVisualGridCoordinates(i, j),
-                tile: emptyTile(),
-                x: i,
-                y: j,
-                locked: false,
-            };
+            grid[i][j] = emptyGridCell(i,j);
         }
     }
     return grid;

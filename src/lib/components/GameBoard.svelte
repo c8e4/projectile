@@ -26,13 +26,6 @@
         game.grid = removeActiveCellFromGrid(game.grid, game.activeCell);
         game.grid = placeActiveCellOnGrid(game.grid, cell, game.activeCell); 
     }
-
-    function getNextTile() {
-        // 1 Not enough tiles ?
-        // 2 Calculate winner
-        // 3 New Random Tile
-    }
-
 </script>
 
 <div class="board bg-green-100">
