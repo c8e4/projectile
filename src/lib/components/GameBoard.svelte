@@ -11,9 +11,11 @@
         hasGoodConnections,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
+    import { addLocations } from "$lib/landscape";
 
     const game = newGame();
     getNextCell();
+    addLocations(game.grid[40][40]);
 
     onMount(() => {
         window.game = game;
