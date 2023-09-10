@@ -1,7 +1,7 @@
 <script lang="ts">
     import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
-    import { newGame } from "../gameState";
+    import { getNextGridCell, newGame } from "../gameState";
     import { rotateActiveCell, type GridCell, confirmTilePlacement, removeAndPlaceActiveCell, hasNeighbours } from "$lib/grid";
 
     const game = newGame();
@@ -18,7 +18,7 @@
         }
         if (e.key == " ") {
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
-            game.activeCell = null;
+            game.activeCell = getNextGridCell();
             console.log("this is probel");
         }
     }

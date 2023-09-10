@@ -13,7 +13,7 @@ export function newGame(): GameState{
   return gameState;
 }
 
-function getNextGridCell(): GridCell {
+export function getNextGridCell(): GridCell {
   const cell = emptyGridCell(0,0);
   cell.tile.name = "B";
   return cell;
