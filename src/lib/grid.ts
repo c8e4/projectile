@@ -84,9 +84,6 @@ export function rotateActiveCell(cell: GridCell | null): GridCell | null {
 }
 
 export function removeActiveCellFromGrid(grid: GridOfTiles, cell: GridCell | null): GridOfTiles {
-    if (!cell || !hasNeighbours(grid, cell)) {
-        return grid;
-    }
     if (cell) {
         grid[cell.x][cell.y].tile = emptyTile();
     }

@@ -2,11 +2,12 @@
     import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
     import { newGame } from "../gameState";
-    import { placeActiveCellOnGrid, rotateActiveCell, type GridCell, removeActiveCellFromGrid, confirmTilePlacement } from "$lib/grid";
+    import { placeActiveCellOnGrid, rotateActiveCell, type GridCell, removeActiveCellFromGrid, confirmTilePlacement, hasNeighbours } from "$lib/grid";
 
     const game = newGame();
 
     onMount(() => {
+        window.game = game;
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
     });
 
@@ -23,6 +24,9 @@
     }
 
     function previewActiveCell(cell: GridCell){
+        if (!game.activeCell || !hasNeighbours(game.grid, cell)) {
+            return;
+        }
         game.grid = removeActiveCellFromGrid(game.grid, game.activeCell);
         game.grid = placeActiveCellOnGrid(game.grid, cell, game.activeCell); 
     }
