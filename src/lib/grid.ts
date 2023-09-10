@@ -214,7 +214,7 @@ export function canConnect(list1: Array<string | null>, list2: Array<string | nu
     return list1[0]?.charAt(0) == list2[0]?.charAt(0) && list1[1]?.charAt(0) == list2[1]?.charAt(0) && list1[2]?.charAt(0) == list2[2]?.charAt(0)
 }
 
-function rotateTile(tile: Tile):Tile{
+export function rotateTile(tile: Tile):Tile{
     for (let i = 0 ; i<3 ; i++ ) {
         tile.connectors.unshift(tile.connectors[tile.connectors.length-1]);
         tile.connectors.pop();

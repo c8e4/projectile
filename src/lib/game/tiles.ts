@@ -10,7 +10,8 @@ export let tiles =
       'p0', null, 'p0',
       'd0', 'p0', null,
       'p0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'B',
@@ -22,7 +23,8 @@ export let tiles =
       'p0', null, null,
       'p0', null, null,
       'p0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'C',
@@ -34,7 +36,8 @@ export let tiles =
       'z0', null, null,
       'z0', null, null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'D',
@@ -46,7 +49,8 @@ export let tiles =
       'd0', 'p0', null,
       'p0', null, 'p0',
       'd0', 'p1', null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'E',
@@ -58,7 +62,8 @@ export let tiles =
       'p0', null, null,
       'p0', null, null,
       'p0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'F',
@@ -70,7 +75,8 @@ export let tiles =
       'z0', null, null,
       'p0', null, null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'G',
@@ -82,7 +88,8 @@ export let tiles =
       'z0', null, null,
       'p0', null, null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'H',
@@ -94,7 +101,8 @@ export let tiles =
       'p0', null, null,
       'z1', null, null,
       'p0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'I',
@@ -106,7 +114,8 @@ export let tiles =
       'p0', null, null,
       'p0', null, null,
       'z1', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'J',
@@ -118,7 +127,8 @@ export let tiles =
       'd0', 'p1', 'p1',
       'd0', 'p0', null,
       'p0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'K',
@@ -130,7 +140,8 @@ export let tiles =
       'p0', null, 'p0',
       'd0', 'p1', 'p1',
       'd0', 'p0', null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'L',
@@ -142,7 +153,8 @@ export let tiles =
       'd0', 'p1', 'p1',
       'd1', 'p2', 'p2',
       'd2', 'p0', null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'M',
@@ -154,7 +166,8 @@ export let tiles =
       'p0', null, null,
       'p0', null, null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'N',
@@ -166,7 +179,8 @@ export let tiles =
       'p0', null, null,
       'p0', null, null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'O',
@@ -178,7 +192,8 @@ export let tiles =
       'd0', 'p1', 'p1',
       'd0', 'p0', null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'P',
@@ -190,7 +205,8 @@ export let tiles =
       'd0', 'p1', 'p1',
       'd0', 'p0', null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'Q',
@@ -202,7 +218,8 @@ export let tiles =
       'z0', null, null,
       'p0', null, null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'R',
@@ -214,7 +231,8 @@ export let tiles =
       'z0', null, null,
       'p0', null, null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'S',
@@ -226,7 +244,8 @@ export let tiles =
       'z0', null, 'p0',
       'd0', 'p1', null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'T',
@@ -238,7 +257,8 @@ export let tiles =
       'z0', null, 'p0',
       'd0', 'p1', null,
       'z0', null, null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'U',
@@ -250,7 +270,8 @@ export let tiles =
       'p0', null, 'p0',
       'd0', 'p1', null,
       'p1', null, 'p1'
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'V',
@@ -262,7 +283,8 @@ export let tiles =
       'p0', null, 'p0',
       'd0', 'p1', 'p1',
       'd0', 'p0', null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'W',
@@ -274,7 +296,8 @@ export let tiles =
       'd0', 'p1', 'p1',
       'd1', 'p2', 'p2',
       'd2', 'p0', null
-    ]
+    ],
+    deg: 0
   },
   {
     name: 'X',
@@ -286,6 +309,7 @@ export let tiles =
       'd1', 'p1', 'p1',
       'd2', 'p2', 'p2',
       'd3', 'p3', 'p3'
-    ]
+    ],
+    deg: 0
   }
 ]

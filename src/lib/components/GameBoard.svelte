@@ -10,6 +10,7 @@
         hasNeighbours,
         hasGoodConnections,
     } from "$lib/grid";
+    import Tile from "./Tile.svelte";
 
     const game = newGame();
     getNextCell();
@@ -18,6 +19,8 @@
         window.game = game;
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
     });
+
+    let showConnectors=false
 
     function getNextCell() {
         const tile = getNextTile(game.tileDeck);
@@ -47,6 +50,9 @@
             getNextCell();
             }
         }
+        if (e.key == "x") {
+            showConnectors=!showConnectors
+        }
     }
 
     function previewActiveCell(cell: GridCell) {
@@ -56,6 +62,8 @@
             game.activeCell.y = cell.y;
         }
     }
+
+
 </script>
 
 <div class="board bg-green-100">
@@ -63,6 +71,9 @@
         <div class="flex">
             {#each row as cell}
                 {#if cell.tile?.name}
+                    {#if showConnectors}
+                    <Tile tile={cell.tile}></Tile> 
+                    {:else}
                     <img
                         style="transform: rotate({cell.tile?.deg ??
                             0}deg); scale: {cell.locked
@@ -72,6 +83,7 @@
                         class="tile"
                         alt=""
                     />
+                    {/if}
                 {:else}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
