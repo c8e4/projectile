@@ -4,5 +4,5 @@
     import TilePreview from "$lib/TilePreview.svelte";
 </script>
 <!-- <TilePreview></TilePreview> -->
-<!-- <GameBoard></GameBoard> -->
-<Three></Three>
+<GameBoard></GameBoard>
+<!-- <Three></Three> -->
