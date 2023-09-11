@@ -7,6 +7,8 @@ export type Tile = {
     deg: number
     connectors: TileConnectorList
     center: string | null
+    dropZone: TileConnectorList
+    dropZoneCenter: string | null
 }
 
 export type GridCell = {
@@ -27,7 +29,9 @@ export function emptyTile(): Tile {
         name: "",
         deg: 0,
         connectors: [],
-        center: null
+        center: null,
+        dropZone: [],
+        dropZoneCenter: null,
     }
 }
 
@@ -70,7 +74,14 @@ export function newGameGrid(): GridOfTiles {
             'd0', 'p0', null,
             'p0', null, 'p0',
             'd0', 'p1', null
-          ]
+        ],
+        dropZone: [
+            'z0', null, 'p1',
+            null, null, null,
+            'p0', null, null,
+            null, null, null
+        ],
+        dropZoneCenter: 'd0',
     };
     grid[GRID_CENTER][GRID_CENTER].locked = true;
     return grid;
@@ -149,11 +160,11 @@ export function hasNeighbours(grid: GridOfTiles, cell: GridCell): boolean {
     return false;
 }
 
-export function hasGoodConnections(grid: GridOfTiles, activeCell: GridCell|null): boolean {
-    if (!activeCell){
+export function hasGoodConnections(grid: GridOfTiles, activeCell: GridCell | null): boolean {
+    if (!activeCell) {
         return false
     }
-    
+
     const x = activeCell.x;
     const y = activeCell.y;
     //neighbours
@@ -191,24 +202,24 @@ export function validCellConnection(activeCell: GridCell, cell2: GridCell): bool
             //cell1 - 3 bottom connectors
             //cell2 - 3 top connectors
 
-            return canConnect([cell1.tile.connectors[7], cell1.tile.connectors[6], cell1.tile.connectors[5]], [cell2.tile.connectors[11], cell2.tile.connectors[0], cell2.tile.connectors[1]])  
-            
+            return canConnect([cell1.tile.connectors[7], cell1.tile.connectors[6], cell1.tile.connectors[5]], [cell2.tile.connectors[11], cell2.tile.connectors[0], cell2.tile.connectors[1]])
+
         }
         else {
             //cell2 - 3 bottom connectors
             //cell1 - 3 top connectors
-            return canConnect([cell2.tile.connectors[7], cell2.tile.connectors[6], cell2.tile.connectors[5]], [cell1.tile.connectors[11], cell1.tile.connectors[0], cell1.tile.connectors[1]])           
+            return canConnect([cell2.tile.connectors[7], cell2.tile.connectors[6], cell2.tile.connectors[5]], [cell1.tile.connectors[11], cell1.tile.connectors[0], cell1.tile.connectors[1]])
         }
     }
     else {
         if (x1 > x2) {
-        // cell2 - 3 right connectors      cells1 - 3 left connectors
-        return canConnect([cell2.tile.connectors[2], cell2.tile.connectors[3], cell2.tile.connectors[4]], [cell1.tile.connectors[10], cell1.tile.connectors[9], cell1.tile.connectors[8]])
+            // cell2 - 3 right connectors      cells1 - 3 left connectors
+            return canConnect([cell2.tile.connectors[2], cell2.tile.connectors[3], cell2.tile.connectors[4]], [cell1.tile.connectors[10], cell1.tile.connectors[9], cell1.tile.connectors[8]])
 
         }
         else {
-        // cell1 - 3 right connectors      cells2 - 3 left connectors
-        return canConnect([cell1.tile.connectors[2], cell1.tile.connectors[3], cell1.tile.connectors[4]], [cell2.tile.connectors[10], cell2.tile.connectors[9], cell2.tile.connectors[8]])
+            // cell1 - 3 right connectors      cells2 - 3 left connectors
+            return canConnect([cell1.tile.connectors[2], cell1.tile.connectors[3], cell1.tile.connectors[4]], [cell2.tile.connectors[10], cell2.tile.connectors[9], cell2.tile.connectors[8]])
         }
     }
 }
@@ -217,14 +228,16 @@ export function canConnect(list1: Array<string | null>, list2: Array<string | nu
     return list1[0]?.charAt(0) == list2[0]?.charAt(0) && list1[1]?.charAt(0) == list2[1]?.charAt(0) && list1[2]?.charAt(0) == list2[2]?.charAt(0)
 }
 
-export function rotateTile(tile: Tile):Tile{
-    for (let i = 0 ; i<3 ; i++ ) {
-        tile.connectors.unshift(tile.connectors[tile.connectors.length-1]);
+export function rotateTile(tile: Tile): Tile {
+    for (let i = 0; i < 3; i++) {
+        tile.connectors.unshift(tile.connectors[tile.connectors.length - 1]);
         tile.connectors.pop();
+        tile.dropZone.unshift(tile.connectors[tile.connectors.length - 1]);
+        tile.dropZone.pop();
     }
     return tile
 }
 
-export function convertJ(j:number):number{
+export function convertJ(j: number): number {
     return j
 }

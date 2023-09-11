@@ -21,6 +21,9 @@ export type Port = {
     closed: boolean
     id: string
     landscapeId: string
+    playerId: number
+    figureId: number
+    dropZone: boolean
 }
 
 export type ConnectorIndex = number // 0..11
@@ -38,7 +41,9 @@ export function addLocations(cell: GridCell): Array<Port> {
                 index: i,
                 closed: false,
                 id: `x${cell.x}y${cell.y}${p}`,
-                landscapeId: `x${cell.x}y${cell.y}${p}`
+                landscapeId: `x${cell.x}y${cell.y}${p}`,
+                figureId:null,
+                dropZone:cell.tile.dropZone[i]
             }
             localPorts.push(tempPort)
         }
