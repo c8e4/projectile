@@ -97,7 +97,7 @@ function renameLandscapeId(sourcePort: Port, targetPort: Port | null, portList: 
 
 function getCorrespondingPortParametrs(portIndex: number): Array<number> {
     // @ts-ignore
-    return PORT_MAP.find((p) => { p[0] == portIndex })
+    return PORT_MAP.find((p) =>  p[0] == portIndex )
 }
 
 function addCurrentCellPorts(cell: GridCell, portList: Array<Port>): Array<Port> {
