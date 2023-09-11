@@ -51,13 +51,6 @@ export function addLocations(cell: GridCell): Array<Port> {
     //let localPorts = cell.tile.connectors 
 }
 
-type PortMapRow = {
-    index: number
-    dX: number
-    dY: number
-    targetIndex: number
-}
-
 const PORT_MAP = [
     [11, 0, 1, 7],
     [0, 0, 1, 6],
@@ -77,7 +70,7 @@ export function processCurrentCellPorts(cell: GridCell, portList: Array<Port>): 
     let localPorts: Array<Port> = addLocations(cell)
     portList.push(...localPorts)
     localPorts.forEach((p) => {
-        let {dX, dY, targetIndex} = getCorrespondingPortParametrs(p.index)
+        let [index, dX, dY, targetIndex] = getCorrespondingPortParametrs(p.index)
         let targetPort = findPort(portList, p.x + dX, p.y + dY, targetIndex)
         portList = renameLandscapeId(p, targetPort, portList)
     })
@@ -102,20 +95,9 @@ function renameLandscapeId(sourcePort: Port, targetPort: Port | null, portList: 
 }
 
 
-function getCorrespondingPortParametrs(portIndex: number): PortMapRow {
+function getCorrespondingPortParametrs(portIndex: number): Array<number> {
     // @ts-ignore
-    const row = PORT_MAP.find((p) => { p[0] == portIndex })
-
-    return {
-        // @ts-ignore
-        index: row[0],
-        // @ts-ignore
-        dX: row[1],
-        // @ts-ignore
-        dY: row[2],
-        // @ts-ignore
-        targetIndex: row[3]
-    }
+    return PORT_MAP.find((p) => { p[0] == portIndex })
 }
 
 function addCurrentCellPorts(cell: GridCell, portList: Array<Port>): Array<Port> {
