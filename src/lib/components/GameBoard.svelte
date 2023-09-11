@@ -14,6 +14,8 @@
     import {processCurrentCellPorts } from "$lib/landscape";
 
     const game = newGame();
+    game.portList=processCurrentCellPorts(game.grid[40][40], game.portList)
+    console.table(game.portList)
     getNextCell();
 
     onMount(() => {
@@ -50,6 +52,7 @@
             if (hasGoodConnections(game.grid,game.activeCell)){
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
             game.portList = processCurrentCellPorts(game.activeCell,game.portList)
+            console.table(game.portList)
             getNextCell();
             }
             e.preventDefault();
