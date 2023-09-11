@@ -14,7 +14,7 @@
     import {processCurrentCellPorts } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
 
-    const game = newGame();
+    const game = newGame(3);
     game.portList=processCurrentCellPorts(game.grid[40][40], game.portList)
     console.table(game.portList)
     getNextCell();
