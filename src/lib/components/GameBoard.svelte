@@ -75,7 +75,9 @@
         }
     }
 
-
+    function updatePos(pos:any){
+        console.log(pos)
+    }
 </script>
 
 <div class="board flex">
@@ -84,7 +86,7 @@
             {#each row as cell}
                 {#if cell.tile?.name}
                     <div class="relative" style="width:100px;height:100px">
-                        <MeepleDropzone tile={cell.tile}></MeepleDropzone>
+                        <MeepleDropzone tile={cell.tile} updatePos={updatePos}></MeepleDropzone>
                         {#if showConnectors}
                         <Tile tile={cell.tile}></Tile> 
                         {:else}
