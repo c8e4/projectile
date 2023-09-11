@@ -43,13 +43,29 @@ export function addLocations(cell: GridCell) {
             localPorts.push(tempPort)
         }
     })
-    console.log (localPorts)
+    console.log(localPorts)
     const localPortNames = cell.tile.connectors.filter((c, i, a) => c && a.indexOf(c) == i)
     // Landscape name = port name [0]
     //console.log(localLandscapes)
 
     //let localPorts = cell.tile.connectors 
 }
+
+const PORT_MAP = [
+    [11, 0, 1, 7],
+    [0, 0, 1, 6],
+    [1, 0, 1, 5],
+    [2, 1, 0, 10],
+    [3, 1, 0, 9],
+    [4, 1, 0, 8],
+    [5, 0, -1, 1],
+    [6, 0, -1, 0],
+    [7, 0, -1, 11],
+    [8, -1, 0, 4],
+    [9, -1, 0, 3],
+    [10, -1, 0, 2],
+]
+
 
 
 function landTypeToName(landType: LandType): string {
