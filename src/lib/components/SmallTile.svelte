@@ -3,16 +3,16 @@
 </script>
 <div
     class="small-tile"
+    style="border: {val?'1px solid black':'none'}; background:{val?'#0000005c':''};"
 >
-    {val ?? ""}
 </div>
 
 <style>
     .small-tile {
         width: 20px;
         height: 20px;
-        border: 1px solid gray;
         display: flex;
+        border-radius: 50%;
         justify-content: center;
         align-items: center;
     }

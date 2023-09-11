@@ -12,6 +12,7 @@
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
     import {processCurrentCellPorts } from "$lib/landscape";
+    import MeepleDropzone from "./MeepleDropzone.svelte";
 
     const game = newGame();
     game.portList=processCurrentCellPorts(game.grid[40][40], game.portList)
@@ -19,7 +20,7 @@
     getNextCell();
 
     onMount(() => {
-        window.game = game;
+        (window as any).game = game;
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
     });
 
@@ -42,7 +43,7 @@
         }
     }
 
-    function onKeyDown(e) {
+    function onKeyDown(e:any) {
         if (e.key == "r") {
             game.activeCell = rotateActiveCell(game.activeCell);
             game.grid = game.grid;
@@ -79,24 +80,27 @@
         <div class="flex flex-col-reverse">
             {#each row as cell}
                 {#if cell.tile?.name}
-                    {#if showConnectors}
-                    <Tile tile={cell.tile}></Tile> 
-                    {:else}
-                    <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
-                    <!-- TODO: https://www.kevinleary.net/blog/remove-box-shadows-one-side-css/ -->
-                    <!-- TODO: add static properties: hasLeftNeighbour, haBotNeighbouth, ... -->
-                    <!-- TODO: only render a subframe of the board, no need to iterate over all tiles -->
-                    <img
-                    
-                        style="transform: rotate({cell.tile?.deg ??
-                            0}deg); scale: {cell.locked
-                            ? 1
-                            : 1.1}; z-index:{cell.locked ? 1 : 2};"
-                        src="tiles/{cell.tile?.name}.png"
-                        class="tile"
-                        alt=""
-                    />
-                    {/if}
+                    <div class="relative" style="width:100px;height:100px">
+                        <MeepleDropzone tile={cell.tile}></MeepleDropzone>
+                        {#if showConnectors}
+                        <Tile tile={cell.tile}></Tile> 
+                        {:else}
+                        <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
+                        <!-- TODO: https://www.kevinleary.net/blog/remove-box-shadows-one-side-css/ -->
+                        <!-- TODO: add static properties: hasLeftNeighbour, haBotNeighbouth, ... -->
+                        <!-- TODO: only render a subframe of the board, no need to iterate over all tiles -->
+                        <img
+                        
+                            style="z-index:1;transform: rotate({cell.tile?.deg ??
+                                0}deg); scale: {cell.locked
+                                ? 1
+                                : 1.1}; z-index:{cell.locked ? 1 : 2};"
+                            src="tiles/{cell.tile?.name}.png"
+                            class="absolute tile"
+                            alt=""
+                        />
+                        {/if}
+                    </div>
                 {:else}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <!-- svelte-ignore a11y-no-static-element-interactions -->

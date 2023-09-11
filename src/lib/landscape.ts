@@ -30,7 +30,6 @@ export type ConnectorIndex = number // 0..11
 
 
 export function addLocations(cell: GridCell): Array<Port> {
-    console.log(cell)
     let localPorts: Array<Port> = []
     cell.tile.connectors.forEach((p, i) => {
         if (p) {
@@ -71,7 +70,7 @@ const PORT_MAP = [
     [10, -1, 0, 2],
 ]
 
-export function processCurrentCellPorts(cell: GridCell, portList: Array<Port>): Array<Port> {
+export function processCurrentCellPorts(cell: GridCell| null, portList: Array<Port>): Array<Port> {
     let localPorts: Array<Port> = addLocations(cell)
     portList.push(...localPorts)
     localPorts.forEach((p) => {
