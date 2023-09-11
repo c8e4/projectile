@@ -14,7 +14,8 @@ export function newGame(): GameState{
   const gameState = {
     grid: newGameGrid(),
     activeCell: null,
-    tileDeck: newRandomDeck()
+    tileDeck: newRandomDeck(),
+    portList:[],
   }
   return gameState;
 }

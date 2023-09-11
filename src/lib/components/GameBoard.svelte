@@ -11,11 +11,10 @@
         hasGoodConnections,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
-    import { addLocations } from "$lib/landscape";
+    import {processCurrentCellPorts } from "$lib/landscape";
 
     const game = newGame();
     getNextCell();
-    addLocations(game.grid[40][40]);
 
     onMount(() => {
         window.game = game;
@@ -50,6 +49,7 @@
         if (e.key == " ") {
             if (hasGoodConnections(game.grid,game.activeCell)){
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
+            game.portList = processCurrentCellPorts(game.activeCell,game.portList)
             getNextCell();
             }
             e.preventDefault();

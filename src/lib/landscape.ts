@@ -19,16 +19,16 @@ export type Port = {
     y: number
     index: ConnectorIndex
     closed: boolean
-    landscapeId: number
+    id: string
+    landscapeId: string
 }
 
 export type ConnectorIndex = number // 0..11
 
 
-
-export function addLocations(cell: GridCell) {
+export function addLocations(cell: GridCell): Array<Port> {
     console.log(cell)
-    let localPorts = []
+    let localPorts: Array<Port> = []
     cell.tile.connectors.forEach((p, i) => {
         if (p) {
             let tempPort = {
@@ -45,9 +45,9 @@ export function addLocations(cell: GridCell) {
     })
     console.log(localPorts)
     const localPortNames = cell.tile.connectors.filter((c, i, a) => c && a.indexOf(c) == i)
+    return localPorts;
     // Landscape name = port name [0]
     //console.log(localLandscapes)
-
     //let localPorts = cell.tile.connectors 
 }
 
@@ -66,22 +66,62 @@ const PORT_MAP = [
     [10, -1, 0, 2],
 ]
 
-function visitPorts(x:number,y:number){
-    PORT_MAP.forEach(row =>{
-        doSomething(x, y, row[0], x+row[1], y+row[2], row[3])
+export function processCurrentCellPorts(cell: GridCell, portList: Array<Port>): Array<Port> {
+    let localPorts: Array<Port> = addLocations(cell)
+    portList.push(...localPorts)
+    localPorts.forEach((p) => {
+        let [index, dX, dY, targetIndex] = getCorrespondingPortParametrs(p.index)
+        let targetPort = findPort(portList, p.x + dX, p.y + dY, targetIndex)
+        portList = renameLandscapeId(p, targetPort, portList)
+    })
+    return portList
+}
+
+function renameLandscapeId(sourcePort: Port, targetPort: Port | null, portList: Array<Port>): Array<Port> {
+    if (!targetPort) {
+        return portList
+    }
+    return portList.map((p) => {
+        if (p.index == sourcePort.index && p.id == sourcePort.id) {
+            sourcePort.closed = true
+        }
+
+        if (p.landscapeId == targetPort.landscapeId) {
+            p.landscapeId = sourcePort.landscapeId
+            p.closed = true
+        }
+        return p
     })
 }
 
-function doSomething(x1:number, y1:number, i1:number, x2:number, y2:number, i2:number){
+
+function getCorrespondingPortParametrs(portIndex: number): Array<number> {
+    // @ts-ignore
+    return PORT_MAP.find((p) => { p[0] == portIndex })
+}
+
+function addCurrentCellPorts(cell: GridCell, portList: Array<Port>): Array<Port> {
+    let localPorts: Array<Port> = addLocations(cell)
+    portList.push(...localPorts)
+    return portList
+}
+
+
+function visitPorts(x: number, y: number) {
+    PORT_MAP.forEach(row => {
+        doSomething(x, y, row[0], x + row[1], y + row[2], row[3])
+    })
+}
+
+function doSomething(x1: number, y1: number, i1: number, x2: number, y2: number, i2: number) {
     //1 check odinakovie? 
 }
 
-function findPort(grid: GridOfTiles,ports:Array<Port>,x:number,y:number,index:number):Port{
-    landscapeId: `x${cell.x}y${cell.y}${p}`;
-    
-    return 0 
+function findPort(portList: Array<Port>, x: number, y: number, index: number): Port | null {
+    return portList.find((p) => {
+        return (p.x == x) && (p.y == y) && (p.index == index)
+    }) ?? null
 }
-
 
 function landTypeToName(landType: LandType): string {
     if (LandType.Pole == landType) { return "Pole" }
