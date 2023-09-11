@@ -23,7 +23,7 @@ export function initPlayers(playerCount:number):Array<Player>{
     for (let i=0;i<playerCount;i++)
     {   
         let tempPlayer ={
-            id:i,
+            id:i+1,
             meeples: initMeeples(i),
         }
         players.push(tempPlayer)
@@ -44,3 +44,4 @@ function initMeeples(playerId:number):Array<Meeple>{
     }
     return meeples
 }
+

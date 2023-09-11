@@ -6,6 +6,8 @@ import { initPlayers, type Player } from "./player"
 type GameState = {
   grid: GridOfTiles
   activeCell: GridCell | null
+  activePlayerId: number
+  playerCount: number
   tileDeck: Array<Tile>
   portList: Array<Port>
   players: Array<Player> 
@@ -18,6 +20,8 @@ export function newGame(playerCount:number): GameState{
     activeCell: null,
     tileDeck: newRandomDeck(),
     portList:[],
+    playerCount,
+    activePlayerId: 1,
     players: initPlayers(playerCount)
   }
   return gameState;
