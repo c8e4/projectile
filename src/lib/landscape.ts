@@ -66,6 +66,15 @@ const PORT_MAP = [
     [10, -1, 0, 2],
 ]
 
+function visitPorts(x:number,y:number){
+    PORT_MAP.forEach(row =>{
+        doSomething(x, y, row[0], x+row[1], y+row[2], row[3])
+    })
+}
+
+function doSomething(x1:number, y1:number, p1:number, x2:number, y2:number, p2:number){
+
+}
 
 
 function landTypeToName(landType: LandType): string {
