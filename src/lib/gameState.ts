@@ -1,11 +1,12 @@
 import { newRandomDeck } from "./deck"
 import { newGameGrid, type GridOfTiles, type GridCell, emptyTile, emptyGridCell, type Tile } from "./grid"
+import type { Port } from "./landscape"
 
 type GameState = {
   grid: GridOfTiles
   activeCell: GridCell | null
   tileDeck: Array<Tile>
-  landscapeList: Array<Landscape>
+  portList: Array<Port>
 }
 
 

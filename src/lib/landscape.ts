@@ -72,8 +72,14 @@ function visitPorts(x:number,y:number){
     })
 }
 
-function doSomething(x1:number, y1:number, p1:number, x2:number, y2:number, p2:number){
+function doSomething(x1:number, y1:number, i1:number, x2:number, y2:number, i2:number){
+    //1 check odinakovie? 
+}
 
+function findPort(grid: GridOfTiles,ports:Array<Port>,x:number,y:number,index:number):Port{
+    landscapeId: `x${cell.x}y${cell.y}${p}`;
+    
+    return 0 
 }
 
 
