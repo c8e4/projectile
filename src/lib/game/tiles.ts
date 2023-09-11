@@ -35,7 +35,7 @@ export let tiles =
     dropZone: [
       null, null, null,
       null, null, 'p0',
-      'd0', null, null,
+      null, null, null,
       null, null, null
     ],
     dropZoneCenter: 'c0'
@@ -296,7 +296,7 @@ export let tiles =
       'z0', null, null,
       null, null, 'p1',
       'd0', null, null,
-      'z0', null, null
+      null, null, null
     ],
     dropZoneCenter: 'p0'
   },
@@ -316,7 +316,7 @@ export let tiles =
       'z0', null, null,
       null, null, 'p1',
       'd0', null, null,
-      'z0', null, null
+      null, null, null
     ],
     dropZoneCenter: 'p0'
   },
@@ -413,9 +413,9 @@ export let tiles =
       'p1', null, 'p1'
     ],
     dropZone: [
-      'd0', null, null,
+      null, null, null,
       'p0', null, null,
-      'd0', null, null,
+      null, null, null,
       'p1', null, null
     ],
     dropZoneCenter: 'd0'

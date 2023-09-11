@@ -232,7 +232,8 @@ export function rotateTile(tile: Tile): Tile {
     for (let i = 0; i < 3; i++) {
         tile.connectors.unshift(tile.connectors[tile.connectors.length - 1]);
         tile.connectors.pop();
-        tile.dropZone.unshift(tile.connectors[tile.connectors.length - 1]);
+
+        tile.dropZone.unshift(tile.dropZone[tile.dropZone.length - 1]);
         tile.dropZone.pop();
     }
     return tile

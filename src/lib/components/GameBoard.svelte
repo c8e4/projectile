@@ -54,6 +54,9 @@
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
             game.portList = processCurrentCellPorts(game.activeCell,game.portList)
             console.table(game.portList)
+            console.log("---------")
+            console.table(game.activeCell?.tile.dropZone)
+            console.table(game.activeCell?.tile.dropZoneCenter)
             getNextCell();
             }
             e.preventDefault();
