@@ -45,19 +45,28 @@
 
     function onKeyDown(e:any) {
         if (e.key == "r") {
+            if (game.activeCell?.locked){
+                e.preventDefault();
+                return 
+            }
             game.activeCell = rotateActiveCell(game.activeCell);
             game.grid = game.grid;
             e.preventDefault();
         }
         if (e.key == " ") {
+            if (game.activeCell?.locked){
+                e.preventDefault();
+                return 
+            }
             if (hasGoodConnections(game.grid,game.activeCell)){
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
             game.portList = processCurrentCellPorts(game.activeCell,game.portList)
+            if(game.activeCell){game.activeCell.locked=true}
             console.table(game.portList)
             console.log("---------")
             console.table(game.activeCell?.tile.dropZone)
             console.table(game.activeCell?.tile.dropZoneCenter)
-            getNextCell();
+            //getNextCell();
             }
             e.preventDefault();
         }
@@ -68,6 +77,10 @@
     }
 
     function previewActiveCell(cell: GridCell) {
+        if(game.activeCell?.locked)
+        {
+            return
+        }
         game.grid = removeAndPlaceActiveCell(game.grid, game.activeCell, cell);
         if (game.activeCell && hasNeighbours(game.grid, cell)) {
             game.activeCell.x = cell.x;
@@ -75,7 +88,7 @@
         }
     }
 
-    function updatePos(pos:any){
+    function updatePos(pos:string){
         console.log(pos)
     }
 </script>
@@ -86,7 +99,9 @@
             {#each row as cell}
                 {#if cell.tile?.name}
                     <div class="relative" style="width:100px;height:100px">
+                        {#if game.activeCell?.x==cell.x&&game.activeCell?.y==cell.y}
                         <MeepleDropzone tile={cell.tile} updatePos={updatePos}></MeepleDropzone>
+                        {/if}
                         {#if showConnectors}
                         <Tile tile={cell.tile}></Tile> 
                         {:else}
