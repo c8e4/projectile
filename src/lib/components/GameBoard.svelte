@@ -11,7 +11,7 @@
         hasGoodConnections,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
-    import { addMeepleToPort, mergeLandscapes } from "$lib/landscape";
+    import { addMeepleToPort, addMeepleToTile, mergeLandscapes } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
 
@@ -123,6 +123,7 @@
         //Активного мипла если есть вписать в порт туда куда его поставили
         //записывает данного мипла в figureId в таблице портс
         game.portList = addMeepleToPort(game.activeMeeple, game.portList);
+        game.grid = addMeepleToTile(game.activeMeeple, game.activeCell, game.grid)
         console.table(game.activeMeeple);
         console.table(game.portList);
         //записываем в tile
@@ -140,9 +141,9 @@
             {#each row as cell}
                 {#if cell.tile?.name}
                     <div class="relative" style="width:100px;height:100px">
-                        {#if game.activeCell?.x == cell.x && game.activeCell?.y == cell.y}
-                            <MeepleDropzone tile={cell.tile} {updatePos} />
-                        {/if}
+                        <div class="absolute" style="z-index:4;">
+                            <MeepleDropzone tile={cell.tile} {updatePos} activeMeeple={game.activeMeeple}  isInteractive={game.activeCell?.x == cell.x && game.activeCell?.y == cell.y} />
+                        </div>
                         {#if showConnectors}
                             <Tile tile={cell.tile} />
                         {:else}

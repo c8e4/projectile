@@ -1,5 +1,5 @@
 import type { C } from "vitest/dist/reporters-cb94c88b"
-import type { GridCell } from "./grid"
+import type { GridCell, GridOfTiles, Tile } from "./grid"
 import type { Meeple } from "./player"
 
 export type Landscape = {
@@ -163,4 +163,14 @@ export function addMeepleToPort(activeMeeple: Meeple | null, ports: Array<Port>)
     {
         return ports
     }
+}
+
+export function addMeepleToTile(activeMeeple: Meeple | null, cell: GridCell|null, grid: GridOfTiles): GridOfTiles {
+    if(activeMeeple && cell){
+        const gridCell = grid.find(row => row.some(c => c.x == cell.x))?.find(c => c.x == cell.x)
+        if(gridCell){
+            gridCell.tile.meeple = activeMeeple;
+        }
+    }
+    return grid;
 }
