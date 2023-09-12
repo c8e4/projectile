@@ -142,7 +142,9 @@
                 {#if cell.tile?.name}
                     <div class="relative" style="width:100px;height:100px">
                         <div class="absolute" style="z-index:4;">
+                        {#if cell.locked}
                             <MeepleDropzone tile={cell.tile} {updatePos} activeMeeple={game.activeMeeple}  isInteractive={game.activeCell?.x == cell.x && game.activeCell?.y == cell.y} />
+                        {/if}
                         </div>
                         {#if showConnectors}
                             <Tile tile={cell.tile} />
