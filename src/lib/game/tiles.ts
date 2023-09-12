@@ -35,8 +35,8 @@ export let tiles =
     ],
     dropZone: [
       null, null, null,
-      null, null, 'p0',
       null, null, null,
+      'p0', null, null,
       null, null, null
     ],
     dropZoneCenter: 'c0',
@@ -46,7 +46,7 @@ export let tiles =
     name: 'C',
     index: 3,
     amount: 1,
-    center: null,
+    center: 'z0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -67,7 +67,7 @@ export let tiles =
     name: 'D',
     index: 4,
     amount: 4,
-    center: null,
+    center: 'd0',
     deg: 0,
     connectors: [
       'z0', null, 'p1',
@@ -88,7 +88,7 @@ export let tiles =
     name: 'E',
     index: 5,
     amount: 2,
-    center: null,
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -109,7 +109,7 @@ export let tiles =
     name: 'F',
     index: 6,
     amount: 2,
-    center: null,
+    center: 'z0',
     deg: 0,
     connectors: [
       'p0', null, null,
@@ -130,7 +130,7 @@ export let tiles =
     name: 'G',
     index: 7,
     amount: 1,
-    center: null,
+    center: 'z0',
     deg: 0,
     connectors: [
       'p0', null, null,
@@ -151,7 +151,7 @@ export let tiles =
     name: 'H',
     index: 8,
     amount: 3,
-    center: null,
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -172,7 +172,7 @@ export let tiles =
     name: 'I',
     index: 9,
     amount: 2,
-    center: null,
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -193,7 +193,7 @@ export let tiles =
     name: 'J',
     index: 10,
     amount: 3,
-    center: null,
+    center: 'd0',
     deg: 0,
     connectors: [
       'z0', null, 'p0',
@@ -214,7 +214,7 @@ export let tiles =
     name: 'K',
     index: 11,
     amount: 3,
-    center: null,
+    center: 'd0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -247,16 +247,16 @@ export let tiles =
       'z0', null, null,
       'd0', null, 'p1',
       'd1', null, 'p2',
-      'd2', null, null
+      'd2', 'p0', null
     ],
-    dropZoneCenter: 'p0',
+    dropZoneCenter: null,
     meeple: null
   },
   {
     name: 'M',
     index: 13,
     amount: 2,
-    center: null,
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -277,7 +277,7 @@ export let tiles =
     name: 'N',
     index: 14,
     amount: 3,
-    center: null,
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -298,7 +298,7 @@ export let tiles =
     name: 'O',
     index: 15,
     amount: 2,
-    center: null,
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, 'p0',
@@ -319,7 +319,7 @@ export let tiles =
     name: 'P',
     index: 16,
     amount: 3,
-    center: null,
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, 'p0',
@@ -340,7 +340,7 @@ export let tiles =
     name: 'Q',
     index: 17,
     amount: 1,
-    center: null,
+    center: 'z0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -361,7 +361,7 @@ export let tiles =
     name: 'R',
     index: 18,
     amount: 3,
-    center: null,
+    center: 'z0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -382,7 +382,7 @@ export let tiles =
     name: 'S',
     index: 19,
     amount: 2,
-    center: null,
+    center: 'z0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -403,7 +403,7 @@ export let tiles =
     name: 'T',
     index: 20,
     amount: 1,
-    center: null,
+    center: 'z0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -424,7 +424,7 @@ export let tiles =
     name: 'U',
     index: 21,
     amount: 8,
-    center: null,
+    center: 'd0',
     deg: 0,
     connectors: [
       'd0', 'p0', null,
@@ -445,7 +445,7 @@ export let tiles =
     name: 'V',
     index: 22,
     amount: 9,
-    center: null,
+    center: 'd0',
     deg: 0,
     connectors: [
       'p0', null, null,
