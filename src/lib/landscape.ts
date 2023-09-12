@@ -21,8 +21,8 @@ export type Port = {
     index: ConnectorIndex
     closed: boolean
     id: string
-    landscapeId: string 
-    figureId: number|null
+    landscapeId: string
+    figureId: number | null
     dropZone: boolean
 }
 
@@ -42,7 +42,7 @@ export function addLocations(cell: GridCell): Array<Port> {
                 id: `x${cell.x}y${cell.y}${p}`,
                 landscapeId: `x${cell.x}y${cell.y}${p}`,
                 figureId: null,
-                dropZone: cell.tile.dropZone[i]?true:false
+                dropZone: cell.tile.dropZone[i] ? true : false
             }
             localPorts.push(tempPort)
         }
@@ -56,12 +56,12 @@ export function addLocations(cell: GridCell): Array<Port> {
         id: `x${cell.x}y${cell.y}${cell.tile.center}`,
         landscapeId: `x${cell.x}y${cell.y}${cell.tile.center}`,
         figureId: null,
-        dropZone: cell.tile.dropZoneCenter?true:false
+        dropZone: cell.tile.dropZoneCenter ? true : false
     }
     localPorts.push(tempPort)
-    
 
-    console.log(localPorts)
+
+    //console.log(localPorts)
     const localPortNames = cell.tile.connectors.filter((c, i, a) => c && a.indexOf(c) == i)
     return localPorts;
     // Landscape name = port name [0]
@@ -104,20 +104,17 @@ function renameLandscapeId(sourcePort: Port, targetPort: Port | null, portList: 
     if (!targetPort) {
         return portList
     }
-
+    const tempLandscapeId = targetPort.landscapeId
     return portList.map((p) => {
         if (p.index == sourcePort.index && p.id == sourcePort.id) {
             sourcePort.closed = true
         }
-        if (p.id==targetPort.id){
+        if (p.landscapeId == tempLandscapeId) {
             p.landscapeId = sourcePort.landscapeId
         }
         return p
     })
     // Есил мы наступили на target port - то берем все такие же landscapeId как у таргет порта и их перезаписываем на source Landscape
-
-
-
 }
 
 
@@ -185,12 +182,40 @@ export function addMeepleToPort(activeMeeple: Meeple | null, ports: Array<Port>)
     }
 }
 
-export function addMeepleToTile(activeMeeple: Meeple | null, cell: GridCell|null, grid: GridOfTiles): GridOfTiles {
-    if(activeMeeple && cell){
+export function addMeepleToTile(activeMeeple: Meeple | null, cell: GridCell | null, grid: GridOfTiles): GridOfTiles {
+    if (activeMeeple && cell) {
         const gridCell = grid.find(row => row.some(c => c.x == cell.x))?.find(c => c.x == cell.x)
-        if(gridCell){
+        if (gridCell) {
             gridCell.tile.meeple = activeMeeple;
         }
     }
     return grid;
 }
+
+export function deleteOccupiedDropZoneFromTile(activeCell: GridCell|null, ports: Array<Port>):GridCell|null {
+    if (!activeCell){
+        return activeCell
+    }
+    let x = activeCell.x
+    let y = activeCell.y
+    console.log ("ActiveCell DZ=",activeCell.tile.dropZone)
+
+    activeCell.tile.dropZone.forEach((d, i) => {
+        let tempPort: Port | null
+        if (!d) {
+            tempPort = findPort(ports, x, y, i)
+            
+            if (tempPort) {
+                if(ports.some((p) => p.landscapeId == tempPort?.landscapeId && p.figureId != null))
+                {   
+                    console.log ("index=",i,activeCell.tile.dropZone[i])
+                    activeCell.tile.dropZone[i]=null
+                    console.log ("after",activeCell.tile.dropZone[i])
+                }   
+            }
+
+        }
+    })
+    return activeCell
+}
+

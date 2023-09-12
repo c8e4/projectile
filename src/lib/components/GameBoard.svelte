@@ -12,13 +12,13 @@
         emptyGridCell,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
-    import { addMeepleToPort, addMeepleToTile, mergeLandscapes } from "$lib/landscape";
+    import { addMeepleToPort, addMeepleToTile, deleteOccupiedDropZoneFromTile, mergeLandscapes } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
 
     const game = newGame(3);
     game.portList = mergeLandscapes(game.grid[40][40], game.portList);
-    console.table(game.portList);
+    //console.table(game.portList);
     getNextCell();
 
     onMount(() => {
@@ -58,13 +58,15 @@
             if (hasGoodConnections(game.grid, game.activeCell)) {
                 game.grid = confirmTilePlacement(game.grid, game.activeCell);
                 game.portList = mergeLandscapes(game.activeCell, game.portList);
+                game.activeCell=deleteOccupiedDropZoneFromTile(game.activeCell, game.portList)
+                game.grid[game.activeCell?.x][game.activeCell.y].tile.dropZone=game.activeCell?.tile.dropZone
                 if (game.activeCell) {
                     game.activeCell.locked = true;
                 }
-                console.table(game.portList);
-                console.log("---------");
-                console.table(game.activeCell?.tile.dropZone);
-                console.table(game.activeCell?.tile.dropZoneCenter);
+                //console.table(game.portList);
+                //console.log("---------");
+                //console.table(game.activeCell?.tile.dropZone);
+                //console.table(game.activeCell?.tile.dropZoneCenter);
                 //getNextCell();
             }
             e.preventDefault();
