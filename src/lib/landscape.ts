@@ -1,5 +1,6 @@
 import type { C } from "vitest/dist/reporters-cb94c88b"
 import type { GridCell } from "./grid"
+import type { Meeple } from "./player"
 
 export type Landscape = {
     name: string
@@ -41,8 +42,8 @@ export function addLocations(cell: GridCell): Array<Port> {
                 closed: false,
                 id: `x${cell.x}y${cell.y}${p}`,
                 landscapeId: `x${cell.x}y${cell.y}${p}`,
-                figureId:null,
-                dropZone:cell.tile.dropZone[i]
+                figureId: null,
+                dropZone: cell.tile.dropZone[i]
             }
             localPorts.push(tempPort)
         }
@@ -70,8 +71,8 @@ const PORT_MAP = [
     [10, -1, 0, 2],
 ]
 
-export function processCurrentCellPorts(cell: GridCell| null, portList: Array<Port>): Array<Port> {
-    let localPorts: Array<Port> = addLocations(cell)
+export function mergeLandscapes(activeCell: GridCell | null, portList: Array<Port>): Array<Port> {
+    let localPorts: Array<Port> = addLocations(activeCell)
     portList.push(...localPorts)
     localPorts.forEach((p) => {
         let [index, dX, dY, targetIndex] = getCorrespondingPortParametrs(p.index)
@@ -101,7 +102,7 @@ function renameLandscapeId(sourcePort: Port, targetPort: Port | null, portList: 
 
 function getCorrespondingPortParametrs(portIndex: number): Array<number> {
     // @ts-ignore
-    return PORT_MAP.find((p) =>  p[0] == portIndex )
+    return PORT_MAP.find((p) => p[0] == portIndex)
 }
 
 function addCurrentCellPorts(cell: GridCell, portList: Array<Port>): Array<Port> {
@@ -149,28 +150,17 @@ function connectorNameToLandType(connectorName: string | null): LandType | null 
     return null
 }
 
-
-// landscapeList - > Landscape (name,type) - >  Location (x,y,nodeList)
-
-
-// local objects 
-// connectors - 9|p0, 3|p0
-// connectedTo - Name (linked to Global name) 
-
-// В рамках каждого объекта все конекты из соседних клеток
-// Функция - Merge - добавляет все элементы в первый 
-// Сложение очков + длина цепочки + обновление статуса Занят + проверка статуса Завершен?
-
-//
-
-// смещение Х смещение Y коннектор клетки - целевой коннектор  | (+1,0) 3 - 9   (Pole 1)
-// смещение Х смещение Y коннектор клетки - целевой коннектор  | (+1,0) 2 - 10  (Pole 2)
-// смещение Х смещение Y коннектор клетки - целевой коннектор  | ()
-// смещение Х смещение Y коннектор клетки - целевой коннектор
-// смещение Х смещение Y коннектор клетки - целевой коннектор
-// смещение Х смещение Y коннектор клетки - целевой коннектор
-// смещение Х смещение Y коннектор клетки - целевой коннектор
-// смещение Х смещение Y коннектор клетки - целевой коннектор
-// смещение Х смещение Y коннектор клетки - целевой коннектор
-// смещение Х смещение Y коннектор клетки - целевой коннектор
-// смещение Х смещение Y коннектор клетки - целевой коннектор
+export function addMeepleToPort(activeMeeple: Meeple | null, ports: Array<Port>): Array<Port> {
+    if (activeMeeple?.at) {
+        return ports.map((p) => {
+            if ((activeMeeple.at?.x == p.x) && (activeMeeple.at?.y == p.y) && (activeMeeple.at?.connectorIndex == p.index)) {
+                p.figureId = activeMeeple.id
+            }
+            return p
+        })
+    }
+    else
+    {
+        return ports
+    }
+}

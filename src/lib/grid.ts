@@ -1,3 +1,5 @@
+import type { Meeple } from "./player"
+
 type TileConnector = string | null
 
 type TileConnectorList = Array<TileConnector>
@@ -9,6 +11,7 @@ export type Tile = {
     center: string | null
     dropZone: TileConnectorList
     dropZoneCenter: string | null
+    meeple: Meeple | null
 }
 
 export type GridCell = {
@@ -32,6 +35,7 @@ export function emptyTile(): Tile {
         center: null,
         dropZone: [],
         dropZoneCenter: null,
+        meeple: null,
     }
 }
 

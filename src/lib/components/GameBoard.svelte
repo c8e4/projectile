@@ -11,12 +11,12 @@
         hasGoodConnections,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
-    import {processCurrentCellPorts } from "$lib/landscape";
+    import {addMeepleToPort, mergeLandscapes } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
 
     const game = newGame(3);
-    game.portList=processCurrentCellPorts(game.grid[40][40], game.portList)
+    game.portList=mergeLandscapes(game.grid[40][40], game.portList)
     console.table(game.portList)
     getNextCell();
 
@@ -61,7 +61,7 @@
             }
             if (hasGoodConnections(game.grid,game.activeCell)){
             game.grid = confirmTilePlacement(game.grid, game.activeCell);
-            game.portList = processCurrentCellPorts(game.activeCell,game.portList)
+            game.portList = mergeLandscapes(game.activeCell,game.portList)
             if(game.activeCell){game.activeCell.locked=true}
             console.table(game.portList)
             console.log("---------")
@@ -118,7 +118,15 @@
     }
 
     export function endTurn (){
-    game.activeCell=null;
+    // - если там не занято
+    //Активного мипла если есть вписать в порт туда куда его поставили 
+    //записывает данного мипла в figureId в таблице портс
+    game.portList=addMeepleToPort(game.activeMeeple,game.portList)
+    console.table(game.activeMeeple)
+    console.table(game.portList)
+    //записываем в tile
+        //----------
+        game.activeCell=null;
     game.activeMeeple=null
     game.activePlayer=getNextPlayer(game.activePlayer,game.players)
     getNextCell()
