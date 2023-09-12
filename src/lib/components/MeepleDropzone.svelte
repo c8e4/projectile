@@ -30,7 +30,7 @@
         </button>
         <SmallTile />
     </div>
-    <div class="flex">
+    <div class="flex" style="height:60px;">
         <div class="">
             <button on:click={() => placeMeeple(10)}>
                 <SmallTile val={tile.dropZone[10]} />
