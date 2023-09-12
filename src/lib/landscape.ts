@@ -47,6 +47,8 @@ export function addLocations(cell: GridCell): Array<Port> {
             }
             localPorts.push(tempPort)
         }
+        //add central tile and dropZone
+
     })
     console.log(localPorts)
     const localPortNames = cell.tile.connectors.filter((c, i, a) => c && a.indexOf(c) == i)
@@ -69,15 +71,20 @@ const PORT_MAP = [
     [8, -1, 0, 4],
     [9, -1, 0, 3],
     [10, -1, 0, 2],
+    //[12, 0, 0, 12] //central port/central dropZone
 ]
 
 export function mergeLandscapes(activeCell: GridCell | null, portList: Array<Port>): Array<Port> {
     let localPorts: Array<Port> = addLocations(activeCell)
     portList.push(...localPorts)
     localPorts.forEach((p) => {
-        let [index, dX, dY, targetIndex] = getCorrespondingPortParametrs(p.index)
-        let targetPort = findPort(portList, p.x + dX, p.y + dY, targetIndex)
-        portList = renameLandscapeId(p, targetPort, portList)
+        if (p.index == 12) {
+        }
+        else {
+            let [index, dX, dY, targetIndex] = getCorrespondingPortParametrs(p.index)
+            let targetPort = findPort(portList, p.x + dX, p.y + dY, targetIndex)
+            portList = renameLandscapeId(p, targetPort, portList)
+        }
     })
     return portList
 }
@@ -159,8 +166,7 @@ export function addMeepleToPort(activeMeeple: Meeple | null, ports: Array<Port>)
             return p
         })
     }
-    else
-    {
+    else {
         return ports
     }
 }

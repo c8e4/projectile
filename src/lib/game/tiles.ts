@@ -18,7 +18,8 @@ export let tiles =
       'd0', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'c0'
+    dropZoneCenter: 'c0',
+    meeple: null
   },
   {
     name: 'B',
@@ -38,7 +39,8 @@ export let tiles =
       null, null, null,
       null, null, null
     ],
-    dropZoneCenter: 'c0'
+    dropZoneCenter: 'c0',
+    meeple: null
   },
   {
     name: 'C',
@@ -58,7 +60,8 @@ export let tiles =
       null, null, null,
       null, null, null
     ],
-    dropZoneCenter: 'z0'
+    dropZoneCenter: 'z0',
+    meeple: null
   },
   {
     name: 'D',
@@ -78,7 +81,8 @@ export let tiles =
       'p0', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'd0'
+    dropZoneCenter: 'd0',
+    meeple: null
   },
   {
     name: 'E',
@@ -98,7 +102,8 @@ export let tiles =
       null, null, null,
       null, null, null
     ],
-    dropZoneCenter: 'p0'
+    dropZoneCenter: 'p0',
+    meeple: null
   },
   {
     name: 'F',
@@ -118,7 +123,8 @@ export let tiles =
       'p0', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'z0'
+    dropZoneCenter: 'z0',
+    meeple: null
   },
   {
     name: 'G',
@@ -138,7 +144,8 @@ export let tiles =
       'p0', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'z0'
+    dropZoneCenter: 'z0',
+    meeple: null
   },
   {
     name: 'H',
@@ -158,7 +165,8 @@ export let tiles =
       'z1', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'p0'
+    dropZoneCenter: 'p0',
+    meeple: null
   },
   {
     name: 'I',
@@ -178,7 +186,8 @@ export let tiles =
       null, null, null,
       'z1', null, null
     ],
-    dropZoneCenter: 'p0'
+    dropZoneCenter: 'p0',
+    meeple: null
   },
   {
     name: 'J',
@@ -198,7 +207,8 @@ export let tiles =
       null, null, null,
       'p0', null, null
     ],
-    dropZoneCenter: 'd0'
+    dropZoneCenter: 'd0',
+    meeple: null
   },
   {
     name: 'K',
@@ -218,7 +228,8 @@ export let tiles =
       null, null, 'p1',
       null, null, null
     ],
-    dropZoneCenter: 'd0'
+    dropZoneCenter: 'd0',
+    meeple: null
   },
   {
     name: 'L',
@@ -238,7 +249,8 @@ export let tiles =
       'd1', null, 'p2',
       'd2', null, null
     ],
-    dropZoneCenter: 'p0'
+    dropZoneCenter: 'p0',
+    meeple: null
   },
   {
     name: 'M',
@@ -258,7 +270,8 @@ export let tiles =
       null, null, null,
       null, null, null
     ],
-    dropZoneCenter: 'p0'
+    dropZoneCenter: 'p0',
+    meeple: null
   },
   {
     name: 'N',
@@ -278,7 +291,8 @@ export let tiles =
       null, null, null,
       null, null, null
     ],
-    dropZoneCenter: 'p0'
+    dropZoneCenter: 'p0',
+    meeple: null
   },
   {
     name: 'O',
@@ -298,7 +312,8 @@ export let tiles =
       'd0', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'p0'
+    dropZoneCenter: 'p0',
+    meeple: null
   },
   {
     name: 'P',
@@ -318,7 +333,8 @@ export let tiles =
       'd0', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'p0'
+    dropZoneCenter: 'p0',
+    meeple: null
   },
   {
     name: 'Q',
@@ -338,7 +354,8 @@ export let tiles =
       'p0', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'z0'
+    dropZoneCenter: 'z0',
+    meeple: null
   },
   {
     name: 'R',
@@ -358,7 +375,8 @@ export let tiles =
       'p0', null, null,
       null, null, null
     ],
-    dropZoneCenter: 'z0'
+    dropZoneCenter: 'z0',
+    meeple: null
   },
   {
     name: 'S',
@@ -378,7 +396,8 @@ export let tiles =
       'd0', 'p1', null,
       null, null, null
     ],
-    dropZoneCenter: 'z0'
+    dropZoneCenter: 'z0',
+    meeple: null
   },
   {
     name: 'T',
@@ -398,7 +417,8 @@ export let tiles =
       'd0', 'p1', null,
       null, null, null
     ],
-    dropZoneCenter: 'z0'
+    dropZoneCenter: 'z0',
+    meeple: null
   },
   {
     name: 'U',
@@ -418,7 +438,8 @@ export let tiles =
       null, null, null,
       'p1', null, null
     ],
-    dropZoneCenter: 'd0'
+    dropZoneCenter: 'd0',
+    meeple: null
   },
   {
     name: 'V',
@@ -438,7 +459,8 @@ export let tiles =
       null, 'p1', null,
       null, null, null
     ],
-    dropZoneCenter: 'd0'
+    dropZoneCenter: 'd0',
+    meeple: null
   },
   {
     name: 'W',
@@ -458,7 +480,8 @@ export let tiles =
       'd1', null, 'p2',
       'd2', null, null
     ],
-    dropZoneCenter: null
+    dropZoneCenter: null,
+    meeple: null
   },
   {
     name: 'X',
@@ -478,6 +501,7 @@ export let tiles =
       'd2', null, 'p2',
       'd3', null, 'p3'
     ],
-    dropZoneCenter: null
+    dropZoneCenter: null,
+    meeple: null
   }
 ]

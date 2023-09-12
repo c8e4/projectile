@@ -7,7 +7,6 @@
     export let activeMeeple:Meeple|null=null;
     export let index = 0;
 </script>
-{meeple?.playerId??''}
 {#if activeMeeple && isInteractive && activeMeeple.at?.connectorIndex == index}
     {activeMeeple.playerId}
 {:else if meeple && meeple.at?.connectorIndex == index}

@@ -9,6 +9,7 @@
         removeAndPlaceActiveCell,
         hasNeighbours,
         hasGoodConnections,
+        emptyGridCell,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
     import { addMeepleToPort, addMeepleToTile, mergeLandscapes } from "$lib/landscape";
@@ -30,13 +31,8 @@
     function getNextCell() {
         const tile = getNextTile(game.tileDeck);
         if (tile) {
-            game.activeCell = {
-                coord: `0,0`,
-                tile,
-                x: 0,
-                y: 0,
-                locked: false,
-            };
+            game.activeCell = emptyGridCell(0,0)
+            game.activeCell.tile = tile
         } else {
             game.activeCell = null;
             // game is over no more tiles left
@@ -124,6 +120,7 @@
         //записывает данного мипла в figureId в таблице портс
         game.portList = addMeepleToPort(game.activeMeeple, game.portList);
         game.grid = addMeepleToTile(game.activeMeeple, game.activeCell, game.grid)
+        game.activeCell.tile.meeple=game.activeMeeple
         console.table(game.activeMeeple);
         console.table(game.portList);
         //записываем в tile
@@ -131,6 +128,7 @@
         game.activeCell = null;
         game.activeMeeple = null;
         game.activePlayer = getNextPlayer(game.activePlayer, game.players);
+
         getNextCell();
     }
 </script>

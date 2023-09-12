@@ -62,3 +62,4 @@ export function getNextPlayer(activePlayer:Player|null,allPlayers:Array<Player>)
     }
     return allPlayers[(activePlayer.id+1)%allPlayers.length]
 }
+

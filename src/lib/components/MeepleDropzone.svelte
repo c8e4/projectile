@@ -13,7 +13,6 @@
         }
     }
 </script>
-{tile.meeple}
 <div class="absolute" style="z-index:2;">
     <div class="flex">
         <SmallTile />

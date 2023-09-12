@@ -86,6 +86,7 @@ export function newGameGrid(): GridOfTiles {
             null, null, null
         ],
         dropZoneCenter: 'd0',
+        meeple: null,
     };
     grid[GRID_CENTER][GRID_CENTER].locked = true;
     return grid;
@@ -233,13 +234,18 @@ export function canConnect(list1: Array<string | null>, list2: Array<string | nu
 }
 
 export function rotateTile(tile: Tile): Tile {
-    for (let i = 0; i < 3; i++) {
+    //tile.connectors.pop(); //delete central from connectors
+    //tile.dropZone.pop(); // delete central from dropZones
+    for (let i = 0; i < 3; i++) {   //rotate x3 
+
         tile.connectors.unshift(tile.connectors[tile.connectors.length - 1]);
         tile.connectors.pop();
 
         tile.dropZone.unshift(tile.dropZone[tile.dropZone.length - 1]);
         tile.dropZone.pop();
     }
+    //tile.connectors.push(tile.center) //add central from connectors
+    //tile.connectors.push(tile.dropZoneCenter) // add central from dropZones
     return tile
 }
 

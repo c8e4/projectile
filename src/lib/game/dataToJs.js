@@ -44,6 +44,7 @@ const json = lines
                 s[27],
             ].map((x) => (x == "null" ? null : x)),
             dropZoneCenter: s[28] == "null" ? null : s[28],
+            meeple:null,
         };
     });
 
