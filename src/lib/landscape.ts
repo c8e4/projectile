@@ -192,30 +192,24 @@ export function addMeepleToTile(activeMeeple: Meeple | null, cell: GridCell | nu
     return grid;
 }
 
-export function deleteOccupiedDropZoneFromTile(activeCell: GridCell|null, ports: Array<Port>):GridCell|null {
-    if (!activeCell){
+export function deleteOccupiedDropZoneFromTile(activeCell: GridCell | null, ports: Array<Port>): GridCell | null {
+    if (!activeCell) {
         return activeCell
     }
     let x = activeCell.x
     let y = activeCell.y
-    console.log ("ActiveCell DZ=",activeCell.tile.dropZone)
-
-    activeCell.tile.dropZone.forEach((d, i) => {
-        let tempPort: Port | null
-        if (!d) {
-            tempPort = findPort(ports, x, y, i)
-            
-            if (tempPort) {
-                if(ports.some((p) => p.landscapeId == tempPort?.landscapeId && p.figureId != null))
-                {   
-                    console.log ("index=",i,activeCell.tile.dropZone[i])
-                    activeCell.tile.dropZone[i]=null
-                    console.log ("after",activeCell.tile.dropZone[i])
-                }   
-            }
-
+    activeCell.tile.dropZone = activeCell.tile.dropZone.map((d, i) => {
+        if (isOccupiedLandscapeId(findPort(ports, x, y, i), ports)) {
+            return null
+        }
+        else {
+            return d
         }
     })
+
     return activeCell
 }
 
+export function isOccupiedLandscapeId(targetPort: Port | null, ports: Array<Port>): boolean | null {
+    return targetPort && ports.some((p) => p.landscapeId == targetPort?.landscapeId && p.figureId != null)
+}
