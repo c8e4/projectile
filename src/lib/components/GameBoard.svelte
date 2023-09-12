@@ -105,8 +105,15 @@
         }
     }
 
-    function updatePos(pos:string){
+    function updatePos(pos:number){
         console.log(pos)
+        if(game.activeMeeple&&game.activeCell){
+            game.activeMeeple.at = {
+                x:game.activeCell.x,
+                y:game.activeCell.y,
+                connectorIndex:pos, // need FIX
+            }
+        }
     }
 </script>
 

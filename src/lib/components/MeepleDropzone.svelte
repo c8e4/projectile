@@ -6,13 +6,7 @@
     export let updatePos: any;
     function placeMeeple(position: number) {
         console.log("place meeple");
-        if (position == 12 && tile.dropZoneCenter) {
-            updatePos(tile.dropZoneCenter);
-        }
-        if (tile.dropZone[position]) {
-            //update positoin here
-            updatePos(tile.dropZone[position]);
-        }
+        updatePos(position)
     }
 </script>
 
