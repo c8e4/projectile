@@ -1,5 +1,5 @@
 import type { C } from "vitest/dist/reporters-cb94c88b"
-import type { GridCell, GridOfTiles, Tile } from "./grid"
+import type { GridCell, GridOfTiles, Tile, TileConnector } from "./grid"
 import type { Meeple } from "./player"
 
 export type Landscape = {
@@ -15,15 +15,14 @@ enum LandType {
 }
 
 export type Port = {
-    name: string
+    name: TileConnector
     x: number
     y: number
     index: ConnectorIndex
     closed: boolean
     id: string
-    landscapeId: string
-    playerId: number
-    figureId: number
+    landscapeId: string 
+    figureId: number|null
     dropZone: boolean
 }
 
@@ -43,13 +42,25 @@ export function addLocations(cell: GridCell): Array<Port> {
                 id: `x${cell.x}y${cell.y}${p}`,
                 landscapeId: `x${cell.x}y${cell.y}${p}`,
                 figureId: null,
-                dropZone: cell.tile.dropZone[i]
+                dropZone: cell.tile.dropZone[i]?true:false
             }
             localPorts.push(tempPort)
         }
-        //add central tile and dropZone
-
     })
+    let tempPort = {
+        x: cell.x,
+        y: cell.y,
+        name: cell.tile.center,
+        index: 12,
+        closed: true,
+        id: `x${cell.x}y${cell.y}${cell.tile.center}`,
+        landscapeId: `x${cell.x}y${cell.y}${cell.tile.center}`,
+        figureId: null,
+        dropZone: cell.tile.dropZoneCenter?true:false
+    }
+    localPorts.push(tempPort)
+    
+
     console.log(localPorts)
     const localPortNames = cell.tile.connectors.filter((c, i, a) => c && a.indexOf(c) == i)
     return localPorts;
@@ -100,7 +111,6 @@ function renameLandscapeId(sourcePort: Port, targetPort: Port | null, portList: 
 
         if (p.landscapeId == targetPort.landscapeId) {
             p.landscapeId = sourcePort.landscapeId
-            p.closed = true
         }
         return p
     })
