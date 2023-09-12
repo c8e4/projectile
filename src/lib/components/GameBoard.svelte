@@ -11,13 +11,13 @@
         hasGoodConnections,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
-    import {addMeepleToPort, mergeLandscapes } from "$lib/landscape";
+    import { addMeepleToPort, mergeLandscapes } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
 
     const game = newGame(3);
-    game.portList=mergeLandscapes(game.grid[40][40], game.portList)
-    console.table(game.portList)
+    game.portList = mergeLandscapes(game.grid[40][40], game.portList);
+    console.table(game.portList);
     getNextCell();
 
     onMount(() => {
@@ -25,7 +25,7 @@
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
     });
 
-    let showConnectors=false
+    let showConnectors = false;
 
     function getNextCell() {
         const tile = getNextTile(game.tileDeck);
@@ -44,60 +44,61 @@
         }
     }
 
-    function onKeyDown(e:any) {
+    function onKeyDown(e: any) {
         if (e.key == "r") {
-            if (game.activeCell?.locked){
+            if (game.activeCell?.locked) {
                 e.preventDefault();
-                return 
+                return;
             }
             game.activeCell = rotateActiveCell(game.activeCell);
             game.grid = game.grid;
             e.preventDefault();
         }
         if (e.key == " ") {
-            if (game.activeCell?.locked){
+            if (game.activeCell?.locked) {
                 e.preventDefault();
-                return 
+                return;
             }
-            if (hasGoodConnections(game.grid,game.activeCell)){
-            game.grid = confirmTilePlacement(game.grid, game.activeCell);
-            game.portList = mergeLandscapes(game.activeCell,game.portList)
-            if(game.activeCell){game.activeCell.locked=true}
-            console.table(game.portList)
-            console.log("---------")
-            console.table(game.activeCell?.tile.dropZone)
-            console.table(game.activeCell?.tile.dropZoneCenter)
-            //getNextCell();
+            if (hasGoodConnections(game.grid, game.activeCell)) {
+                game.grid = confirmTilePlacement(game.grid, game.activeCell);
+                game.portList = mergeLandscapes(game.activeCell, game.portList);
+                if (game.activeCell) {
+                    game.activeCell.locked = true;
+                }
+                console.table(game.portList);
+                console.log("---------");
+                console.table(game.activeCell?.tile.dropZone);
+                console.table(game.activeCell?.tile.dropZoneCenter);
+                //getNextCell();
             }
             e.preventDefault();
         }
         if (e.key == "x") {
-            showConnectors=!showConnectors
+            showConnectors = !showConnectors;
             e.preventDefault();
         }
         if (e.key == "e") {
-            endTurn()
+            endTurn();
             //SKIP MEEPLE PLACEMENT // END TURN
             e.preventDefault();
         }
         if (e.key == "q") {
             //TAKE FREE MEEPLE
-            //если это выдает позицию мипла - тогда мы можем по аналогии с тайлом. 
-            //перемещать 1-го свободного мипла на эту позицию и снимать его с другой 
-            
+            //если это выдает позицию мипла - тогда мы можем по аналогии с тайлом.
+            //перемещать 1-го свободного мипла на эту позицию и снимать его с другой
+
             //Сначала просто берем первого мипла и его ставим
             //console.log(game.players[game.activePlayerId].meeples[0])
             //console.log("active meeple =",game.activeMeeple)
-            game.activeMeeple=getFreeMeeple(game.activePlayer)
-            console.log("active meeple =",game.activeMeeple)
+            game.activeMeeple = getFreeMeeple(game.activePlayer);
+            console.log("active meeple =", game.activeMeeple);
             e.preventDefault();
         }
     }
 
     function previewActiveCell(cell: GridCell) {
-        if(game.activeCell?.locked)
-        {
-            return
+        if (game.activeCell?.locked) {
+            return;
         }
         game.grid = removeAndPlaceActiveCell(game.grid, game.activeCell, cell);
         if (game.activeCell && hasNeighbours(game.grid, cell)) {
@@ -106,33 +107,31 @@
         }
     }
 
-    function updatePos(pos:number){
-        console.log(pos)
-        if(game.activeMeeple&&game.activeCell){
+    function updatePos(pos: number) {
+        console.log(pos);
+        if (game.activeMeeple && game.activeCell) {
             game.activeMeeple.at = {
-                x:game.activeCell.x,
-                y:game.activeCell.y,
-                connectorIndex:pos, // need FIX
-            }
+                x: game.activeCell.x,
+                y: game.activeCell.y,
+                connectorIndex: pos, // need FIX
+            };
         }
     }
 
-    export function endTurn (){
-    // - если там не занято
-    //Активного мипла если есть вписать в порт туда куда его поставили 
-    //записывает данного мипла в figureId в таблице портс
-    game.portList=addMeepleToPort(game.activeMeeple,game.portList)
-    console.table(game.activeMeeple)
-    console.table(game.portList)
-    //записываем в tile
+    export function endTurn() {
+        // - если там не занято
+        //Активного мипла если есть вписать в порт туда куда его поставили
+        //записывает данного мипла в figureId в таблице портс
+        game.portList = addMeepleToPort(game.activeMeeple, game.portList);
+        console.table(game.activeMeeple);
+        console.table(game.portList);
+        //записываем в tile
         //----------
-        game.activeCell=null;
-    game.activeMeeple=null
-    game.activePlayer=getNextPlayer(game.activePlayer,game.players)
-    getNextCell()
+        game.activeCell = null;
+        game.activeMeeple = null;
+        game.activePlayer = getNextPlayer(game.activePlayer, game.players);
+        getNextCell();
     }
-
-
 </script>
 
 <div class="board flex">
@@ -141,35 +140,31 @@
             {#each row as cell}
                 {#if cell.tile?.name}
                     <div class="relative" style="width:100px;height:100px">
-                        {#if game.activeCell?.x==cell.x&&game.activeCell?.y==cell.y}
-                        <MeepleDropzone tile={cell.tile} updatePos={updatePos}></MeepleDropzone>
+                        {#if game.activeCell?.x == cell.x && game.activeCell?.y == cell.y}
+                            <MeepleDropzone tile={cell.tile} {updatePos} />
                         {/if}
                         {#if showConnectors}
-                        <Tile tile={cell.tile}></Tile> 
+                            <Tile tile={cell.tile} />
                         {:else}
-                        <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
-                        <!-- TODO: https://www.kevinleary.net/blog/remove-box-shadows-one-side-css/ -->
-                        <!-- TODO: add static properties: hasLeftNeighbour, haBotNeighbouth, ... -->
-                        <!-- TODO: only render a subframe of the board, no need to iterate over all tiles -->
-                        <img
-                        
-                            style="z-index:1;transform: rotate({cell.tile?.deg ??
-                                0}deg); scale: {cell.locked
-                                ? 1
-                                : 1.1}; z-index:{cell.locked ? 1 : 2};"
-                            src="tiles/{cell.tile?.name}.png"
-                            class="absolute tile"
-                            alt=""
-                        />
+                            <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
+                            <!-- TODO: https://www.kevinleary.net/blog/remove-box-shadows-one-side-css/ -->
+                            <!-- TODO: add static properties: hasLeftNeighbour, haBotNeighbouth, ... -->
+                            <!-- TODO: only render a subframe of the board, no need to iterate over all tiles -->
+                            <img
+                                style="z-index:1;transform: rotate({cell.tile
+                                    ?.deg ?? 0}deg); scale: {cell.locked
+                                    ? 1
+                                    : 1.1}; z-index:{cell.locked ? 1 : 2};"
+                                src="tiles/{cell.tile?.name}.png"
+                                class="absolute tile"
+                                alt=""
+                            />
                         {/if}
                     </div>
                 {:else}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <div
-                        class="cell"
-                        on:click={() => previewActiveCell(cell)}
-                    >
+                    <div class="cell" on:click={() => previewActiveCell(cell)}>
                         <!-- {cell.coord} -->
                     </div>
                 {/if}
@@ -182,7 +177,7 @@
 
 <style>
     .board {
-        background-image: url('gray_tile.png');
+        background-image: url("gray_tile.png");
         background-repeat: repeat;
         backdrop-filter: grayscale(1);
         width: 8000px;
