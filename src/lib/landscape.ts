@@ -104,16 +104,20 @@ function renameLandscapeId(sourcePort: Port, targetPort: Port | null, portList: 
     if (!targetPort) {
         return portList
     }
+
     return portList.map((p) => {
         if (p.index == sourcePort.index && p.id == sourcePort.id) {
             sourcePort.closed = true
         }
-
-        if (p.landscapeId == targetPort.landscapeId) {
+        if (p.id==targetPort.id){
             p.landscapeId = sourcePort.landscapeId
         }
         return p
     })
+    // Есил мы наступили на target port - то берем все такие же landscapeId как у таргет порта и их перезаписываем на source Landscape
+
+
+
 }
 
 
