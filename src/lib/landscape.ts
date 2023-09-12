@@ -206,7 +206,8 @@ export function deleteOccupiedDropZoneFromTile(activeCell: GridCell | null, port
             return d
         }
     })
-
+    
+    activeCell.tile.dropZoneCenter =isOccupiedLandscapeId(findPort(ports, x, y, 12), ports)?null:activeCell.tile.dropZoneCenter 
     return activeCell
 }
 
