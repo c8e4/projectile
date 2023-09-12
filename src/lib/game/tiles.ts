@@ -67,7 +67,7 @@ export let tiles =
     name: 'D',
     index: 4,
     amount: 4,
-    center: 'd0',
+    center: null,
     deg: 0,
     connectors: [
       'z0', null, 'p1',
@@ -79,9 +79,9 @@ export let tiles =
       'z0', null, 'p1',
       null, null, null,
       'p0', null, null,
-      null, null, null
+      'd0', null, null
     ],
-    dropZoneCenter: 'd0',
+    dropZoneCenter: null,
     meeple: null
   },
   {
@@ -193,7 +193,7 @@ export let tiles =
     name: 'J',
     index: 10,
     amount: 3,
-    center: 'd0',
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, 'p0',
@@ -204,17 +204,17 @@ export let tiles =
     dropZone: [
       'z0', null, null,
       null, 'p1', null,
-      null, null, null,
-      'p0', null, null
+      'd0', null, null,
+      null, null, null
     ],
-    dropZoneCenter: 'd0',
+    dropZoneCenter: 'p0',
     meeple: null
   },
   {
     name: 'K',
     index: 11,
     amount: 3,
-    center: 'd0',
+    center: 'p0',
     deg: 0,
     connectors: [
       'z0', null, null,
@@ -224,11 +224,11 @@ export let tiles =
     ],
     dropZone: [
       'z0', null, null,
-      'p0', null, null,
-      null, null, 'p1',
+      null, null, null,
+      'd0', null, 'p1',
       null, null, null
     ],
-    dropZoneCenter: 'd0',
+    dropZoneCenter: 'p0',
     meeple: null
   },
   {
@@ -424,7 +424,7 @@ export let tiles =
     name: 'U',
     index: 21,
     amount: 8,
-    center: 'd0',
+    center: null,
     deg: 0,
     connectors: [
       'd0', 'p0', null,
@@ -433,19 +433,19 @@ export let tiles =
       'p1', null, 'p1'
     ],
     dropZone: [
-      null, null, null,
+      'd0', null, null,
       'p0', null, null,
       null, null, null,
       'p1', null, null
     ],
-    dropZoneCenter: 'd0',
+    dropZoneCenter: null,
     meeple: null
   },
   {
     name: 'V',
     index: 22,
     amount: 9,
-    center: 'd0',
+    center: null,
     deg: 0,
     connectors: [
       'p0', null, null,
@@ -456,10 +456,10 @@ export let tiles =
     dropZone: [
       'p0', null, null,
       null, null, null,
-      null, 'p1', null,
+      'd0', null, 'p1',
       null, null, null
     ],
-    dropZoneCenter: 'd0',
+    dropZoneCenter: null,
     meeple: null
   },
   {
