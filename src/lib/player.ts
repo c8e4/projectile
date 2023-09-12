@@ -53,3 +53,12 @@ export function getFreeMeeple(currentPlayer: Player|null): Meeple | null {
     })
     return freeMeeples[0]
 }
+
+
+
+export function getNextPlayer(activePlayer:Player|null,allPlayers:Array<Player>):Player{
+    if (!activePlayer){
+        return allPlayers[0]
+    }
+    return allPlayers[(activePlayer.id+1)%allPlayers.length]
+}

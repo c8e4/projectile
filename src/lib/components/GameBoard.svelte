@@ -13,7 +13,7 @@
     import Tile from "./Tile.svelte";
     import {processCurrentCellPorts } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
-    import { getFreeMeeple } from "$lib/player";
+    import { getFreeMeeple, getNextPlayer } from "$lib/player";
 
     const game = newGame(3);
     game.portList=processCurrentCellPorts(game.grid[40][40], game.portList)
@@ -75,11 +75,12 @@
             showConnectors=!showConnectors
             e.preventDefault();
         }
-        if (e.key == "s") {
-            //SKIP MEEPLE PLACEMENT
+        if (e.key == "e") {
+            endTurn()
+            //SKIP MEEPLE PLACEMENT // END TURN
             e.preventDefault();
         }
-        if (e.key == "p") {
+        if (e.key == "q") {
             //TAKE FREE MEEPLE
             //если это выдает позицию мипла - тогда мы можем по аналогии с тайлом. 
             //перемещать 1-го свободного мипла на эту позицию и снимать его с другой 
@@ -115,6 +116,15 @@
             }
         }
     }
+
+    export function endTurn (){
+    game.activeCell=null;
+    game.activeMeeple=null
+    game.activePlayer=getNextPlayer(game.activePlayer,game.players)
+    getNextCell()
+    }
+
+
 </script>
 
 <div class="board flex">
