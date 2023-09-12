@@ -1,12 +1,13 @@
 import { newRandomDeck } from "./deck"
 import { newGameGrid, type GridOfTiles, type GridCell, emptyTile, emptyGridCell, type Tile } from "./grid"
 import type { Port } from "./landscape"
-import { initPlayers, type Player } from "./player"
+import { initPlayers, type Meeple, type Player } from "./player"
 
 type GameState = {
   grid: GridOfTiles
   activeCell: GridCell | null
-  activePlayerId: number
+  activePlayer: Player | null
+  activeMeeple: Meeple|null
   playerCount: number
   tileDeck: Array<Tile>
   portList: Array<Port>
@@ -15,14 +16,16 @@ type GameState = {
 
 
 export function newGame(playerCount:number): GameState{
-  const gameState = {
+  const players = initPlayers(playerCount)
+    const gameState = {
     grid: newGameGrid(),
     activeCell: null,
     tileDeck: newRandomDeck(),
     portList:[],
     playerCount,
-    activePlayerId: 1,
-    players: initPlayers(playerCount)
+    activePlayer: players[0],
+    activeMeeple: null,
+    players,
   }
   return gameState;
 }

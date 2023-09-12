@@ -13,6 +13,7 @@
     import Tile from "./Tile.svelte";
     import {processCurrentCellPorts } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
+    import { getFreeMeeple } from "$lib/player";
 
     const game = newGame(3);
     game.portList=processCurrentCellPorts(game.grid[40][40], game.portList)
@@ -72,6 +73,22 @@
         }
         if (e.key == "x") {
             showConnectors=!showConnectors
+            e.preventDefault();
+        }
+        if (e.key == "s") {
+            //SKIP MEEPLE PLACEMENT
+            e.preventDefault();
+        }
+        if (e.key == "p") {
+            //TAKE FREE MEEPLE
+            //если это выдает позицию мипла - тогда мы можем по аналогии с тайлом. 
+            //перемещать 1-го свободного мипла на эту позицию и снимать его с другой 
+            
+            //Сначала просто берем первого мипла и его ставим
+            //console.log(game.players[game.activePlayerId].meeples[0])
+            //console.log("active meeple =",game.activeMeeple)
+            game.activeMeeple=getFreeMeeple(game.activePlayer)
+            console.log("active meeple =",game.activeMeeple)
             e.preventDefault();
         }
     }

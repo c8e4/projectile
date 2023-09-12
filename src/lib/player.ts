@@ -7,7 +7,7 @@ export type Player = {
 export type Meeple = {
     id: number
     playerId: number
-    at: ConnectorLocation|null //x,y,connectorIndex   
+    at: ConnectorLocation | null //x,y,connectorIndex   
 }
 
 export type ConnectorLocation = {
@@ -18,12 +18,11 @@ export type ConnectorLocation = {
 
 export const MEEPLE_PER_PLAYER = 7;
 
-export function initPlayers(playerCount:number):Array<Player>{
-    const players:Array<Player> = []
-    for (let i=0;i<playerCount;i++)
-    {   
-        let tempPlayer ={
-            id:i+1,
+export function initPlayers(playerCount: number): Array<Player> {
+    const players: Array<Player> = []
+    for (let i = 0; i < playerCount; i++) {
+        let tempPlayer = {
+            id: i,
             meeples: initMeeples(i),
         }
         players.push(tempPlayer)
@@ -31,17 +30,26 @@ export function initPlayers(playerCount:number):Array<Player>{
     return players
 }
 
-function initMeeples(playerId:number):Array<Meeple>{
-    const meeples:Array<Meeple> = []
-    for (let i=0;i<MEEPLE_PER_PLAYER;i++)
-    {
-        let tempMeeple={
-            id:playerId*100+i,
-            playerId:playerId,
-            at:null,
+function initMeeples(playerId: number): Array<Meeple> {
+    const meeples: Array<Meeple> = []
+    for (let i = 0; i < MEEPLE_PER_PLAYER; i++) {
+        let tempMeeple = {
+            id: playerId * 100 + i,
+            playerId: playerId,
+            at: null,
         }
         meeples.push(tempMeeple)
     }
     return meeples
 }
 
+export function getFreeMeeple(currentPlayer: Player|null): Meeple | null {
+    if (currentPlayer==null){ 
+        return null
+    }
+    const freeMeeples: Array<Meeple> | null = currentPlayer.meeples.filter((m) => {
+        if (m.at == null)
+            return m
+    })
+    return freeMeeples[0]
+}
