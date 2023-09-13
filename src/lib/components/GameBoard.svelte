@@ -12,14 +12,18 @@
         emptyGridCell,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
-    import { addMeepleToPort, addMeepleToTile, deleteOccupiedDropZoneFromTile, getClosedLandscapes, mergeLandscapes } from "$lib/landscape";
+    import {
+        addMeepleToPort,
+        addMeepleToTile,
+        deleteOccupiedDropZoneFromTile,
+        getClosedLandscapes,
+        mergeLandscapes,
+    } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
 
-    const game = newGame(3);
-    game.portList = mergeLandscapes(game.grid[40][40], game.portList);
-    //console.table(game.portList);
-    getNextCell();
+    let game = newGame(3);
+    startGame();
 
     onMount(() => {
         (window as any).game = game;
@@ -31,8 +35,8 @@
     function getNextCell() {
         const tile = getNextTile(game.tileDeck);
         if (tile) {
-            game.activeCell = emptyGridCell(0,0)
-            game.activeCell.tile = tile
+            game.activeCell = emptyGridCell(0, 0);
+            game.activeCell.tile = tile;
         } else {
             game.activeCell = null;
             // game is over no more tiles left
@@ -42,56 +46,20 @@
 
     function onKeyDown(e: any) {
         if (e.key == "r") {
-            if (game.activeCell?.locked) {
-                e.preventDefault();
-                return;
-            }
-            game.activeCell = rotateActiveCell(game.activeCell);
-            game.grid = game.grid;
-            e.preventDefault();
+            pressRotateActiveCell(e)
         }
         if (e.key == " ") {
-            if (game.activeCell?.locked) {
-                e.preventDefault();
-                return;
-            }
-            if (hasGoodConnections(game.grid, game.activeCell)) {
-                game.grid = confirmTilePlacement(game.grid, game.activeCell);
-                game.portList = mergeLandscapes(game.activeCell, game.portList);
-                game.activeCell=deleteOccupiedDropZoneFromTile(game.activeCell, game.portList)
-                game.grid[game.activeCell?.x][game.activeCell.y].tile.dropZone=game.activeCell?.tile.dropZone
-                if (game.activeCell) {
-                    game.activeCell.locked = true;
-                }
-                //console.table(game.portList);
-                //console.log("---------");
-                //console.table(game.activeCell?.tile.dropZone);
-                //console.table(game.activeCell?.tile.dropZoneCenter);
-                //getNextCell();
-            }
-            e.preventDefault();
+            pressLockTile(e);
         }
         if (e.key == "x") {
             showConnectors = !showConnectors;
-            e.preventDefault();
+            if(e)e.preventDefault();
         }
         if (e.key == "e") {
-            //Check Completed objects
-            endTurn();
-            //SKIP MEEPLE PLACEMENT // END TURN
-            e.preventDefault();
+            pressEndTurn(e);
         }
         if (e.key == "q") {
-            //TAKE FREE MEEPLE
-            //если это выдает позицию мипла - тогда мы можем по аналогии с тайлом.
-            //перемещать 1-го свободного мипла на эту позицию и снимать его с другой
-
-            //Сначала просто берем первого мипла и его ставим
-            //console.log(game.players[game.activePlayerId].meeples[0])
-            //console.log("active meeple =",game.activeMeeple)
-            game.activeMeeple = getFreeMeeple(game.activePlayer);
-            console.log("active meeple =", game.activeMeeple);
-            e.preventDefault();
+            pressGetFreeMepple(e);
         }
     }
 
@@ -122,12 +90,16 @@
         //Активного мипла если есть вписать в порт туда куда его поставили
         //записывает данного мипла в meepleId в таблице портс
         game.portList = addMeepleToPort(game.activeMeeple, game.portList);
-        game.grid = addMeepleToTile(game.activeMeeple, game.activeCell, game.grid)
-        game.activeCell.tile.meeple=game.activeMeeple
+        game.grid = addMeepleToTile(
+            game.activeMeeple,
+            game.activeCell,
+            game.grid
+        );
+        game.activeCell.tile.meeple = game.activeMeeple;
         //console.table(game.activeMeeple);
         //console.table(game.portList);
         //записываем в tile
-        getClosedLandscapes(game.portList)
+        getClosedLandscapes(game.portList);
         //----------
         game.activeCell = null;
         game.activeMeeple = null;
@@ -136,10 +108,73 @@
         getNextCell();
     }
 
+    function runSimulation() {
+        //------------- ---------------//
+        startGame();
+        let x = 41;
+        let y = 40;
+        clickAt(x, y);
+        //previewActiveCell(cell)
+        //------------- ---------------//
+    }
+
+    function clickAt(x: number, y: number) {
+        previewActiveCell(game.grid[x][y]);
+    }
+
+    function pressLockTile(e: any) {
+        if (game.activeCell?.locked) {
+            if(e)e.preventDefault();
+            return;
+        }
+        if (hasGoodConnections(game.grid, game.activeCell)) {
+            game.grid = confirmTilePlacement(game.grid, game.activeCell);
+            game.portList = mergeLandscapes(game.activeCell, game.portList);
+            game.activeCell = deleteOccupiedDropZoneFromTile(
+                game.activeCell,
+                game.portList
+            );
+            game.grid[game.activeCell?.x][game.activeCell.y].tile.dropZone =
+                game.activeCell?.tile.dropZone;
+            if (game.activeCell) {
+                game.activeCell.locked = true;
+            }
+            //console.table(game.portList);
+            //console.log("---------");
+            //console.table(game.activeCell?.tile.dropZone);
+            //console.table(game.activeCell?.tile.dropZoneCenter);
+            //getNextCell();
+        }
+        if(e)e.preventDefault();
+    }
+
+    function pressEndTurn(e: any) {
+        endTurn();
+        if(e)e.preventDefault();
+    }
+
+    function pressGetFreeMepple(e: any) {
+        game.activeMeeple = getFreeMeeple(game.activePlayer);
+        console.log("active meeple =", game.activeMeeple);
+        if(e)e.preventDefault();
+    }
+
+    function pressRotateActiveCell(e:any){
+        if (game.activeCell?.locked) {
+                if(e)e.preventDefault();
+                return;
+            }
+            game.activeCell = rotateActiveCell(game.activeCell);
+            game.grid = game.grid;
+            if(e)e.preventDefault();
+    }
 
 
-
-
+    function startGame() {
+        game = newGame(3);
+        game.portList = mergeLandscapes(game.grid[40][40], game.portList);
+        getNextCell();
+    }
 </script>
 
 <div class="board flex">
@@ -149,9 +184,15 @@
                 {#if cell.tile?.name}
                     <div class="relative" style="width:100px;height:100px">
                         <div class="absolute" style="z-index:4;">
-                        {#if cell.locked}
-                            <MeepleDropzone tile={cell.tile} {updatePos} activeMeeple={game.activeMeeple}  isInteractive={game.activeCell?.x == cell.x && game.activeCell?.y == cell.y} />
-                        {/if}
+                            {#if cell.locked}
+                                <MeepleDropzone
+                                    tile={cell.tile}
+                                    {updatePos}
+                                    activeMeeple={game.activeMeeple}
+                                    isInteractive={game.activeCell?.x ==
+                                        cell.x && game.activeCell?.y == cell.y}
+                                />
+                            {/if}
                         </div>
                         {#if showConnectors}
                             <Tile tile={cell.tile} />
@@ -174,7 +215,7 @@
                 {:else}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <div class="cell" on:click={() => previewActiveCell(cell)}>
+                    <div class="cell" on:click={() => clickAt(cell.x, cell.y)}>
                         <!-- {cell.coord} -->
                     </div>
                 {/if}
