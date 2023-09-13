@@ -114,13 +114,13 @@ export let tiles =
     connectors: [
       'p0', null, null,
       'z0', null, null,
-      'p0', null, null,
+      'p1', null, null,
       'z0', null, null
     ],
     dropZone: [
       'p0', null, null,
       null, null, null,
-      'p0', null, null,
+      'p1', null, null,
       null, null, null
     ],
     dropZoneCenter: 'z0',
@@ -135,13 +135,13 @@ export let tiles =
     connectors: [
       'p0', null, null,
       'z0', null, null,
-      'p0', null, null,
+      'p1', null, null,
       'z0', null, null
     ],
     dropZone: [
       'p0', null, null,
       null, null, null,
-      'p0', null, null,
+      'p1', null, null,
       null, null, null
     ],
     dropZoneCenter: 'z0',

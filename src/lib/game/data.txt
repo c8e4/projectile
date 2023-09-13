@@ -3,8 +3,8 @@ B	2	4	p0	null	null	p0	null	null	p0	null	null	p0	null	null	c0	null	null	null	null
 C	3	1	z0	null	null	z0	null	null	z0	null	null	z0	null	null	z0	null	null	null	null	null	null	null	null	null	null	null	null	z0
 D	4	4	z0	null	p1	d0	p0	null	p0	null	p0	d0	p1	null	null	z0	null	p1	null	null	null	p0	null	null	d0	null	null	null
 E	5	2	z0	null	null	p0	null	null	p0	null	null	p0	null	null	p0	z0	null	null	null	null	null	null	null	null	null	null	null	p0
-F	6	2	p0	null	null	z0	null	null	p0	null	null	z0	null	null	z0	p0	null	null	null	null	null	p0	null	null	null	null	null	z0
-G	7	1	p0	null	null	z0	null	null	p0	null	null	z0	null	null	z0	p0	null	null	null	null	null	p0	null	null	null	null	null	z0
+F	6	2	p0	null	null	z0	null	null	p1	null	null	z0	null	null	z0	p0	null	null	null	null	null	p1	null	null	null	null	null	z0
+G	7	1	p0	null	null	z0	null	null	p1	null	null	z0	null	null	z0	p0	null	null	null	null	null	p1	null	null	null	null	null	z0
 H	8	3	z0	null	null	p0	null	null	z1	null	null	p0	null	null	p0	z0	null	null	null	null	null	z1	null	null	null	null	null	p0
 I	9	2	z0	null	null	p0	null	null	p0	null	null	z1	null	null	p0	z0	null	null	null	null	null	null	null	null	z1	null	null	p0
 J	10	3	z0	null	p0	d0	p1	p1	d0	p0	null	p0	null	null	p0	z0	null	null	null	p1	null	d0	null	null	null	null	null	p0
