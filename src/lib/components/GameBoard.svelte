@@ -57,6 +57,17 @@
     }
 
     function onKeyDown(e: any) {
+        if (e.key == "l") {
+            loadReplayFromLocalStorage(e);
+            playReplay();
+        }
+        if (e.key == "i") {
+            saveReplayToLocalStorage(e)
+        }
+        if (e.key == "p") {
+            playReplay();
+        }
+
         if (e.key == "r") {
             pressRotateActiveCell(e);
         }
@@ -72,9 +83,6 @@
         }
         if (e.key == "q") {
             pressGetFreeMepple(e);
-        }
-        if (e.key == "p") {
-            playReplay();
         }
     }
 
@@ -214,7 +222,7 @@
         recordReplay = false;
         startGame(replay.playerCount, replay.tileNames);
         const startTime = replay.actions
-        const STATIC_DELAY = 500
+        const STATIC_DELAY = 100
         if(startTime){
             for(let i=0; i < replay.actions.length; i++){
                 const action  = replay.actions[i]
@@ -240,6 +248,21 @@
         if(action.fn == FunctionName.pressRotateActiveCell){
             pressRotateActiveCell(null)
         }
+    }
+    function loadReplayFromLocalStorage(e:any){
+        const item = localStorage.getItem("replay");
+        if(item){
+            replay = JSON.parse(item)
+        }
+        console.log("replay loaded")
+    }
+    function saveReplayToLocalStorage(e:any){
+        if(!replay){
+            return
+        }
+        const replayString = JSON.stringify(replay)
+        localStorage.setItem("replay", replayString);
+        console.log("replay saved")
     }
 </script>
 
