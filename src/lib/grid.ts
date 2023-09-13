@@ -1,12 +1,12 @@
 import type { Meeple } from "./player"
 
+export type TileName = string
 export type TileConnector = string | null
-
 
 export type TileConnectorList = Array<TileConnector>
 
 export type Tile = {
-    name: string
+    name: TileName
     deg: number
     connectors: TileConnectorList
     center: TileConnector 

@@ -10,6 +10,7 @@
         hasNeighbours,
         hasGoodConnections,
         emptyGridCell,
+        type TileName,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
     import {
@@ -21,12 +22,23 @@
     } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
+    import {
+        startRecording,
+        type Replay,
+        recordAction,
+        FunctionName,
+        type ReplayAction,
+    } from "$lib/replay";
+
+    let recordReplay: boolean = true;
+    let replay: null | Replay = null;
 
     let game = newGame(3);
-    startGame();
+    startGame(3);
 
     onMount(() => {
         (window as any).game = game;
+        (window as any).replay = replay;
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
     });
 
@@ -46,20 +58,23 @@
 
     function onKeyDown(e: any) {
         if (e.key == "r") {
-            pressRotateActiveCell(e)
+            pressRotateActiveCell(e);
         }
         if (e.key == " ") {
             pressLockTile(e);
         }
         if (e.key == "x") {
             showConnectors = !showConnectors;
-            if(e)e.preventDefault();
+            if (e) e.preventDefault();
         }
         if (e.key == "e") {
             pressEndTurn(e);
         }
         if (e.key == "q") {
             pressGetFreeMepple(e);
+        }
+        if (e.key == "p") {
+            playReplay();
         }
     }
 
@@ -110,7 +125,7 @@
 
     function runSimulation() {
         //------------- ---------------//
-        startGame();
+        startGame(3);
         let x = 41;
         let y = 40;
         clickAt(x, y);
@@ -120,11 +135,14 @@
 
     function clickAt(x: number, y: number) {
         previewActiveCell(game.grid[x][y]);
+        if (recordReplay) {
+            replay = recordAction(replay, FunctionName.clickAt, [x, y]);
+        }
     }
 
     function pressLockTile(e: any) {
         if (game.activeCell?.locked) {
-            if(e)e.preventDefault();
+            if (e) e.preventDefault();
             return;
         }
         if (hasGoodConnections(game.grid, game.activeCell)) {
@@ -139,41 +157,89 @@
             if (game.activeCell) {
                 game.activeCell.locked = true;
             }
-            //console.table(game.portList);
-            //console.log("---------");
-            //console.table(game.activeCell?.tile.dropZone);
-            //console.table(game.activeCell?.tile.dropZoneCenter);
-            //getNextCell();
         }
-        if(e)e.preventDefault();
+        if (e) e.preventDefault();
+        if (recordReplay) {
+            replay = recordAction(replay, FunctionName.pressLockTile, []);
+        }
     }
 
     function pressEndTurn(e: any) {
         endTurn();
-        if(e)e.preventDefault();
+        if (e) e.preventDefault();
+        if (recordReplay) {
+            replay = recordAction(replay, FunctionName.pressEndTurn, []);
+        }
     }
 
     function pressGetFreeMepple(e: any) {
         game.activeMeeple = getFreeMeeple(game.activePlayer);
         console.log("active meeple =", game.activeMeeple);
-        if(e)e.preventDefault();
+        if (e) e.preventDefault();
+        if (recordReplay) {
+            replay = recordAction(replay, FunctionName.pressGetFreeMepple, []);
+        }
     }
 
-    function pressRotateActiveCell(e:any){
+    function pressRotateActiveCell(e: any) {
         if (game.activeCell?.locked) {
-                if(e)e.preventDefault();
-                return;
-            }
-            game.activeCell = rotateActiveCell(game.activeCell);
-            game.grid = game.grid;
-            if(e)e.preventDefault();
+            if (e) e.preventDefault();
+            return;
+        }
+        game.activeCell = rotateActiveCell(game.activeCell);
+        game.grid = game.grid;
+        if (e) e.preventDefault();
+        if(recordReplay){
+            replay = recordAction(replay, FunctionName.pressRotateActiveCell, [])
+        }
     }
 
-
-    function startGame() {
-        game = newGame(3);
+    function startGame(playerCount:number, tileNames: Array<TileName>|null = null) {
+        console.log("startGame")
+        game = newGame(playerCount, tileNames);
+        if (recordReplay) {
+            replay = startRecording(
+                game.playerCount,
+                game.tileDeck.map(t => t.name)
+            );
+        }
         game.portList = mergeLandscapes(game.grid[40][40], game.portList);
         getNextCell();
+    }
+
+    async function playReplay(){
+        if(!replay){
+            return
+        }
+        recordReplay = false;
+        startGame(replay.playerCount, replay.tileNames);
+        const startTime = replay.actions
+        const STATIC_DELAY = 500
+        if(startTime){
+            for(let i=0; i < replay.actions.length; i++){
+                const action  = replay.actions[i]
+                await new Promise((resolve,reject)=>{
+                    setTimeout(()=>{resolve(true); executeReplayAction(action);}, STATIC_DELAY)
+                })
+            }
+        }
+    }
+    function executeReplayAction(action: ReplayAction){
+        if(action.fn == FunctionName.clickAt){
+            clickAt(action.params[0],action.params[1])
+        }
+        if(action.fn == FunctionName.pressLockTile){
+            pressLockTile(null)
+        }
+        if(action.fn == FunctionName.pressEndTurn){
+            pressEndTurn(null)
+        }
+        if(action.fn == FunctionName.pressGetFreeMepple){
+            pressGetFreeMepple(null)
+        }
+        if(action.fn == FunctionName.pressRotateActiveCell){
+            pressRotateActiveCell(null)
+        }
     }
 </script>
 
