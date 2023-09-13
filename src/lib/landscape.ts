@@ -1,18 +1,28 @@
-import type { C } from "vitest/dist/reporters-cb94c88b"
+import type { C, as } from "vitest/dist/reporters-cb94c88b"
 import type { GridCell, GridOfTiles, Tile, TileConnector } from "./grid"
-import type { Meeple } from "./player"
+import type { Meeple, PlayerId } from "./player"
 
 export type Landscape = {
     name: string
     type: LandType
     locations: Array<Port>
 }
+
 enum LandType {
     Pole,
     Zamok,
     Doroga,
     Cerkov,
 }
+
+export type ClosedLandscape = {
+    landscapeId: string,
+    type: LandType|null,
+    meepleIds: Array<number>,
+    tileCount: number
+    //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
+}
+
 
 export type Port = {
     name: TileConnector
@@ -22,8 +32,11 @@ export type Port = {
     closed: boolean
     id: string
     landscapeId: string
-    figureId: number | null
+    meepleId: number | null
     dropZone: boolean
+    completed: boolean
+    score: number | null
+    conquerer: PlayerId | null  // playerId
 }
 
 export type ConnectorIndex = number // 0..11
@@ -41,8 +54,11 @@ export function addLocations(cell: GridCell): Array<Port> {
                 closed: false,
                 id: `x${cell.x}y${cell.y}${p}`,
                 landscapeId: `x${cell.x}y${cell.y}${p}`,
-                figureId: null,
-                dropZone: cell.tile.dropZone[i] ? true : false
+                meepleId: null,
+                dropZone: cell.tile.dropZone[i] ? true : false,
+                completed: false,
+                score: null,
+                conquerer: null,
             }
             localPorts.push(tempPort)
         }
@@ -55,8 +71,11 @@ export function addLocations(cell: GridCell): Array<Port> {
         closed: true,
         id: `x${cell.x}y${cell.y}${cell.tile.center}`,
         landscapeId: `x${cell.x}y${cell.y}${cell.tile.center}`,
-        figureId: null,
-        dropZone: cell.tile.dropZoneCenter ? true : false
+        meepleId: null,
+        dropZone: cell.tile.dropZoneCenter ? true : false,
+        completed: false,
+        score: null,
+        conquerer: null,
     }
     localPorts.push(tempPort)
 
@@ -146,7 +165,7 @@ function findPort(portList: Array<Port>, x: number, y: number, index: number): P
     }) ?? null
 }
 
-function landTypeToName(landType: LandType): string {
+export function landTypeToName(landType: LandType): string {
     if (LandType.Pole == landType) { return "Pole" }
     if (LandType.Zamok == landType) { return "Zamok" }
     if (LandType.Doroga == landType) { return "Doroga" }
@@ -172,7 +191,7 @@ export function addMeepleToPort(activeMeeple: Meeple | null, ports: Array<Port>)
     if (activeMeeple?.at) {
         return ports.map((p) => {
             if ((activeMeeple.at?.x == p.x) && (activeMeeple.at?.y == p.y) && (activeMeeple.at?.connectorIndex == p.index)) {
-                p.figureId = activeMeeple.id
+                p.meepleId = activeMeeple.id
             }
             return p
         })
@@ -206,11 +225,40 @@ export function deleteOccupiedDropZoneFromTile(activeCell: GridCell | null, port
             return d
         }
     })
-    
-    activeCell.tile.dropZoneCenter =isOccupiedLandscapeId(findPort(ports, x, y, 12), ports)?null:activeCell.tile.dropZoneCenter 
+
+    activeCell.tile.dropZoneCenter = isOccupiedLandscapeId(findPort(ports, x, y, 12), ports) ? null : activeCell.tile.dropZoneCenter
     return activeCell
 }
 
 export function isOccupiedLandscapeId(targetPort: Port | null, ports: Array<Port>): boolean | null {
-    return targetPort && ports.some((p) => p.landscapeId == targetPort?.landscapeId && p.figureId != null)
+    return targetPort && ports.some((p) => p.landscapeId == targetPort?.landscapeId && p.meepleId != null)
+}
+
+
+export function getClosedLandscapes(ports: Array<Port>):Array<ClosedLandscape> {
+
+    let bigObjects = ports.filter((p, i, a) => p.completed == false && a.every(z => z.landscapeId == p.landscapeId && z.closed))
+    let closedObjects = bigObjects.filter((p, i, a) => a.findIndex(z => z.landscapeId == p.landscapeId) == i)
+        .map(p => {
+            return {
+                landscapeId: p.landscapeId,
+                type: connectorNameToLandType(p.name),
+                meepleIds: (ports.filter(x=>x.landscapeId==p.landscapeId).map(x=>x.meepleId).filter(x=>x!=null) as Array<number>),
+                tileCount: ports.filter(x=>x.landscapeId==p.landscapeId).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
+                //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
+            }
+        })
+    console.table (closedObjects)
+    return closedObjects
+}
+
+export function calculateScore(landscapes: Array<ClosedLandscape>) {
+
+    //Дороги - |уникальные id|*1 = score 
+    //Замки  - |уникальные id|*2 = score
+
+    //Поля - ничего
+    //Церковь - ничего 
+
+
 }

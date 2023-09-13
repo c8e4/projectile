@@ -12,7 +12,7 @@
         emptyGridCell,
     } from "$lib/grid";
     import Tile from "./Tile.svelte";
-    import { addMeepleToPort, addMeepleToTile, deleteOccupiedDropZoneFromTile, mergeLandscapes } from "$lib/landscape";
+    import { addMeepleToPort, addMeepleToTile, deleteOccupiedDropZoneFromTile, getClosedLandscapes, mergeLandscapes } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
 
@@ -76,6 +76,7 @@
             e.preventDefault();
         }
         if (e.key == "e") {
+            //Check Completed objects
             endTurn();
             //SKIP MEEPLE PLACEMENT // END TURN
             e.preventDefault();
@@ -119,13 +120,14 @@
     export function endTurn() {
         // - если там не занято
         //Активного мипла если есть вписать в порт туда куда его поставили
-        //записывает данного мипла в figureId в таблице портс
+        //записывает данного мипла в meepleId в таблице портс
         game.portList = addMeepleToPort(game.activeMeeple, game.portList);
         game.grid = addMeepleToTile(game.activeMeeple, game.activeCell, game.grid)
         game.activeCell.tile.meeple=game.activeMeeple
-        console.table(game.activeMeeple);
-        console.table(game.portList);
+        //console.table(game.activeMeeple);
+        //console.table(game.portList);
         //записываем в tile
+        getClosedLandscapes(game.portList)
         //----------
         game.activeCell = null;
         game.activeMeeple = null;
@@ -133,6 +135,11 @@
 
         getNextCell();
     }
+
+
+
+
+
 </script>
 
 <div class="board flex">

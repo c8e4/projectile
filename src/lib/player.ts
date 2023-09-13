@@ -1,8 +1,10 @@
 
 export type Player = {
-    id: number
+    id: PlayerId
     meeples: Array<Meeple>
 }
+
+export type PlayerId = number
 
 export type Meeple = {
     id: number
