@@ -270,24 +270,20 @@ export function getClosedLandscapes(ports: Array<Port>): Array<ClosedLandscape> 
     (window as any).completedLandscapes=completedLandscapes ;
     console.log("completedLandscapes")
     console.table(completedLandscapes);
-    // если замок или дорога - то считаем
-    // если поле - не важно 
-    // если церковь - не важно
 
-    (window as any).uniqueLandscapeId=uniqueLandscapeId ;
-   // let uniqueCompletedLandscapes = uniqueLandscapeId.filter(u=>)
     
-    let completedCastlesFields = uniqueLandscapeId.filter(u=> completedLandscapes.some(s=>s[0].landscapeId==u.landscapeId)).map(p => {
+    (window as any).uniqueLandscapeId=uniqueLandscapeId ;
+    
+    let completedCastlesFields = uniqueLandscapeId.filter(u=>connectorNameToLandType(u.name)==LandType.Zamok||connectorNameToLandType(u.name)==LandType.Doroga).filter(u=> completedLandscapes.some(s=>s[0].landscapeId==u.landscapeId)).map(p => {
         return {
             landscapeId: p.landscapeId,
             type: connectorNameToLandType(p.name),
             meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
-            tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
+            tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length,
+            pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
         }
     })
-     //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
-
-    //x2/x1 + pennants
+     
     console.log("completedCastlesField")
     console.log(completedCastlesFields)
 
