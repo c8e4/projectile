@@ -5,6 +5,11 @@ export type TileConnector = string | null
 
 export type TileConnectorList = Array<TileConnector>
 
+export type zamokPoleLink = {
+    zamok: TileConnector,
+    pole: TileConnector
+}
+
 export type Tile = {
     name: TileName
     deg: number
@@ -13,6 +18,8 @@ export type Tile = {
     dropZone: TileConnectorList
     dropZoneCenter: TileConnector 
     meeple: Meeple | null
+    zamokPoleLinks: Array<zamokPoleLink>
+    penant: TileConnector
 }
 
 export type GridCell = {
