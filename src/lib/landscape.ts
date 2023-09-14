@@ -259,21 +259,10 @@ export function showClosedLandscapes(ports: Array<Port>, players: Array<Player>)
 
 export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>): Array<ClosedLandscape> {
     let bigObjects = ports.filter((p, i, a) => p.completed == false && a.filter(z => z.landscapeId == p.landscapeId).every(z => z.closed))
-
-
-
-
     let uniqueLandscapeId = ports.filter(p => p.name != null).filter((p, i, a) => i == a.findIndex(z => z.landscapeId == p.landscapeId))
-
-
-
-
+    
     let closedLadnscapes = uniqueLandscapeId.map(u => ports.filter(p => p.landscapeId == u.landscapeId))
         .filter(m => m.every(p => p.closed == true && p.completed == false))
-
-
-
-
     let completedLandscapes = closedLadnscapes.map(c => {
         c.map(p => {
             p.completed = true
@@ -282,14 +271,10 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
         return c
     });
 
-
-
+    (window as any).uniqueLandscapeId = uniqueLandscapeId;
     (window as any).completedLandscapes = completedLandscapes;
     console.log("completedLandscapes")
     console.table(completedLandscapes);
-
-
-    (window as any).uniqueLandscapeId = uniqueLandscapeId;
 
     let completedCastlesFields = uniqueLandscapeId.filter(u => connectorNameToLandType(u.name) == LandType.Zamok || connectorNameToLandType(u.name) == LandType.Doroga)
         .filter(u => completedLandscapes.some(s => s[0].landscapeId == u.landscapeId)).map(p => {

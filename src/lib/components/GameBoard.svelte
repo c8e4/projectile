@@ -179,10 +179,13 @@
     }
 
     function pressEndTurn(e: any) {
-        endTurn();
-        if (e) e.preventDefault();
-        if (recordReplay) {
-            replay = recordAction(replay, FunctionName.pressEndTurn, []);
+        if(game.activeCell?.locked){
+            endTurn();
+   
+            if (e) e.preventDefault();
+            if (recordReplay) {
+                replay = recordAction(replay, FunctionName.pressEndTurn, []);
+            }
         }
     }
 
