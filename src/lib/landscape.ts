@@ -52,7 +52,7 @@ export type Port = {
     dropZone: boolean
     completed: boolean
     score: number | null
-    conquerer: PlayerId | null  // playerId
+    conquerers: Array<PlayerId>  // playerId
 }
 
 export type ConnectorIndex = number // 0..11
@@ -74,7 +74,7 @@ export function addLocations(cell: GridCell): Array<Port> {
                 dropZone: cell.tile.dropZone[i] ? true : false,
                 completed: false,
                 score: null,
-                conquerer: null,
+                conquerers: [],
             }
             localPorts.push(tempPort)
         }
@@ -91,7 +91,7 @@ export function addLocations(cell: GridCell): Array<Port> {
         dropZone: cell.tile.dropZoneCenter ? true : false,
         completed: false,
         score: null,
-        conquerer: null,
+        conquerers: [],
     }
     localPorts.push(tempPort)
 
@@ -273,8 +273,7 @@ export function showClosedLandscapes(ports: Array<Port>, players: Array<Player>)
 
 
 
-export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>): Array<ClosedLandscape> {
-    let bigObjects = ports.filter((p, i, a) => p.completed == false && a.filter(z => z.landscapeId == p.landscapeId).every(z => z.closed))
+export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>): Array<Port> {
     let uniqueLandscapeId = ports.filter(p => p.name != null).filter((p, i, a) => i == a.findIndex(z => z.landscapeId == p.landscapeId))
     
     let closedLadnscapes = uniqueLandscapeId.map(u => ports.filter(p => p.landscapeId == u.landscapeId))
@@ -286,11 +285,6 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
         })
         return c
     });
-
-    (window as any).uniqueLandscapeId = uniqueLandscapeId;
-    (window as any).completedLandscapes = completedLandscapes;
-    console.log("completedLandscapes")
-    console.table(completedLandscapes);
 
     // only Zamok and Doroga
     let closedLandscapes = uniqueLandscapeId.filter(u => connectorNameToLandType(u.name) == LandType.Zamok || connectorNameToLandType(u.name) == LandType.Doroga)
@@ -319,18 +313,23 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
         return (l as ClosedLandscapeOwners)
     })
 
+    ports = updateScore(closedLandscapesOwners, ports);
+
     console.log("closedLandscapesOwners")
     console.log(closedLandscapesOwners);
     (window as any).closedLandscapesOwners = closedLandscapesOwners;
-
-    //console.log("completedCastlesField")
-    //console.log(completedCastlesFields);
-    //(window as any).completedCastlesFields = completedCastlesFields;
-
-    //const playerMeepleCountList:Array<PlayerIdMeeple> =  completedCastlesFields.map()
     
-    
-    return closedLandscapes
+    return ports
+}
+
+function updateScore(closedLandscapesOwners: Array<ClosedLandscapeOwners>, ports: Array<Port>):Array<Port>{
+    closedLandscapesOwners.forEach(owner=>{
+        ports.filter(p => p.landscapeId == owner.landscapeId).forEach(port =>{
+            port.conquerers = owner.owners.map(o=>o.playerId)
+            port.score = calculateLandscapeScore(owner.type, owner.tileCount, owner.penantCount);
+        })
+    })
+    return ports;
 }
 
 function meepleIdToPlayerId(mId: number, players: Array<Player>):number{
@@ -341,6 +340,20 @@ function meepleIdToPlayerId(mId: number, players: Array<Player>):number{
 
 export function getTopPlayers(playerIdMeeple: LandscapeOwner) {
     let maxMeeples = Math.max(playerIdMeeple.meepleCount)
+}
+
+function calculateLandscapeScore(landType: LandType | null, tileCount:number, penantCount:number):number{
+    return tileCount * scorePerLandType(landType)+ penantCount*2;
+}
+
+function scorePerLandType(type: LandType | null): number{
+    if(type == LandType.Zamok){
+        return 2;
+    }
+    if(type == LandType.Doroga){
+        return 1;
+    }
+    return 0;
 }
 
 export function calculateScore(landscapes: Array<ClosedLandscape>) {
