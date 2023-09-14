@@ -36,12 +36,13 @@
     let replay: null | Replay = null;
 
     let game = newGame(3);
-    startGame(3);
+    
 
     onMount(() => {
         (window as any).game = game;
         (window as any).replay = replay;
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
+        startGame(3);
     });
 
     let showConnectors = false;
@@ -108,16 +109,10 @@
                 connectorIndex: pos, // need FIX
             };
             if (recordReplay) {
-                replay = recordAction(
-                    replay,
-                    FunctionName.updatePos,
-                    [pos]
-                );
+                replay = recordAction(replay, FunctionName.updatePos, [pos]);
             }
         }
     }
-
-
 
     export function endTurn() {
         // - если там не занято
@@ -222,6 +217,10 @@
     ) {
         console.log("startGame");
         game = newGame(playerCount, tileNames);
+        if (window) {
+            (window as any).game = game;
+        }
+
         if (recordReplay) {
             replay = startRecording(
                 game.playerCount,
@@ -273,6 +272,7 @@
         const item = localStorage.getItem("replay");
         if (item) {
             replay = JSON.parse(item);
+            (window as any).replay = replay;
         }
         console.log("replay loaded");
     }
