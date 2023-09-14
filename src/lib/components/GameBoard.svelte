@@ -101,16 +101,13 @@
     }
 
     function updatePos(pos: number) {
-        console.log("updatePos:",pos);
-        console.log("updatePos:active meeple",game.activeMeeple);
-        console.log("updatePos:active cell",game.activeCell);
+
         if (game.activeMeeple && game.activeCell) {
             game.activeMeeple.at = {
                 x: game.activeCell.x,
                 y: game.activeCell.y,
                 connectorIndex: pos, // need FIX
             };
-            console.log ("updatePos:entered")
             if (recordReplay) {
                 replay = recordAction(replay, FunctionName.updatePos, [pos]);
             }
@@ -129,7 +126,6 @@
             game.grid
         );
         game.activeCell.tile.meeple = game.activeMeeple;
-        console.log("endTurn: active meeple Placed=",game.activeMeeple)
         //console.table(game.activeMeeple);
         //console.table(game.portList);
         //записываем в tile
@@ -192,7 +188,6 @@
 
     function pressGetFreeMepple(e: any) {
         game.activeMeeple = getFreeMeeple(game.activePlayer);
-        console.log("press get meeple =", game.activeMeeple);
         if (e) e.preventDefault();
         if (recordReplay) {
             replay = recordAction(replay, FunctionName.pressGetFreeMepple, []);
