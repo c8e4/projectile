@@ -241,54 +241,68 @@ export function showClosedLandscapes(ports: Array<Port>) {
 
     const closedLandscapes = getClosedLandscapes(ports)
     if (closedLandscapes) {
-       // console.log("cant find closed landscapes")
+        // console.log("cant find closed landscapes")
     }
     else {
-       // console.table(closedLandscapes)
+        // console.table(closedLandscapes)
     }
 
 }
 export function getClosedLandscapes(ports: Array<Port>): Array<ClosedLandscape> {
-    let bigObjects = ports.filter((p, i, a) => p.completed == false && a.filter(z=>z.landscapeId==p.landscapeId).every(z => z.closed))
+    let bigObjects = ports.filter((p, i, a) => p.completed == false && a.filter(z => z.landscapeId == p.landscapeId).every(z => z.closed))
     // p.completed = false
     // a.filter(z=>z.landscapeId==p.landscapeId)
     // 
 
-    let uniqueLandscapeId = ports.filter((p,i,a)=>i=a.findIndex(z=>z.landscapeId==p.landscapeId)).filter(p=>p.name!=null)
-    //console.log("unique landscapeID")
+    let uniqueLandscapeId = ports.filter(p => p.name != null).filter((p, i, a) => i == a.findIndex(z => z.landscapeId == p.landscapeId))
     //console.table(uniqueLandscapeId)
 
-    let closedLadnscapes=uniqueLandscapeId.map(u=>ports.filter(p=>p.landscapeId==u.landscapeId))
-    .filter (m=>m.every(p=>p.closed==true&&p.completed==false))
-    //console.log ("closedLadnscapes")
-    //console.log (closedLadnscapes)
-    
-    // zamok1
-        // port 1
-        // port 2 
-        // port 3
+    let closedLadnscapes = uniqueLandscapeId.map(u => ports.filter(p => p.landscapeId == u.landscapeId))
+        .filter(m => m.every(p => p.closed == true && p.completed == false))
 
-    // zamok1
-        // port 1
-        // port 2 
-        // port 3
-
-
-
-    
-    let closedObjects = bigObjects.filter((p, i, a) => a.findIndex(z => z.landscapeId == p.landscapeId) == i)
-        .map(p => {
-            return {
-                landscapeId: p.landscapeId,
-                type: connectorNameToLandType(p.name),
-                meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
-                tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
-                //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
-            }
+    let completedLandscapes = closedLadnscapes.map(c => {
+        c.map(p => {
+            p.completed = true
+            return p
         })
-    //console.table (closedObjects)
+        return c
+    });
+    (window as any).completedLandscapes=completedLandscapes ;
+    console.log("completedLandscapes")
+    console.table(completedLandscapes);
+    // если замок или дорога - то считаем
+    // если поле - не важно 
+    // если церковь - не важно
+
+    (window as any).uniqueLandscapeId=uniqueLandscapeId ;
+   // let uniqueCompletedLandscapes = uniqueLandscapeId.filter(u=>)
     
-    return closedObjects
+    let completedCastlesFields = uniqueLandscapeId.filter(u=> completedLandscapes.some(s=>s[0].landscapeId==u.landscapeId)).map(p => {
+        return {
+            landscapeId: p.landscapeId,
+            type: connectorNameToLandType(p.name),
+            meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
+            tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
+        }
+    })
+     //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
+
+    //x2/x1 + pennants
+    console.log("completedCastlesField")
+    console.log(completedCastlesFields)
+
+    completedCastlesFields.forEach(p => {
+        if (p.type == LandType.Zamok) {
+                //calculateZamok()
+        }
+        else {
+            if (p.type == LandType.Doroga) {
+                //calculateDoroga()
+            }
+        }
+    }
+    )
+    return completedCastlesFields
 }
 
 export function calculateScore(landscapes: Array<ClosedLandscape>) {
