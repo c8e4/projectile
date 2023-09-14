@@ -1,6 +1,7 @@
 import type { C, as } from "vitest/dist/reporters-cb94c88b"
 import type { GridCell, GridOfTiles, Tile, TileConnector } from "./grid"
 import type { Meeple, Player, PlayerId, PlayerIdMeeple } from "./player"
+import type { List } from "postcss/lib/list"
 
 export type Landscape = {
     name: string
@@ -16,11 +17,26 @@ enum LandType {
 }
 
 export type ClosedLandscape = {
-    landscapeId: string,
-    type: LandType | null,
-    meepleIds: Array<number>,
+    landscapeId: string
+    type: LandType | null
+    meepleIds: Array<number>
     tileCount: number
+    penantCount: number
     //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
+}
+
+export type LandscapeOwner = {
+    playerId: number,
+    meepleCount: number
+}
+
+export type ClosedLandscapeOwners = {
+    landscapeId: string
+    type: LandType | null
+    meepleIds: Array<number>
+    tileCount: number
+    penantCount: number
+    owners: Array<LandscapeOwner>
 }
 
 
@@ -276,43 +292,53 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
     console.log("completedLandscapes")
     console.table(completedLandscapes);
 
-    let completedCastlesFields = uniqueLandscapeId.filter(u => connectorNameToLandType(u.name) == LandType.Zamok || connectorNameToLandType(u.name) == LandType.Doroga)
+    // only Zamok and Doroga
+    let closedLandscapes = uniqueLandscapeId.filter(u => connectorNameToLandType(u.name) == LandType.Zamok || connectorNameToLandType(u.name) == LandType.Doroga)
         .filter(u => completedLandscapes.some(s => s[0].landscapeId == u.landscapeId)).map(p => {
             return {
                 landscapeId: p.landscapeId,
                 type: connectorNameToLandType(p.name),
                 meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
                 tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length,
-                pennants: ports.filter(x => x.landscapeId == p.landscapeId && x.hasPennant).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
+                penantCount: ports.filter(x => x.landscapeId == p.landscapeId && x.hasPennant).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
             }
         })
-
-    console.log("completedCastlesField")
-    console.log(completedCastlesFields);
-    (window as any).completedCastlesFields = completedCastlesFields;
-
-
-
-    completedCastlesFields.forEach(p => {
-        if (p.type == LandType.Zamok) {
-            //getConquerer()
-            const playerIds = p.meepleIds.map(mId => players.flatMap(player => player.meeples).filter(playerMeeple => playerMeeple.id == mId).map(playerMeeple => playerMeeple.playerId))
-            let uniquePlayersId = playerIds.filter((p, i, a) => i == a.indexOf(p));
-            (window as any).playerIds = playerIds;
-            (window as any).uniquePlayersId = uniquePlayersId;
-        }
-        else {
-            if (p.type == LandType.Doroga) {
-                //calculateDoroga()
+    
+    let closedLandscapesOwners: Array<ClosedLandscapeOwners> = closedLandscapes.map(l =>{
+        const uniquePlayerIds = l.meepleIds
+            .map(mId => meepleIdToPlayerId(mId, players))
+            .filter((pId,i,a) => a.indexOf(pId) == i);
+        const owners:Array<LandscapeOwner> = uniquePlayerIds.map((pId)=>{
+            return {
+                playerId: pId,
+                meepleCount: l.meepleIds.map(mId => meepleIdToPlayerId(mId, players)).filter(id =>id == pId).length
             }
-        }
-    }
-    )
-    return completedCastlesFields
+        });
+        (l as ClosedLandscapeOwners).owners = owners;
+        return (l as ClosedLandscapeOwners)
+    })
+
+    console.log("closedLandscapesOwners")
+    console.log(closedLandscapesOwners);
+    (window as any).closedLandscapesOwners = closedLandscapesOwners;
+
+    //console.log("completedCastlesField")
+    //console.log(completedCastlesFields);
+    //(window as any).completedCastlesFields = completedCastlesFields;
+
+    //const playerMeepleCountList:Array<PlayerIdMeeple> =  completedCastlesFields.map()
+    
+    
+    return closedLandscapes
+}
+
+function meepleIdToPlayerId(mId: number, players: Array<Player>):number{
+    //@ts-ignore
+    return players.flatMap(p => p.meeples).find(m => m.id == mId)?.playerId
 }
 
 
-export function getTopPlayers(playerIdMeeple: PlayerIdMeeple) {
+export function getTopPlayers(playerIdMeeple: LandscapeOwner) {
     let maxMeeples = Math.max(playerIdMeeple.meepleCount)
 }
 
