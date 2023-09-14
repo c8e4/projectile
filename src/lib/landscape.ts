@@ -308,12 +308,13 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
         const uniquePlayerIds = l.meepleIds
             .map(mId => meepleIdToPlayerId(mId, players))
             .filter((pId,i,a) => a.indexOf(pId) == i);
-        const owners:Array<LandscapeOwner> = uniquePlayerIds.map((pId)=>{
+        let owners:Array<LandscapeOwner> = uniquePlayerIds.map((pId)=>{
             return {
                 playerId: pId,
                 meepleCount: l.meepleIds.map(mId => meepleIdToPlayerId(mId, players)).filter(id =>id == pId).length
             }
         });
+        owners = owners.filter(o => o.meepleCount == Math.max(...owners.map(o=> o.meepleCount)));
         (l as ClosedLandscapeOwners).owners = owners;
         return (l as ClosedLandscapeOwners)
     })
