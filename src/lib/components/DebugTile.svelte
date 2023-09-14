@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Meeple } from "$lib/player";
 
-    export let val:null|string=null;
+    export let val:null|number=null;
     export let isInteractive:boolean=false;
     export let meeple:Meeple|null=null;
     export let activeMeeple:Meeple|null=null;

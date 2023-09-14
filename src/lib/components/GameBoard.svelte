@@ -286,7 +286,7 @@
                         </div>
                         {#if showConnectors}
                             <div class="absolute" style="z-index:6">
-                                <BigDebugTile tile={cell.tile} />
+                                <BigDebugTile cell={cell} ports={game.portList} />
                             </div>
                         {/if}
                             <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
