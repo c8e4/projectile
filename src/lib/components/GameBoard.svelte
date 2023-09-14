@@ -29,6 +29,7 @@
         FunctionName,
         type ReplayAction,
     } from "$lib/replay";
+    import BigDebugTile from "./BigDebugTile.svelte";
 
     let recordReplay: boolean = true;
     let replay: null | Replay = null;
@@ -284,22 +285,23 @@
                             {/if}
                         </div>
                         {#if showConnectors}
-                            <Tile tile={cell.tile} />
-                        {:else}
+                            <div class="absolute" style="z-index:6">
+                                <BigDebugTile tile={cell.tile} />
+                            </div>
+                        {/if}
                             <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
                             <!-- TODO: https://www.kevinleary.net/blog/remove-box-shadows-one-side-css/ -->
                             <!-- TODO: add static properties: hasLeftNeighbour, haBotNeighbouth, ... -->
                             <!-- TODO: only render a subframe of the board, no need to iterate over all tiles -->
-                            <img
-                                style="z-index:1;transform: rotate({cell.tile
-                                    ?.deg ?? 0}deg); scale: {cell.locked
-                                    ? 1
-                                    : 1.1}; z-index:{cell.locked ? 1 : 2};"
-                                src="tiles/{cell.tile?.name}.png"
-                                class="absolute tile"
-                                alt=""
-                            />
-                        {/if}
+                        <img
+                            style="z-index:1;transform: rotate({cell.tile
+                                ?.deg ?? 0}deg); scale: {cell.locked
+                                ? 1
+                                : 1.1}; z-index:{cell.locked ? 1 : 2};"
+                            src="tiles/{cell.tile?.name}.png"
+                            class="absolute tile"
+                            alt=""
+                        />
                     </div>
                 {:else}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
