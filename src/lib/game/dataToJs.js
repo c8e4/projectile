@@ -44,9 +44,10 @@ const json = lines
                 s[27],
             ].map((x) => (x == "null" ? null : x)),
             dropZoneCenter: s[28] == "null" ? null : s[28],
+            zamokPoleLinks: s[29]?s[29].split(',').map(x=>{return{zamok:x.split(':')[0],pole:x.split(':')[1]}}):null, 
             meeple:null,
         };
     });
 
 console.log("export let tiles =");
-console.dir(json);
+console.dir(json, {depth:null});

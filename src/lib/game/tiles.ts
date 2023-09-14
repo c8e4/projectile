@@ -19,6 +19,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'c0',
+    zamokPoleLinks: null,
     meeple: null
   },
   {
@@ -40,6 +41,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'c0',
+    zamokPoleLinks: null,
     meeple: null
   },
   {
@@ -61,6 +63,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'z0',
+    zamokPoleLinks: null,
     meeple: null
   },
   {
@@ -82,6 +85,7 @@ export let tiles =
       'd0', null, null
     ],
     dropZoneCenter: null,
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p1' } ],
     meeple: null
   },
   {
@@ -103,6 +107,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -124,6 +129,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'z0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z0', pole: 'p1' } ],
     meeple: null
   },
   {
@@ -145,6 +151,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'z0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z0', pole: 'p1' } ],
     meeple: null
   },
   {
@@ -166,6 +173,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z1', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -187,6 +195,7 @@ export let tiles =
       'z1', null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z1', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -208,6 +217,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -229,6 +239,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -250,6 +261,7 @@ export let tiles =
       'd2', 'p0', null
     ],
     dropZoneCenter: null,
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -271,6 +283,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -292,6 +305,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -313,6 +327,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -334,6 +349,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'p0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -355,6 +371,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'z0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -376,6 +393,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'z0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null
   },
   {
@@ -397,6 +415,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'z0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z0', pole: 'p1' } ],
     meeple: null
   },
   {
@@ -418,6 +437,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: 'z0',
+    zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z0', pole: 'p1' } ],
     meeple: null
   },
   {
@@ -439,6 +459,7 @@ export let tiles =
       'p1', null, null
     ],
     dropZoneCenter: null,
+    zamokPoleLinks: null,
     meeple: null
   },
   {
@@ -460,6 +481,7 @@ export let tiles =
       null, null, null
     ],
     dropZoneCenter: null,
+    zamokPoleLinks: null,
     meeple: null
   },
   {
@@ -481,6 +503,7 @@ export let tiles =
       'd2', null, null
     ],
     dropZoneCenter: null,
+    zamokPoleLinks: null,
     meeple: null
   },
   {
@@ -502,6 +525,7 @@ export let tiles =
       'd3', null, 'p3'
     ],
     dropZoneCenter: null,
+    zamokPoleLinks: null,
     meeple: null
   }
 ]
