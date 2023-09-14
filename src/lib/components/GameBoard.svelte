@@ -241,7 +241,7 @@
         recordReplay = false;
         startGame(replay.playerCount, replay.tileNames);
         const startTime = replay.actions;
-        const STATIC_DELAY = 100;
+        const STATIC_DELAY = 10;
         if (startTime) {
             for (let i = 0; i < replay.actions.length; i++) {
                 const action = replay.actions[i];

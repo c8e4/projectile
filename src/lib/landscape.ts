@@ -293,7 +293,7 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
                 landscapeId: p.landscapeId,
                 type: connectorNameToLandType(p.name),
                 meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
-                tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length,
+                tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.x+"."+x.y).filter((x, i, a) => a.indexOf(x) == i).length,
                 penantCount: ports.filter(x => x.landscapeId == p.landscapeId && x.hasPennant).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
             }
         })
