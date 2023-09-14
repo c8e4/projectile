@@ -1,11 +1,12 @@
 import type { TileName } from "./grid"
 
 export enum FunctionName {
-    clickAt,
-    pressLockTile,
-    pressEndTurn,
-    pressGetFreeMepple,
-    pressRotateActiveCell
+    clickAt, 
+    pressLockTile, // " "
+    pressEndTurn,  // "e"
+    pressGetFreeMepple, // "q"
+    pressRotateActiveCell, // "r"
+    updatePos //"click meeple"
 }
 
 export type ReplayAction = {

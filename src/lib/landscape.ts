@@ -17,7 +17,7 @@ enum LandType {
 
 export type ClosedLandscape = {
     landscapeId: string,
-    type: LandType|null,
+    type: LandType | null,
     meepleIds: Array<number>,
     tileCount: number
     //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
@@ -127,10 +127,12 @@ function renameLandscapeId(sourcePort: Port, targetPort: Port | null, portList: 
     return portList.map((p) => {
         if (p.index == sourcePort.index && p.id == sourcePort.id) {
             sourcePort.closed = true
+            targetPort.closed = true
         }
         if (p.landscapeId == tempLandscapeId) {
             p.landscapeId = sourcePort.landscapeId
         }
+
         return p
     })
     // Есил мы наступили на target port - то берем все такие же landscapeId как у таргет порта и их перезаписываем на source Landscape
@@ -235,20 +237,57 @@ export function isOccupiedLandscapeId(targetPort: Port | null, ports: Array<Port
 }
 
 
-export function getClosedLandscapes(ports: Array<Port>):Array<ClosedLandscape> {
+export function showClosedLandscapes(ports: Array<Port>) {
 
-    let bigObjects = ports.filter((p, i, a) => p.completed == false && a.every(z => z.landscapeId == p.landscapeId && z.closed))
+    const closedLandscapes = getClosedLandscapes(ports)
+    if (closedLandscapes) {
+       // console.log("cant find closed landscapes")
+    }
+    else {
+       // console.table(closedLandscapes)
+    }
+
+}
+export function getClosedLandscapes(ports: Array<Port>): Array<ClosedLandscape> {
+    let bigObjects = ports.filter((p, i, a) => p.completed == false && a.filter(z=>z.landscapeId==p.landscapeId).every(z => z.closed))
+    // p.completed = false
+    // a.filter(z=>z.landscapeId==p.landscapeId)
+    // 
+
+    let uniqueLandscapeId = ports.filter((p,i,a)=>i=a.findIndex(z=>z.landscapeId==p.landscapeId)).filter(p=>p.name!=null)
+    //console.log("unique landscapeID")
+    //console.table(uniqueLandscapeId)
+
+    let closedLadnscapes=uniqueLandscapeId.map(u=>ports.filter(p=>p.landscapeId==u.landscapeId))
+    .filter (m=>m.every(p=>p.closed==true&&p.completed==false))
+    //console.log ("closedLadnscapes")
+    //console.log (closedLadnscapes)
+    
+    // zamok1
+        // port 1
+        // port 2 
+        // port 3
+
+    // zamok1
+        // port 1
+        // port 2 
+        // port 3
+
+
+
+    
     let closedObjects = bigObjects.filter((p, i, a) => a.findIndex(z => z.landscapeId == p.landscapeId) == i)
         .map(p => {
             return {
                 landscapeId: p.landscapeId,
                 type: connectorNameToLandType(p.name),
-                meepleIds: (ports.filter(x=>x.landscapeId==p.landscapeId).map(x=>x.meepleId).filter(x=>x!=null) as Array<number>),
-                tileCount: ports.filter(x=>x.landscapeId==p.landscapeId).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
+                meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
+                tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
                 //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
             }
         })
-    console.table (closedObjects)
+    //console.table (closedObjects)
+    
     return closedObjects
 }
 

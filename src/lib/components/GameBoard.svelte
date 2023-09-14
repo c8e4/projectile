@@ -19,6 +19,7 @@
         deleteOccupiedDropZoneFromTile,
         getClosedLandscapes,
         mergeLandscapes,
+        showClosedLandscapes,
     } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
@@ -63,7 +64,7 @@
             playReplay();
         }
         if (e.key == "i") {
-            saveReplayToLocalStorage(e)
+            saveReplayToLocalStorage(e);
         }
         if (e.key == "p") {
             playReplay();
@@ -106,8 +107,17 @@
                 y: game.activeCell.y,
                 connectorIndex: pos, // need FIX
             };
+            if (recordReplay) {
+                replay = recordAction(
+                    replay,
+                    FunctionName.updatePos,
+                    [pos]
+                );
+            }
         }
     }
+
+
 
     export function endTurn() {
         // - если там не занято
@@ -123,12 +133,11 @@
         //console.table(game.activeMeeple);
         //console.table(game.portList);
         //записываем в tile
-        getClosedLandscapes(game.portList);
+        showClosedLandscapes(game.portList);
         //----------
         game.activeCell = null;
         game.activeMeeple = null;
         game.activePlayer = getNextPlayer(game.activePlayer, game.players);
-
         getNextCell();
     }
 
@@ -198,72 +207,82 @@
         game.activeCell = rotateActiveCell(game.activeCell);
         game.grid = game.grid;
         if (e) e.preventDefault();
-        if(recordReplay){
-            replay = recordAction(replay, FunctionName.pressRotateActiveCell, [])
+        if (recordReplay) {
+            replay = recordAction(
+                replay,
+                FunctionName.pressRotateActiveCell,
+                []
+            );
         }
     }
 
-    function startGame(playerCount:number, tileNames: Array<TileName>|null = null) {
-        console.log("startGame")
+    function startGame(
+        playerCount: number,
+        tileNames: Array<TileName> | null = null
+    ) {
+        console.log("startGame");
         game = newGame(playerCount, tileNames);
         if (recordReplay) {
             replay = startRecording(
                 game.playerCount,
-                game.tileDeck.map(t => t.name)
+                game.tileDeck.map((t) => t.name)
             );
         }
         game.portList = mergeLandscapes(game.grid[40][40], game.portList);
         getNextCell();
     }
 
-    async function playReplay(){
-        if(!replay){
-            return
+    async function playReplay() {
+        if (!replay) {
+            return;
         }
         recordReplay = false;
         startGame(replay.playerCount, replay.tileNames);
-        const startTime = replay.actions
-        const STATIC_DELAY = 100
-        if(startTime){
-            for(let i=0; i < replay.actions.length; i++){
-                const action  = replay.actions[i]
-                await new Promise((resolve,reject)=>{
-                    setTimeout(()=>{resolve(true); executeReplayAction(action);}, STATIC_DELAY)
-                })
+        const startTime = replay.actions;
+        const STATIC_DELAY = 100;
+        if (startTime) {
+            for (let i = 0; i < replay.actions.length; i++) {
+                const action = replay.actions[i];
+                await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(true);
+                        executeReplayAction(action);
+                    }, STATIC_DELAY);
+                });
             }
         }
     }
-    function executeReplayAction(action: ReplayAction){
-        if(action.fn == FunctionName.clickAt){
-            clickAt(action.params[0],action.params[1])
+    function executeReplayAction(action: ReplayAction) {
+        if (action.fn == FunctionName.clickAt) {
+            clickAt(action.params[0], action.params[1]);
         }
-        if(action.fn == FunctionName.pressLockTile){
-            pressLockTile(null)
+        if (action.fn == FunctionName.pressLockTile) {
+            pressLockTile(null);
         }
-        if(action.fn == FunctionName.pressEndTurn){
-            pressEndTurn(null)
+        if (action.fn == FunctionName.pressEndTurn) {
+            pressEndTurn(null);
         }
-        if(action.fn == FunctionName.pressGetFreeMepple){
-            pressGetFreeMepple(null)
+        if (action.fn == FunctionName.pressGetFreeMepple) {
+            pressGetFreeMepple(null);
         }
-        if(action.fn == FunctionName.pressRotateActiveCell){
-            pressRotateActiveCell(null)
+        if (action.fn == FunctionName.pressRotateActiveCell) {
+            pressRotateActiveCell(null);
         }
     }
-    function loadReplayFromLocalStorage(e:any){
+    function loadReplayFromLocalStorage(e: any) {
         const item = localStorage.getItem("replay");
-        if(item){
-            replay = JSON.parse(item)
+        if (item) {
+            replay = JSON.parse(item);
         }
-        console.log("replay loaded")
+        console.log("replay loaded");
     }
-    function saveReplayToLocalStorage(e:any){
-        if(!replay){
-            return
+    function saveReplayToLocalStorage(e: any) {
+        if (!replay) {
+            return;
         }
-        const replayString = JSON.stringify(replay)
+        const replayString = JSON.stringify(replay);
         localStorage.setItem("replay", replayString);
-        console.log("replay saved")
+        console.log("replay saved");
     }
 </script>
 
@@ -286,13 +305,13 @@
                         </div>
                         {#if showConnectors}
                             <div class="absolute" style="z-index:6">
-                                <BigDebugTile cell={cell} ports={game.portList} />
+                                <BigDebugTile {cell} ports={game.portList} />
                             </div>
                         {/if}
-                            <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
-                            <!-- TODO: https://www.kevinleary.net/blog/remove-box-shadows-one-side-css/ -->
-                            <!-- TODO: add static properties: hasLeftNeighbour, haBotNeighbouth, ... -->
-                            <!-- TODO: only render a subframe of the board, no need to iterate over all tiles -->
+                        <!-- TODO: add clip-path: inset(0px -7px 1px 0px); -->
+                        <!-- TODO: https://www.kevinleary.net/blog/remove-box-shadows-one-side-css/ -->
+                        <!-- TODO: add static properties: hasLeftNeighbour, haBotNeighbouth, ... -->
+                        <!-- TODO: only render a subframe of the board, no need to iterate over all tiles -->
                         <img
                             style="z-index:1;transform: rotate({cell.tile
                                 ?.deg ?? 0}deg); scale: {cell.locked
