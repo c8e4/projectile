@@ -101,13 +101,16 @@
     }
 
     function updatePos(pos: number) {
-        console.log(pos);
+        console.log("updatePos:",pos);
+        console.log("updatePos:active meeple",game.activeMeeple);
+        console.log("updatePos:active cell",game.activeCell);
         if (game.activeMeeple && game.activeCell) {
             game.activeMeeple.at = {
                 x: game.activeCell.x,
                 y: game.activeCell.y,
                 connectorIndex: pos, // need FIX
             };
+            console.log ("updatePos:entered")
             if (recordReplay) {
                 replay = recordAction(replay, FunctionName.updatePos, [pos]);
             }
@@ -118,6 +121,7 @@
         // - если там не занято
         //Активного мипла если есть вписать в порт туда куда его поставили
         //записывает данного мипла в meepleId в таблице портс
+
         game.portList = addMeepleToPort(game.activeMeeple, game.portList);
         game.grid = addMeepleToTile(
             game.activeMeeple,
@@ -125,10 +129,11 @@
             game.grid
         );
         game.activeCell.tile.meeple = game.activeMeeple;
+        console.log("endTurn: active meeple Placed=",game.activeMeeple)
         //console.table(game.activeMeeple);
         //console.table(game.portList);
         //записываем в tile
-        showClosedLandscapes(game.portList);
+        //showClosedLandscapes(game.portList);
         //----------
         game.activeCell = null;
         game.activeMeeple = null;
@@ -187,7 +192,7 @@
 
     function pressGetFreeMepple(e: any) {
         game.activeMeeple = getFreeMeeple(game.activePlayer);
-        console.log("active meeple =", game.activeMeeple);
+        console.log("press get meeple =", game.activeMeeple);
         if (e) e.preventDefault();
         if (recordReplay) {
             replay = recordAction(replay, FunctionName.pressGetFreeMepple, []);
@@ -266,6 +271,9 @@
         }
         if (action.fn == FunctionName.pressRotateActiveCell) {
             pressRotateActiveCell(null);
+        }
+        if (action.fn == FunctionName.updatePos) {
+            updatePos(action.params[0]);
         }
     }
     function loadReplayFromLocalStorage(e: any) {
