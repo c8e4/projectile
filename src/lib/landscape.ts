@@ -1,6 +1,6 @@
 import type { C, as } from "vitest/dist/reporters-cb94c88b"
 import type { GridCell, GridOfTiles, Tile, TileConnector } from "./grid"
-import type { Meeple, PlayerId } from "./player"
+import type { Meeple, Player, PlayerId, PlayerIdMeeple } from "./player"
 
 export type Landscape = {
     name: string
@@ -237,9 +237,9 @@ export function isOccupiedLandscapeId(targetPort: Port | null, ports: Array<Port
 }
 
 
-export function showClosedLandscapes(ports: Array<Port>) {
+export function showClosedLandscapes(ports: Array<Port>, players: Array<Player>) {
 
-    const closedLandscapes = getClosedLandscapes(ports)
+    const closedLandscapes = getClosedLandscapes(ports, players)
     if (closedLandscapes) {
         // console.log("cant find closed landscapes")
     }
@@ -248,17 +248,31 @@ export function showClosedLandscapes(ports: Array<Port>) {
     }
 
 }
-export function getClosedLandscapes(ports: Array<Port>): Array<ClosedLandscape> {
+
+
+
+
+
+
+
+
+
+export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>): Array<ClosedLandscape> {
     let bigObjects = ports.filter((p, i, a) => p.completed == false && a.filter(z => z.landscapeId == p.landscapeId).every(z => z.closed))
-    // p.completed = false
-    // a.filter(z=>z.landscapeId==p.landscapeId)
-    // 
+
+
+
 
     let uniqueLandscapeId = ports.filter(p => p.name != null).filter((p, i, a) => i == a.findIndex(z => z.landscapeId == p.landscapeId))
-    //console.table(uniqueLandscapeId)
+
+
+
 
     let closedLadnscapes = uniqueLandscapeId.map(u => ports.filter(p => p.landscapeId == u.landscapeId))
         .filter(m => m.every(p => p.closed == true && p.completed == false))
+
+
+
 
     let completedLandscapes = closedLadnscapes.map(c => {
         c.map(p => {
@@ -267,29 +281,40 @@ export function getClosedLandscapes(ports: Array<Port>): Array<ClosedLandscape> 
         })
         return c
     });
-    (window as any).completedLandscapes=completedLandscapes ;
+
+
+
+    (window as any).completedLandscapes = completedLandscapes;
     console.log("completedLandscapes")
     console.table(completedLandscapes);
 
-    
-    (window as any).uniqueLandscapeId=uniqueLandscapeId ;
-    
-    let completedCastlesFields = uniqueLandscapeId.filter(u=>connectorNameToLandType(u.name)==LandType.Zamok||connectorNameToLandType(u.name)==LandType.Doroga).filter(u=> completedLandscapes.some(s=>s[0].landscapeId==u.landscapeId)).map(p => {
-        return {
-            landscapeId: p.landscapeId,
-            type: connectorNameToLandType(p.name),
-            meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
-            tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length,
-            pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
-        }
-    })
-     
+
+    (window as any).uniqueLandscapeId = uniqueLandscapeId;
+
+    let completedCastlesFields = uniqueLandscapeId.filter(u => connectorNameToLandType(u.name) == LandType.Zamok || connectorNameToLandType(u.name) == LandType.Doroga)
+        .filter(u => completedLandscapes.some(s => s[0].landscapeId == u.landscapeId)).map(p => {
+            return {
+                landscapeId: p.landscapeId,
+                type: connectorNameToLandType(p.name),
+                meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
+                tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length,
+                pennants: ports.filter(x => x.landscapeId == p.landscapeId && x.hasPennant).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
+            }
+        })
+
     console.log("completedCastlesField")
-    console.log(completedCastlesFields)
+    console.log(completedCastlesFields);
+    (window as any).completedCastlesFields = completedCastlesFields;
+
+
 
     completedCastlesFields.forEach(p => {
         if (p.type == LandType.Zamok) {
-                //calculateZamok()
+            //getConquerer()
+            const playerIds = p.meepleIds.map(mId => players.flatMap(player => player.meeples).filter(playerMeeple => playerMeeple.id == mId).map(playerMeeple => playerMeeple.playerId))
+            let uniquePlayersId = playerIds.filter((p, i, a) => i == a.indexOf(p));
+            (window as any).playerIds = playerIds;
+            (window as any).uniquePlayersId = uniquePlayersId;
         }
         else {
             if (p.type == LandType.Doroga) {
@@ -299,6 +324,11 @@ export function getClosedLandscapes(ports: Array<Port>): Array<ClosedLandscape> 
     }
     )
     return completedCastlesFields
+}
+
+
+export function getTopPlayers(playerIdMeeple: PlayerIdMeeple) {
+    let maxMeeples = Math.max(playerIdMeeple.meepleCount)
 }
 
 export function calculateScore(landscapes: Array<ClosedLandscape>) {
