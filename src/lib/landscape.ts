@@ -266,9 +266,13 @@ export function returnMeeplesToPlayers(ports: Array<Port>, players: Array<Player
     ports.filter(p=>p.completed&&p.meepleId!=null).map(p=>{
         p.meepleId
         grid[p.x][p.y].tile.meeple = null;
-        const meep = players.flatMap(p=>p.meeples).find(m => m.id==p.meepleId)
+        const meep = players.flatMap(player=>player.meeples).find(m => m.id==p.meepleId)
         if(meep){
             meep.at = null;
+        }
+        const player = players.find(player => player.meeples.some(m=> m.id==p.meepleId))
+        if(player){
+            player.score += p.score??0;
         }
         p.meepleId = null;
     })
