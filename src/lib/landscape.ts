@@ -302,17 +302,8 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
         })
     
     let closedLandscapesOwners: Array<ClosedLandscapeOwners> = closedLandscapes.map(l =>{
-        const uniquePlayerIds = l.meepleIds
-            .map(mId => meepleIdToPlayerId(mId, players))
-            .filter((pId,i,a) => a.indexOf(pId) == i);
-        let owners:Array<LandscapeOwner> = uniquePlayerIds.map((pId)=>{
-            return {
-                playerId: pId,
-                meepleCount: l.meepleIds.map(mId => meepleIdToPlayerId(mId, players)).filter(id =>id == pId).length
-            }
-        });
-        owners = owners.filter(o => o.meepleCount == Math.max(...owners.map(o=> o.meepleCount)));
-        (l as ClosedLandscapeOwners).owners = owners;
+        let occupiers = meepleIdListToOwnerList(l.meepleIds, players);
+        (l as ClosedLandscapeOwners).owners = occupiers.filter(o => o.meepleCount == Math.max(...occupiers.map(o=> o.meepleCount)));
         return (l as ClosedLandscapeOwners)
     })
 
@@ -325,6 +316,19 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
     return ports
 }
 
+export function meepleIdListToOwnerList(meepleIdList:Array<number>, players: Array<Player>):Array<LandscapeOwner>{
+    const uniquePlayerIds = meepleIdList
+        .map(mId => meepleIdToPlayerId(mId, players))
+        .filter((pId, i, a) => a.indexOf(pId) == i);
+    let owners: Array<LandscapeOwner> = uniquePlayerIds.map((pId) => {
+        return {
+            playerId: pId,
+            meepleCount: meepleIdList.map(mId => meepleIdToPlayerId(mId, players)).filter(id => id == pId).length
+        }
+    });
+    return owners
+}
+
 function updateScore(closedLandscapesOwners: Array<ClosedLandscapeOwners>, ports: Array<Port>):Array<Port>{
     closedLandscapesOwners.forEach(owner=>{
         ports.filter(p => p.landscapeId == owner.landscapeId).forEach(port =>{
@@ -335,7 +339,7 @@ function updateScore(closedLandscapesOwners: Array<ClosedLandscapeOwners>, ports
     return ports;
 }
 
-function meepleIdToPlayerId(mId: number, players: Array<Player>):number{
+export function meepleIdToPlayerId(mId: number, players: Array<Player>):number{
     //@ts-ignore
     return players.flatMap(p => p.meeples).find(m => m.id == mId)?.playerId
 }

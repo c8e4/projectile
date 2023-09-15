@@ -157,7 +157,7 @@
     }
     function pressCalculateFinalScore(e: any) {
         game.portList = endGameZamokScore(game.portList);
-        game.portList = endGamePoleScore(game.portList);
+        game.portList = endGamePoleScore(game.portList, game.grid, game.players);
         console.table(game.portList);
 
         if (recordReplay) {

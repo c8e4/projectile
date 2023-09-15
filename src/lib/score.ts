@@ -1,5 +1,6 @@
 import type { GridOfTiles, ZamokPoleLink } from "./grid"
-import type { Port } from "./landscape"
+import { meepleIdToPlayerId, type LandscapeOwner, type Port, meepleIdListToOwnerList } from "./landscape"
+import type { Player } from "./player"
 
 export type ZamokAndPoleNeighbours = {
     zamokPort: Port
@@ -14,7 +15,7 @@ export function endGameZamokScore(ports: Array<Port>): Array<Port> {
     return ports
 }
 
-export function endGamePoleScore(ports: Array<Port>, grid: GridOfTiles): Array<Port> {
+export function endGamePoleScore(ports: Array<Port>, grid: GridOfTiles, players: Array<Player>): Array<Port> {
 
 
     // check All Completed Castle -> take all connected Pole tiles 
@@ -42,21 +43,24 @@ export function endGamePoleScore(ports: Array<Port>, grid: GridOfTiles): Array<P
         return {
             landscapeId: uniquePole.landscapeId,
             score: castleCount * 3,
-            meepleIdList: ports.filter(p => p.landscapeId == uniquePole.landscapeId).filter(p => p.meepleId != null).map(p => p.meepleId).map(p=>p),
+            meepleIdList: ports.filter(p => p.landscapeId == uniquePole.landscapeId).filter(p => p.meepleId != null).map(p => p.meepleId).filter(p => p != null),
         }
     })
 
-    uniquePolesWithMeepleIds.forEach(u=>{
-        calculatePoleWinner(u.landscapeId,u.score,u.meepleIdList)
+    uniquePolesWithMeepleIds.forEach(u => {
+        // @ts-ignore
+        const winners = calculatePoleWinners(players,  u.meepleIdList);
+
+        ports.filter(port => port.landscapeId == u.landscapeId).forEach((port)=>{
+            port.conquerers = winners.map(w=>w.playerId);
+            port.score = u.score;
+        })
     })
 }
-export function calculatePoleWinner(landscapeId:string,score:number,meepleIdList:Array<number|null>){
-    if (!meepleIdList)
-    {
-        return 
-    }
-    
-    
+
+export function calculatePoleWinners(players: Array<Player>, meepleIdList: Array<number>):Array<LandscapeOwner> {
+    const owners = meepleIdListToOwnerList(meepleIdList, players)
+    return owners.filter(o => o.meepleCount == Math.max(...owners.map(o=> o.meepleCount)));
 }
 
 export function getNeighbourPoles(ports: Array<Port>, targetZamok: Port, links: Array<ZamokPoleLink> | null): Array<Port> {
