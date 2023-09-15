@@ -127,10 +127,9 @@
             game.activeCell,
             game.grid
         );
-        game.activeCell.tile.meeple = game.activeMeeple;
-        //console.table(game.activeMeeple);
-        //console.table(game.portList);
-        //записываем в tile
+        if(game.activeCell){
+            game.activeCell.tile.meeple = game.activeMeeple;
+        }
         game.portList = showClosedLandscapes(game.portList, game.players);
         const {players, ports, grid} = returnMeeplesToPlayers(game.portList, game.players, game.grid);
         game.players = players;
