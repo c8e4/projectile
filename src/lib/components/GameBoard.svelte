@@ -18,6 +18,7 @@
         addMeepleToTile,
         deleteOccupiedDropZoneFromTile,
         mergeLandscapes,
+        returnMeeplesToPlayers,
         showClosedLandscapes,
     } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
@@ -131,6 +132,10 @@
         //console.table(game.portList);
         //записываем в tile
         game.portList = showClosedLandscapes(game.portList, game.players);
+        const {players, ports, grid} = returnMeeplesToPlayers(game.portList, game.players, game.grid);
+        game.players = players;
+        game.portList = ports;
+        game.grid = grid;
         //----------
         game.activeCell = null;
         game.activeMeeple = null;

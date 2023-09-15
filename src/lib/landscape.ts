@@ -58,6 +58,12 @@ export type Port = {
 
 export type ConnectorIndex = number // 0..11
 
+export type PortsAndPlayers = { 
+    ports: Array<Port>
+    players: Array<Player>
+    grid: GridOfTiles
+}
+
 
 export function addLocations(cell: GridCell): Array<Port> {
     let localPorts: Array<Port> = []
@@ -255,6 +261,24 @@ export function isOccupiedLandscapeId(targetPort: Port | null, ports: Array<Port
     return targetPort && ports.some((p) => p.landscapeId == targetPort?.landscapeId && p.meepleId != null)
 }
 
+
+export function returnMeeplesToPlayers(ports: Array<Port>, players: Array<Player>, grid: GridOfTiles):PortsAndPlayers{
+    ports.filter(p=>p.completed&&p.meepleId!=null).map(p=>{
+        p.meepleId
+        grid[p.x][p.y].tile.meeple = null;
+        const meep = players.flatMap(p=>p.meeples).find(m => m.id==p.meepleId)
+        if(meep){
+            meep.at = null;
+        }
+        p.meepleId = null;
+    })
+
+    return {
+        ports,
+        players,
+        grid
+    }
+}
 
 export function showClosedLandscapes(ports: Array<Port>, players: Array<Player>) {
     ports = updateScoreForClosedZamokDoroga(ports, players)
