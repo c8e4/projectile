@@ -19,7 +19,7 @@ export type Tile = {
     dropZoneCenter: TileConnector 
     meeple: Meeple | null
     zamokPoleLinks: Array<zamokPoleLink>
-    penant: TileConnector
+    pennant: TileConnector
 }
 
 export type GridCell = {
@@ -44,7 +44,7 @@ export function emptyTile(): Tile {
         dropZone: [],
         dropZoneCenter: null,
         meeple: null,
-        penant: null,
+        pennant: null,
         zamokPoleLinks: []
     }
 }
@@ -98,7 +98,7 @@ export function newGameGrid(): GridOfTiles {
         dropZoneCenter: 'd0',
         zamokPoleLinks: [ { zamok: 'z0', pole: 'p1' } ],
         meeple: null,
-        penant: null
+        pennant: null
     };
     grid[GRID_CENTER][GRID_CENTER].locked = true;
     return grid;

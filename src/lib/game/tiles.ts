@@ -21,7 +21,7 @@ export let tiles =
     dropZoneCenter: 'c0',
     zamokPoleLinks: null,
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'B',
@@ -44,7 +44,7 @@ export let tiles =
     dropZoneCenter: 'c0',
     zamokPoleLinks: null,
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'C',
@@ -67,7 +67,7 @@ export let tiles =
     dropZoneCenter: 'z0',
     zamokPoleLinks: null,
     meeple: null,
-    penant: 'z0'
+    pennant: 'z0'
   },
   {
     name: 'D',
@@ -90,7 +90,7 @@ export let tiles =
     dropZoneCenter: null,
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p1' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'E',
@@ -113,7 +113,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'F',
@@ -136,7 +136,7 @@ export let tiles =
     dropZoneCenter: 'z0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z0', pole: 'p1' } ],
     meeple: null,
-    penant: 'z0'
+    pennant: 'z0'
   },
   {
     name: 'G',
@@ -159,7 +159,7 @@ export let tiles =
     dropZoneCenter: 'z0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z0', pole: 'p1' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'H',
@@ -182,7 +182,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z1', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'I',
@@ -205,7 +205,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z1', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'J',
@@ -228,7 +228,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'K',
@@ -251,7 +251,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'L',
@@ -274,7 +274,7 @@ export let tiles =
     dropZoneCenter: null,
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'M',
@@ -297,7 +297,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: 'z0'
+    pennant: 'z0'
   },
   {
     name: 'N',
@@ -320,7 +320,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'O',
@@ -343,7 +343,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: 'z0'
+    pennant: 'z0'
   },
   {
     name: 'P',
@@ -366,7 +366,7 @@ export let tiles =
     dropZoneCenter: 'p0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'Q',
@@ -389,7 +389,7 @@ export let tiles =
     dropZoneCenter: 'z0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: 'z0'
+    pennant: 'z0'
   },
   {
     name: 'R',
@@ -412,7 +412,7 @@ export let tiles =
     dropZoneCenter: 'z0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'S',
@@ -435,7 +435,7 @@ export let tiles =
     dropZoneCenter: 'z0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z0', pole: 'p1' } ],
     meeple: null,
-    penant: 'z0'
+    pennant: 'z0'
   },
   {
     name: 'T',
@@ -458,7 +458,7 @@ export let tiles =
     dropZoneCenter: 'z0',
     zamokPoleLinks: [ { zamok: 'z0', pole: 'p0' }, { zamok: 'z0', pole: 'p1' } ],
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'U',
@@ -481,7 +481,7 @@ export let tiles =
     dropZoneCenter: null,
     zamokPoleLinks: null,
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'V',
@@ -504,7 +504,7 @@ export let tiles =
     dropZoneCenter: null,
     zamokPoleLinks: null,
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'W',
@@ -527,7 +527,7 @@ export let tiles =
     dropZoneCenter: null,
     zamokPoleLinks: null,
     meeple: null,
-    penant: null
+    pennant: null
   },
   {
     name: 'X',
@@ -550,6 +550,6 @@ export let tiles =
     dropZoneCenter: null,
     zamokPoleLinks: null,
     meeple: null,
-    penant: null
+    pennant: null
   }
 ]

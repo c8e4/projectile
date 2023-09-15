@@ -2,6 +2,7 @@ import type { C, as } from "vitest/dist/reporters-cb94c88b"
 import type { GridCell, GridOfTiles, Tile, TileConnector } from "./grid"
 import type { Meeple, Player, PlayerId, PlayerIdMeeple } from "./player"
 import type { List } from "postcss/lib/list"
+import { tiles } from "./game/tiles"
 
 export type Landscape = {
     name: string
@@ -21,7 +22,7 @@ export type ClosedLandscape = {
     type: LandType | null
     meepleIds: Array<number>
     tileCount: number
-    penantCount: number
+    pennantCount: number
     //pennants: ports.filter(x=>x.landscapeId==p.landscapeId&&x.hasPennant).map(x=>x.id).filter((x,i,a)=>a.indexOf(x)==i).length
 }
 
@@ -35,7 +36,7 @@ export type ClosedLandscapeOwners = {
     type: LandType | null
     meepleIds: Array<number>
     tileCount: number
-    penantCount: number
+    pennantCount: number
     owners: Array<LandscapeOwner>
 }
 
@@ -75,6 +76,7 @@ export function addLocations(cell: GridCell): Array<Port> {
                 completed: false,
                 score: null,
                 conquerers: [],
+                hasPennant: !!cell.tile.pennant
             }
             localPorts.push(tempPort)
         }
@@ -121,6 +123,7 @@ const PORT_MAP = [
 ]
 
 export function mergeLandscapes(activeCell: GridCell | null, portList: Array<Port>): Array<Port> {
+    //@ts-ignore
     let localPorts: Array<Port> = addLocations(activeCell)
     portList.push(...localPorts)
     localPorts.forEach((p) => {
@@ -294,7 +297,7 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
                 type: connectorNameToLandType(p.name),
                 meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
                 tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.x+"."+x.y).filter((x, i, a) => a.indexOf(x) == i).length,
-                penantCount: ports.filter(x => x.landscapeId == p.landscapeId && x.hasPennant).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
+                pennantCount: ports.filter(x => x.landscapeId == p.landscapeId && x.hasPennant).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
             }
         })
     
@@ -326,7 +329,7 @@ function updateScore(closedLandscapesOwners: Array<ClosedLandscapeOwners>, ports
     closedLandscapesOwners.forEach(owner=>{
         ports.filter(p => p.landscapeId == owner.landscapeId).forEach(port =>{
             port.conquerers = owner.owners.map(o=>o.playerId)
-            port.score = calculateLandscapeScore(owner.type, owner.tileCount, owner.penantCount);
+            port.score = calculateLandscapeScore(owner.type, owner.tileCount, owner.pennantCount);
         })
     })
     return ports;
@@ -342,8 +345,8 @@ export function getTopPlayers(playerIdMeeple: LandscapeOwner) {
     let maxMeeples = Math.max(playerIdMeeple.meepleCount)
 }
 
-function calculateLandscapeScore(landType: LandType | null, tileCount:number, penantCount:number):number{
-    return tileCount * scorePerLandType(landType)+ penantCount*2;
+function calculateLandscapeScore(landType: LandType | null, tileCount:number, pennantCount:number):number{
+    return tileCount * scorePerLandType(landType)+ pennantCount*2;
 }
 
 function scorePerLandType(type: LandType | null): number{

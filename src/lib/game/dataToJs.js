@@ -1,5 +1,5 @@
 import fs from "fs";
-import { penants } from "./penants.js";
+import { pennants } from "./pennants.js";
 
 const data = fs.readFileSync("./data.txt", { encoding: "utf8", flag: "r" });
 const lines = data.split("\n");
@@ -47,7 +47,7 @@ const json = lines
             dropZoneCenter: s[28] == "null" ? null : s[28],
             zamokPoleLinks: s[29]?s[29].split(',').map(x=>{return{zamok:x.split(':')[0],pole:x.split(':')[1]}}):null, 
             meeple:null,
-            penant: penants.find(p => p.tileName==s[0])?.connectorName??null
+            pennant: pennants.find(p => p.tileName==s[0])?.connectorName??null
         };
     });
 

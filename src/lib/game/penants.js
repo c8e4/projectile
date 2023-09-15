@@ -1,4 +1,4 @@
-export const penants = [
+export const pennants = [
     {tileName: "C", connectorName:"z0"},
     {tileName: "F", connectorName:"z0"},
     {tileName: "M", connectorName:"z0"},
