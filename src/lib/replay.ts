@@ -6,7 +6,8 @@ export enum FunctionName {
     pressEndTurn,  // "e"
     pressGetFreeMepple, // "q"
     pressRotateActiveCell, // "r"
-    updatePos //"click meeple"
+    updatePos, //"click meeple"
+    pressCalculateFinalScore
 }
 
 export type ReplayAction = {

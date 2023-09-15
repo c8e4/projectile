@@ -31,12 +31,12 @@
         type ReplayAction,
     } from "$lib/replay";
     import BigDebugTile from "./BigDebugTile.svelte";
+    import { endGamePoleScore, endGameZamokScore } from "$lib/score";
 
     let recordReplay: boolean = true;
     let replay: null | Replay = null;
 
     let game = newGame(3);
-    
 
     onMount(() => {
         (window as any).game = game;
@@ -87,6 +87,9 @@
         if (e.key == "q") {
             pressGetFreeMepple(e);
         }
+        if (e.key == "f") {
+            pressCalculateFinalScore(e);
+        }
     }
 
     function previewActiveCell(cell: GridCell) {
@@ -101,7 +104,6 @@
     }
 
     function updatePos(pos: number) {
-
         if (game.activeMeeple && game.activeCell) {
             game.activeMeeple.at = {
                 x: game.activeCell.x,
@@ -129,7 +131,7 @@
         //console.table(game.activeMeeple);
         //console.table(game.portList);
         //записываем в tile
-        showClosedLandscapes(game.portList,game.players); //CHECK BROKEN
+        showClosedLandscapes(game.portList, game.players); //CHECK BROKEN
         //----------
         game.activeCell = null;
         game.activeMeeple = null;
@@ -151,6 +153,19 @@
         previewActiveCell(game.grid[x][y]);
         if (recordReplay) {
             replay = recordAction(replay, FunctionName.clickAt, [x, y]);
+        }
+    }
+    function pressCalculateFinalScore(e: any) {
+        game.portList = endGameZamokScore(game.portList);
+        game.portList = endGamePoleScore(game.portList);
+        console.table(game.portList);
+
+        if (recordReplay) {
+            replay = recordAction(
+                replay,
+                FunctionName.pressCalculateFinalScore,
+                []
+            );
         }
     }
 
@@ -179,9 +194,9 @@
     }
 
     function pressEndTurn(e: any) {
-        if(game.activeCell?.locked){
+        if (game.activeCell?.locked) {
             endTurn();
-   
+
             if (e) e.preventDefault();
             if (recordReplay) {
                 replay = recordAction(replay, FunctionName.pressEndTurn, []);
@@ -271,6 +286,9 @@
             pressRotateActiveCell(null);
         }
         if (action.fn == FunctionName.updatePos) {
+            updatePos(action.params[0]);
+        }
+        if (action.fn == FunctionName.pressCalculateFinalScore) {
             updatePos(action.params[0]);
         }
     }
