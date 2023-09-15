@@ -292,7 +292,9 @@ export function updateScoreForClosedZamokDoroga(ports: Array<Port>, players: Arr
         .filter(m => m.every(p => p.closed == true && p.completed == false))
     let completedLandscapes = closedLadnscapes.map(c => {
         c.map(p => {
-            p.completed = true
+            if(connectorNameToLandType(p.name) == LandType.Zamok || connectorNameToLandType(p.name) == LandType.Doroga){
+                p.completed = true
+            }
             return p
         })
         return c

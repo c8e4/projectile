@@ -17,7 +17,6 @@
         addMeepleToPort,
         addMeepleToTile,
         deleteOccupiedDropZoneFromTile,
-        getClosedLandscapes,
         mergeLandscapes,
         showClosedLandscapes,
     } from "$lib/landscape";
