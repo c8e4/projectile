@@ -5,7 +5,7 @@ export type TileConnector = string | null
 
 export type TileConnectorList = Array<TileConnector>
 
-export type zamokPoleLink = {
+export type ZamokPoleLink = {
     zamok: TileConnector,
     pole: TileConnector
 }
@@ -18,7 +18,7 @@ export type Tile = {
     dropZone: TileConnectorList
     dropZoneCenter: TileConnector 
     meeple: Meeple | null
-    zamokPoleLinks: Array<zamokPoleLink>
+    zamokPoleLinks: Array<ZamokPoleLink>
     pennant: TileConnector
 }
 
