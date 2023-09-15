@@ -310,6 +310,11 @@
     }
 </script>
 
+<div class="fixed" style="z-index:10;">
+    <div class="absolute">
+        <div class="bg-slate-200 w-40">Active Player ID: {game.activePlayer?.id}</div>
+    </div>
+</div>
 <div class="board flex">
     {#each game.grid as row}
         <div class="flex flex-col-reverse">
