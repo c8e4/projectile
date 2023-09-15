@@ -184,7 +184,7 @@
                 game.activeCell,
                 game.portList
             );
-            game.grid[game.activeCell?.x][game.activeCell?.y].tile.dropZone =
+            game.grid[game.activeCell.x][game.activeCell.y].tile.dropZone =
                 game.activeCell?.tile.dropZone;
             if (game.activeCell) {
                 game.activeCell.locked = true;
@@ -314,9 +314,14 @@
     }
 </script>
 
-<div class="fixed" style="z-index:10;">
-    <div class="absolute">
-        <div class="bg-slate-200 w-40">Active Player ID: {game.activePlayer?.id}</div>
+<div class="fixed  w-full" style="z-index:10;">
+    <div class="absolute w-full bg-slate-200 flex gap-4 p-2">
+        {#each game.players as p}
+            <div>
+                <div class:font-bold={p.id == game.activePlayer?.id}>P{p.id}: {p.score}</div> 
+                <div class="text-xs">{'['}{p.meeples.filter(m=>!m.at).map(m=>m.id).join(' ')}{']'}</div>
+            </div>
+        {/each}
     </div>
 </div>
 <div class="board flex">
