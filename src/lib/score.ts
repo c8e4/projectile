@@ -16,8 +16,6 @@ export function endGameZamokScore(ports: Array<Port>): Array<Port> {
 }
 
 export function endGamePoleScore(ports: Array<Port>, grid: GridOfTiles, players: Array<Player>): Array<Port> {
-
-
     // check All Completed Castle -> take all connected Pole tiles 
     let completedCastles = ports.filter(p => p.completed == true).filter(p => p.name.charAt(0) == "z")
     let uniqueCastles = completedCastles.filter((p, i, a) => i == a.findIndex(u => u.landscapeId == p.landscapeId))
@@ -56,6 +54,8 @@ export function endGamePoleScore(ports: Array<Port>, grid: GridOfTiles, players:
             port.score = u.score;
         })
     })
+
+    return ports
 }
 
 export function calculatePoleWinners(players: Array<Player>, meepleIdList: Array<number>):Array<LandscapeOwner> {
