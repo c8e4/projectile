@@ -19,7 +19,7 @@
         deleteOccupiedDropZoneFromTile,
         mergeLandscapes,
         returnMeeplesToPlayers,
-        showClosedLandscapes,
+        updateScoreProgress,
     } from "$lib/landscape";
     import MeepleDropzone from "./MeepleDropzone.svelte";
     import { getFreeMeeple, getNextPlayer } from "$lib/player";
@@ -130,7 +130,7 @@
         if(game.activeCell){
             game.activeCell.tile.meeple = game.activeMeeple;
         }
-        game.portList = showClosedLandscapes(game.portList, game.players);
+        game.portList = updateScoreProgress(game.portList, game.players);
         const {players, ports, grid} = returnMeeplesToPlayers(game.portList, game.players, game.grid);
         game.players = players;
         game.portList = ports;
@@ -184,7 +184,7 @@
                 game.activeCell,
                 game.portList
             );
-            game.grid[game.activeCell?.x][game.activeCell.y].tile.dropZone =
+            game.grid[game.activeCell?.x][game.activeCell?.y].tile.dropZone =
                 game.activeCell?.tile.dropZone;
             if (game.activeCell) {
                 game.activeCell.locked = true;

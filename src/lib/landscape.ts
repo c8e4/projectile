@@ -280,7 +280,7 @@ export function returnMeeplesToPlayers(ports: Array<Port>, players: Array<Player
     }
 }
 
-export function showClosedLandscapes(ports: Array<Port>, players: Array<Player>) {
+export function updateScoreProgress(ports: Array<Port>, players: Array<Player>) {
     ports = updateScoreForClosedZamokDoroga(ports, players)
     ports = updateScoreForChurches(ports, players)
     return ports;

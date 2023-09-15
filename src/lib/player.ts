@@ -1,6 +1,7 @@
 
 export type Player = {
     id: PlayerId
+    score: number
     meeples: Array<Meeple>
 }
 
@@ -25,6 +26,7 @@ export function initPlayers(playerCount: number): Array<Player> {
     for (let i = 0; i < playerCount; i++) {
         let tempPlayer = {
             id: i,
+            score: 0,
             meeples: initMeeples(i),
         }
         players.push(tempPlayer)
