@@ -29,8 +29,8 @@
             <DebugTile val={getLandscapeIndex(cell,ports,9)}></DebugTile>
             <DebugTile val={getLandscapeIndex(cell,ports,8)}></DebugTile>
         </div>
-        <div class="tile-center flex items-center justify-center text-3xl font-bold">
-            <!-- {tile.name} -->
+        <div class="tile-center flex items-center justify-center text-md font-slate-800">
+            {cell.x},{cell.y}
         </div>
         <div class="">
             <DebugTile val={getLandscapeIndex(cell,ports,2)}></DebugTile>
