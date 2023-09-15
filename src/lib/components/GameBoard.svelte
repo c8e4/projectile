@@ -259,12 +259,13 @@
         if (startTime) {
             for (let i = 0; i < replay.actions.length; i++) {
                 const action = replay.actions[i];
-                await new Promise((resolve, reject) => {
+                executeReplayAction(action);
+                /*await new Promise((resolve, reject) => {
                     setTimeout(() => {
                         resolve(true);
                         executeReplayAction(action);
                     }, STATIC_DELAY);
-                });
+                });*/
             }
         }
     }

@@ -269,7 +269,7 @@ export function updateScoreForChurches(ports: Array<Port>, players: Array<Player
         const playerId = players.find(p=>p.meeples.some(m => m.id==c.meepleId))?.id;
         c.completed = true;
         c.score = 9//c.meepleId!=null?9:null
-        c.conquerers = playerId?[playerId]:[]
+        c.conquerers = playerId!=null?[playerId]:[]
     })
     return ports;
 }
