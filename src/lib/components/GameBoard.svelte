@@ -131,7 +131,7 @@
         //console.table(game.activeMeeple);
         //console.table(game.portList);
         //записываем в tile
-        showClosedLandscapes(game.portList, game.players); //CHECK BROKEN
+        showClosedLandscapes(game.portList, game.players);
         //----------
         game.activeCell = null;
         game.activeMeeple = null;
