@@ -31,7 +31,7 @@
         type ReplayAction,
     } from "$lib/replay";
     import BigDebugTile from "./BigDebugTile.svelte";
-    import { endGamePoleScore, endGameZamokScore } from "$lib/score";
+    import { calculateEndGameScore, endGamePoleScore, endGameZamokScore } from "$lib/score";
 
     let recordReplay: boolean = true;
     let replay: null | Replay = null;
@@ -161,6 +161,7 @@
     function pressCalculateFinalScore(e: any) {
         game.portList = endGameZamokScore(game.portList);
         game.portList = endGamePoleScore(game.portList, game.grid, game.players);
+        game.players  = calculateEndGameScore(game.portList, game.players); 
         console.table(game.portList);
 
         if (recordReplay) {

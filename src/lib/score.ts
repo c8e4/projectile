@@ -1,10 +1,24 @@
 import type { GridOfTiles, ZamokPoleLink } from "./grid"
 import { meepleIdToPlayerId, type LandscapeOwner, type Port, meepleIdListToOwnerList } from "./landscape"
-import type { Player } from "./player"
+import type { Player, PlayerId } from "./player"
 
 export type ZamokAndPoleNeighbours = {
     zamokPort: Port
     uniqueNeighbourPoles: Array<Port>
+}
+
+export function calculateEndGameScore(portList:Array<Port>, playerList:Array<Player>):Array<Player>{
+    playerList.map(player =>{
+        player.score = calculateFinalPlayerScore(player.id,portList);
+    })
+    return playerList;
+}
+
+function calculateFinalPlayerScore(playerId:PlayerId,portList:Array<Port>):number{
+    return portList.filter((e,i,a)=>a.findIndex(ae=>ae.landscapeId==e.landscapeId)==i)
+        .filter(p => p.conquerers.some(c => c==playerId))
+        .map(p=>p.score??0)
+        .reduce((a,b)=>a+b,0)
 }
 
 export function endGameZamokScore(ports: Array<Port>): Array<Port> {
