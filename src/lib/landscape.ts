@@ -257,28 +257,37 @@ export function isOccupiedLandscapeId(targetPort: Port | null, ports: Array<Port
 
 
 export function showClosedLandscapes(ports: Array<Port>, players: Array<Player>) {
-
-    const closedLandscapes = getClosedLandscapes(ports, players)
-    if (closedLandscapes) {
-        // console.log("cant find closed landscapes")
-    }
-    else {
-        // console.table(closedLandscapes)
-    }
-
+    ports = updateScoreForClosedZamokDoroga(ports, players)
+    ports = updateScoreForChurches(ports, players)
+    return ports;
 }
 
+export function updateScoreForChurches(ports: Array<Port>, players: Array<Player>): Array<Port> {
+    const churches = ports.filter(p => p.name?.charAt(0) == 'c' && !p.completed)
+        .filter(c => churchIsEnclosed(c, ports));
+    churches.forEach(c => {
+        const playerId = players.find(p=>p.meeples.some(m => m.id==c.meepleId))?.id;
+        c.completed = true;
+        c.score = 9//c.meepleId!=null?9:null
+        c.conquerers = playerId?[playerId]:[]
+    })
+    return ports;
+}
 
+function churchIsEnclosed(church: Port, ports: Array<Port>): boolean {
+    return ports.some(p => p.x + 1 == church.x && p.y == church.y)
+        && ports.some(p => p.x + 1 == church.x && p.y + 1 == church.y)
+        && ports.some(p => p.x + 1 == church.x && p.y - 1 == church.y)
+        && ports.some(p => p.x - 1 == church.x && p.y == church.y)
+        && ports.some(p => p.x - 1 == church.x && p.y + 1 == church.y)
+        && ports.some(p => p.x - 1 == church.x && p.y - 1 == church.y)
+        && ports.some(p => p.x == church.x && p.y + 1 == church.y)
+        && ports.some(p => p.x == church.x && p.y - 1 == church.y)
+}
 
-
-
-
-
-
-
-export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>): Array<Port> {
+export function updateScoreForClosedZamokDoroga(ports: Array<Port>, players: Array<Player>): Array<Port> {
     let uniqueLandscapeId = ports.filter(p => p.name != null).filter((p, i, a) => i == a.findIndex(z => z.landscapeId == p.landscapeId))
-    
+
     let closedLadnscapes = uniqueLandscapeId.map(u => ports.filter(p => p.landscapeId == u.landscapeId))
         .filter(m => m.every(p => p.closed == true && p.completed == false))
     let completedLandscapes = closedLadnscapes.map(c => {
@@ -296,27 +305,22 @@ export function getClosedLandscapes(ports: Array<Port>, players: Array<Player>):
                 landscapeId: p.landscapeId,
                 type: connectorNameToLandType(p.name),
                 meepleIds: (ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.meepleId).filter(x => x != null) as Array<number>),
-                tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.x+"."+x.y).filter((x, i, a) => a.indexOf(x) == i).length,
+                tileCount: ports.filter(x => x.landscapeId == p.landscapeId).map(x => x.x + "." + x.y).filter((x, i, a) => a.indexOf(x) == i).length,
                 pennantCount: ports.filter(x => x.landscapeId == p.landscapeId && x.hasPennant).map(x => x.id).filter((x, i, a) => a.indexOf(x) == i).length
             }
         })
-    
-    let closedLandscapesOwners: Array<ClosedLandscapeOwners> = closedLandscapes.map(l =>{
+
+    let closedLandscapesOwners: Array<ClosedLandscapeOwners> = closedLandscapes.map(l => {
         let occupiers = meepleIdListToOwnerList(l.meepleIds, players);
-        (l as ClosedLandscapeOwners).owners = occupiers.filter(o => o.meepleCount == Math.max(...occupiers.map(o=> o.meepleCount)));
+        (l as ClosedLandscapeOwners).owners = occupiers.filter(o => o.meepleCount == Math.max(...occupiers.map(o => o.meepleCount)));
         return (l as ClosedLandscapeOwners)
     })
 
     ports = updateScore(closedLandscapesOwners, ports);
-
-    console.log("closedLandscapesOwners")
-    console.log(closedLandscapesOwners);
-    (window as any).closedLandscapesOwners = closedLandscapesOwners;
-    
     return ports
 }
 
-export function meepleIdListToOwnerList(meepleIdList:Array<number>, players: Array<Player>):Array<LandscapeOwner>{
+export function meepleIdListToOwnerList(meepleIdList: Array<number>, players: Array<Player>): Array<LandscapeOwner> {
     const uniquePlayerIds = meepleIdList
         .map(mId => meepleIdToPlayerId(mId, players))
         .filter((pId, i, a) => a.indexOf(pId) == i);
@@ -329,17 +333,17 @@ export function meepleIdListToOwnerList(meepleIdList:Array<number>, players: Arr
     return owners
 }
 
-function updateScore(closedLandscapesOwners: Array<ClosedLandscapeOwners>, ports: Array<Port>):Array<Port>{
-    closedLandscapesOwners.forEach(owner=>{
-        ports.filter(p => p.landscapeId == owner.landscapeId).forEach(port =>{
-            port.conquerers = owner.owners.map(o=>o.playerId)
+function updateScore(closedLandscapesOwners: Array<ClosedLandscapeOwners>, ports: Array<Port>): Array<Port> {
+    closedLandscapesOwners.forEach(owner => {
+        ports.filter(p => p.landscapeId == owner.landscapeId).forEach(port => {
+            port.conquerers = owner.owners.map(o => o.playerId)
             port.score = calculateLandscapeScore(owner.type, owner.tileCount, owner.pennantCount);
         })
     })
     return ports;
 }
 
-export function meepleIdToPlayerId(mId: number, players: Array<Player>):number{
+export function meepleIdToPlayerId(mId: number, players: Array<Player>): number {
     //@ts-ignore
     return players.flatMap(p => p.meeples).find(m => m.id == mId)?.playerId
 }
@@ -349,15 +353,15 @@ export function getTopPlayers(playerIdMeeple: LandscapeOwner) {
     let maxMeeples = Math.max(playerIdMeeple.meepleCount)
 }
 
-function calculateLandscapeScore(landType: LandType | null, tileCount:number, pennantCount:number):number{
-    return tileCount * scorePerLandType(landType)+ pennantCount*2;
+function calculateLandscapeScore(landType: LandType | null, tileCount: number, pennantCount: number): number {
+    return tileCount * scorePerLandType(landType) + pennantCount * 2;
 }
 
-function scorePerLandType(type: LandType | null): number{
-    if(type == LandType.Zamok){
+function scorePerLandType(type: LandType | null): number {
+    if (type == LandType.Zamok) {
         return 2;
     }
-    if(type == LandType.Doroga){
+    if (type == LandType.Doroga) {
         return 1;
     }
     return 0;
