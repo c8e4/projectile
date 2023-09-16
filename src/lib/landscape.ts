@@ -54,6 +54,7 @@ export type Port = {
     completed: boolean
     score: number | null
     conquerers: Array<PlayerId>  // playerId
+    hasPennant: boolean
 }
 
 export type ConnectorIndex = number // 0..11
@@ -100,6 +101,7 @@ export function addLocations(cell: GridCell): Array<Port> {
         completed: false,
         score: null,
         conquerers: [],
+        hasPennant: !!cell.tile.pennant
     }
     localPorts.push(tempPort)
 
