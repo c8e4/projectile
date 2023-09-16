@@ -1,7 +1,7 @@
 <script lang="ts">
     import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
-    import { getNextTile, newGame } from "../gameState";
+    import { getNextTile, newGame } from "../game";
     import {
         rotateActiveCell,
         type GridCell,
