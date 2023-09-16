@@ -14,14 +14,24 @@ export function getRandomNumber16Bit(window:Window): number {
     return randomValues[0];
 }
 */
-export function randomNumberFromSeedList(seedList: Array<number>, rangeLength: number, bits: number = 16): Number {
+export function randomNumberFromSeedList(seedList: Array<Uint8Array>, rangeLength: number, bits: number = 16): Number {
     let sum = BigInt(0);
     for (let i = 0; i < seedList.length - 1; i++) {
-        const first16Bits = BigInt(seedList[i]) & ((1n << BigInt(bits)) - 1n);
+        const first16Bits = uint8ArrayToBigInt(seedList[i]) & ((1n << BigInt(bits)) - 1n);
         sum = sum + first16Bits;
     }
     return Number(sum % BigInt(rangeLength));
 }
+
+function uint8ArrayToBigInt(uint8Array: Uint8Array): bigint {
+
+    const hexString = Array.from(uint8Array)
+      .map(byte => byte.toString(16).padStart(2, '0'))
+      .join('');
+
+    return BigInt('0x' + hexString);
+  }
+
 
 type EncryptedRandomMessage = {
     key: Uint8Array // length: 256 bit how do we serialize this?
