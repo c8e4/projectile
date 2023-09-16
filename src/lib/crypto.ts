@@ -30,7 +30,7 @@ type EncryptedRandomMessage = {
     encryptedData: Uint8Array
 }
 
-async function encryptRandomMessage(): Promise<EncryptedRandomMessage> {
+export async function encryptRandomMessage(): Promise<EncryptedRandomMessage> {
     const key = await crypto.subtle.generateKey(
         { name: "AES-GCM", length: 256 },
         true,
@@ -57,7 +57,7 @@ async function encryptRandomMessage(): Promise<EncryptedRandomMessage> {
     }
 }
 
-async function decrypt(m: EncryptedRandomMessage): Promise<Uint8Array> {
+export async function decrypt(m: EncryptedRandomMessage): Promise<Uint8Array> {
     const importedKey = await crypto.subtle.importKey(
         "raw",
         m.key,

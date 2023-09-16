@@ -32,17 +32,22 @@
     } from "$lib/replay";
     import BigDebugTile from "./BigDebugTile.svelte";
     import { calculateEndGameScore, endGamePoleScore, endGameZamokScore } from "$lib/score";
+    import { decrypt, encryptRandomMessage } from "$lib/crypto";
 
     let recordReplay: boolean = true;
     let replay: null | Replay = null;
 
     let game = newGame(3);
 
-    onMount(() => {
+     onMount(async() => {
         (window as any).game = game;
         (window as any).replay = replay;
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
         startGame(3);
+        const message= await encryptRandomMessage()
+        const decMessage = await decrypt(message)
+        console.log(message)
+        console.log(decMessage)
     });
 
     let showConnectors = false;
@@ -313,6 +318,7 @@
         localStorage.setItem("replay", replayString);
         console.log("replay saved");
     }
+
 </script>
 
 <div class="fixed  w-full" style="z-index:10;">
