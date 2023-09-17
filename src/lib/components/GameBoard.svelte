@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { tiles } from "$lib/game/tiles";
     import { onMount } from "svelte";
     import { getNextTile, newGame } from "../game";
     import {
@@ -12,7 +11,6 @@
         emptyGridCell,
         type TileName,
     } from "$lib/grid";
-    import Tile from "./Tile.svelte";
     import {
         addMeepleToPort,
         addMeepleToTile,
