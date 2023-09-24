@@ -70,7 +70,7 @@ function createEmptyGrid(gridSize: number): GridOfTiles {
 
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j < gridSize; j++) {
-            grid[i][j] = emptyGridCell(i, convertJ(j));
+            grid[i][j] = emptyGridCell(i, j);
         }
     }
     return grid;
@@ -259,8 +259,4 @@ export function rotateTile(tile: Tile): Tile {
     //tile.connectors.push(tile.center) //add central from connectors
     //tile.connectors.push(tile.dropZoneCenter) // add central from dropZones
     return tile
-}
-
-export function convertJ(j: number): number {
-    return j
 }
