@@ -16,6 +16,7 @@
         addMeepleToTile,
         deleteOccupiedDropZoneFromTile,
         mergeLandscapes,
+        possibleLandingZones,
         returnMeeplesToPlayers,
         updateScoreProgress,
     } from "$lib/landscape";
@@ -142,7 +143,10 @@
         game.activeCell = null;
         game.activeMeeple = null;
         game.activePlayer = getNextPlayer(game.activePlayer, game.players);
+        //-------
         getNextCell();
+        console.log(possibleLandingZones(game.portList,game.grid,game.activeCell))
+        //-------
     }
 
     function runSimulation() {

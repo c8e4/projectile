@@ -1,5 +1,5 @@
 import type { C, as } from "vitest/dist/reporters-cb94c88b"
-import type { GridCell, GridOfTiles, Tile, TileConnector } from "./grid"
+import { hasGoodConnections, type GridCell, type GridOfTiles, type Tile, type TileConnector, rotateActiveCell } from "./grid"
 import type { Meeple, Player, PlayerId, PlayerIdMeeple } from "./player"
 import type { List } from "postcss/lib/list"
 import { tiles } from "./game/tiles"
@@ -59,7 +59,7 @@ export type Port = {
 
 export type ConnectorIndex = number // 0..11
 
-export type PortsAndPlayers = { 
+export type PortsAndPlayers = {
     ports: Array<Port>
     players: Array<Player>
     grid: GridOfTiles
@@ -264,17 +264,17 @@ export function isOccupiedLandscapeId(targetPort: Port | null, ports: Array<Port
 }
 
 
-export function returnMeeplesToPlayers(ports: Array<Port>, players: Array<Player>, grid: GridOfTiles):PortsAndPlayers{
-    ports.filter(p=>p.completed&&p.meepleId!=null).map(p=>{
+export function returnMeeplesToPlayers(ports: Array<Port>, players: Array<Player>, grid: GridOfTiles): PortsAndPlayers {
+    ports.filter(p => p.completed && p.meepleId != null).map(p => {
         p.meepleId
         grid[p.x][p.y].tile.meeple = null;
-        const meep = players.flatMap(player=>player.meeples).find(m => m.id==p.meepleId)
-        if(meep){
+        const meep = players.flatMap(player => player.meeples).find(m => m.id == p.meepleId)
+        if (meep) {
             meep.at = null;
         }
-        const player = players.find(player => player.meeples.some(m=> m.id==p.meepleId))
-        if(player){
-            player.score += p.score??0;
+        const player = players.find(player => player.meeples.some(m => m.id == p.meepleId))
+        if (player) {
+            player.score += p.score ?? 0;
         }
         p.meepleId = null;
     })
@@ -296,10 +296,10 @@ export function updateScoreForChurches(ports: Array<Port>, players: Array<Player
     const churches = ports.filter(p => p.name?.charAt(0) == 'c' && !p.completed)
         .filter(c => churchIsEnclosed(c, ports));
     churches.forEach(c => {
-        const playerId = players.find(p=>p.meeples.some(m => m.id==c.meepleId))?.id;
+        const playerId = players.find(p => p.meeples.some(m => m.id == c.meepleId))?.id;
         c.completed = true;
         c.score = 9//c.meepleId!=null?9:null
-        c.conquerers = playerId!=null?[playerId]:[]
+        c.conquerers = playerId != null ? [playerId] : []
     })
     return ports;
 }
@@ -322,7 +322,7 @@ export function updateScoreForClosedZamokDoroga(ports: Array<Port>, players: Arr
         .filter(m => m.every(p => p.closed == true && p.completed == false))
     let completedLandscapes = closedLadnscapes.map(c => {
         c.map(p => {
-            if(connectorNameToLandType(p.name) == LandType.Zamok || connectorNameToLandType(p.name) == LandType.Doroga){
+            if (connectorNameToLandType(p.name) == LandType.Zamok || connectorNameToLandType(p.name) == LandType.Doroga) {
                 p.completed = true
             }
             return p
@@ -410,10 +410,43 @@ export function calculateScore(landscapes: Array<ClosedLandscape>) {
 
 }
 
-export function possibleLandingZones(ports: Array<Port>, tile: GridCell | null){
-    if(!tile){
+export function possibleLandingZones(ports: Array<Port>, grid: GridOfTiles, tile: GridCell | null):Array<GridCell> {
+    if (!tile) {
         return []
     }
-    const shadowTile = JSON.parse(JSON.stringify(tile));
-    //ports.flatMap()
+    const shadowCell = JSON.parse(JSON.stringify(tile));
+    const openPorts = ports.filter(p => p.closed == false)
+
+    const edgeCells = grid.flatMap(r => r).filter(c => c.tile.name).filter(c => openPorts.some(p => p.x == c.x && p.y == c.y))
+
+    const offset = [{ x: 0, y: -1 },
+    { x: 0, y: 1 },
+    { x: -1, y: 0 },
+    { x: 1, y: 0 },]
+
+    let candidates:Array<GridCell> = []
+
+    offset.forEach(d => {
+        edgeCells.forEach(c => {
+            shadowCell.x = c.x + d.x
+            shadowCell.y = c.y + d.y
+            if (hasGoodConnections(grid, shadowCell)) {
+                candidates.push(grid[shadowCell.x][shadowCell.y])
+            }
+            if (hasGoodConnections(grid, rotateActiveCell(shadowCell))) {
+                candidates.push(grid[shadowCell.x][shadowCell.y])
+            }
+            if (hasGoodConnections(grid, rotateActiveCell(shadowCell))) {
+                candidates.push(grid[shadowCell.x][shadowCell.y])
+            }
+            if (hasGoodConnections(grid, rotateActiveCell(shadowCell))) {
+                candidates.push(grid[shadowCell.x][shadowCell.y])
+            }
+            rotateActiveCell(shadowCell)
+        })
+    })
+
+    return candidates.filter((c,i,a)=>i==a.findIndex(z=>z.x==c.x&&z.y==c.y)).filter(c=>c.locked==false)
 }
+
+
