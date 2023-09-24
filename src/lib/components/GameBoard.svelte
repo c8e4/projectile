@@ -30,7 +30,11 @@
         type ReplayAction,
     } from "$lib/replay";
     import BigDebugTile from "./BigDebugTile.svelte";
-    import { calculateEndGameScore, endGamePoleScore, endGameZamokScore } from "$lib/score";
+    import {
+        calculateEndGameScore,
+        endGamePoleScore,
+        endGameZamokScore,
+    } from "$lib/score";
     import { decrypt, encryptRandomMessage } from "$lib/crypto";
 
     let recordReplay: boolean = true;
@@ -38,15 +42,15 @@
 
     let game = newGame(3);
 
-     onMount(async() => {
+    onMount(async () => {
         (window as any).game = game;
         (window as any).replay = replay;
         window.scrollTo(4000 - 100 * 5, 4000 - 100 * 4);
         startGame(3);
-        const message= await encryptRandomMessage()
-        const decMessage = await decrypt(message)
-        console.log(message)
-        console.log(decMessage)
+        const message = await encryptRandomMessage();
+        const decMessage = await decrypt(message);
+        console.log(message);
+        console.log(decMessage);
     });
 
     let showConnectors = false;
@@ -131,11 +135,15 @@
             game.activeCell,
             game.grid
         );
-        if(game.activeCell){
+        if (game.activeCell) {
             game.activeCell.tile.meeple = game.activeMeeple;
         }
         game.portList = updateScoreProgress(game.portList, game.players);
-        const {players, ports, grid} = returnMeeplesToPlayers(game.portList, game.players, game.grid);
+        const { players, ports, grid } = returnMeeplesToPlayers(
+            game.portList,
+            game.players,
+            game.grid
+        );
         game.players = players;
         game.portList = ports;
         game.grid = grid;
@@ -145,7 +153,15 @@
         game.activePlayer = getNextPlayer(game.activePlayer, game.players);
         //-------
         getNextCell();
-        console.log(possibleLandingZones(game.portList,game.grid,game.activeCell))
+        let candidates = possibleLandingZones(
+            game.portList,
+            game.grid,
+            game.activeCell
+        );
+        if (game.activeCell && candidates.length == 0) {
+            console.log("Turn skipped")
+            endTurn();
+        }
         //-------
     }
 
@@ -167,8 +183,12 @@
     }
     function pressCalculateFinalScore(e: any) {
         game.portList = endGameZamokScore(game.portList);
-        game.portList = endGamePoleScore(game.portList, game.grid, game.players);
-        game.players  = calculateEndGameScore(game.portList, game.players); 
+        game.portList = endGamePoleScore(
+            game.portList,
+            game.grid,
+            game.players
+        );
+        game.players = calculateEndGameScore(game.portList, game.players);
         console.table(game.portList);
 
         if (recordReplay) {
@@ -320,15 +340,21 @@
         localStorage.setItem("replay", replayString);
         console.log("replay saved");
     }
-
 </script>
 
-<div class="fixed  w-full" style="z-index:10;">
+<div class="fixed w-full" style="z-index:10;">
     <div class="absolute w-full bg-slate-200 flex gap-4 p-2">
         {#each game.players as p}
             <div>
-                <div class:font-bold={p.id == game.activePlayer?.id}>P{p.id}: {p.score}</div> 
-                <div class="text-xs">{'['}{p.meeples.filter(m=>!m.at).map(m=>m.id).join(' ')}{']'}</div>
+                <div class:font-bold={p.id == game.activePlayer?.id}>
+                    P{p.id}: {p.score}
+                </div>
+                <div class="text-xs">
+                    {"["}{p.meeples
+                        .filter((m) => !m.at)
+                        .map((m) => m.id)
+                        .join(" ")}{"]"}
+                </div>
             </div>
         {/each}
     </div>
