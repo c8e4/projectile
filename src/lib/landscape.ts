@@ -409,3 +409,11 @@ export function calculateScore(landscapes: Array<ClosedLandscape>) {
 
 
 }
+
+export function possibleLandingZones(ports: Array<Port>, tile: GridCell | null){
+    if(!tile){
+        return []
+    }
+    const shadowTile = JSON.parse(JSON.stringify(tile));
+    //ports.flatMap()
+}
